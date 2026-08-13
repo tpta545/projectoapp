@@ -46,7 +46,7 @@ export default defineConfig({
           {
             urlPattern: ({ request }) =>
               request.destination === 'image' &&
-              !request.url.includes('anthropic'),
+              !request.url.includes('generativelanguage.googleapis.com'),
             handler: 'CacheFirst',
             options: {
               cacheName: 'imagenes-app',

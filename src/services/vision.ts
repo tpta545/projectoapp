@@ -1,12 +1,11 @@
-import Anthropic from '@anthropic-ai/sdk'
 import type { Lectura } from '../types/lectura'
 import { dataUrlABase64 } from './imageCompression'
 import { parseLectura, LecturaNoParseable } from './parseLectura'
 
 /**
  * ⚠️ SOLO DESARROLLO ⚠️
- * Esta llamada se hace directamente desde el navegador con `dangerouslyAllowBrowser`,
- * lo que expone la API key en el cliente (visible en el bundle/devtools de cualquiera
+ * Esta llamada se hace directamente desde el navegador con la key en la URL,
+ * lo que la expone en el cliente (visible en el bundle/devtools de cualquiera
  * que use la app). Es aceptable para esta fase de validación en móvil real.
  *
  * ANTES DE PRODUCCIÓN: mover esta función a un endpoint backend (proxy) que guarde la
@@ -14,12 +13,12 @@ import { parseLectura, LecturaNoParseable } from './parseLectura'
  * El resto de la interfaz (leerPlaca) puede mantenerse igual para minimizar cambios
  * en el resto de la app.
  */
-const client = new Anthropic({
-  apiKey: import.meta.env.VITE_ANTHROPIC_API_KEY,
-  dangerouslyAllowBrowser: true,
-})
+const API_KEY = import.meta.env.VITE_GEMINI_API_KEY
 
-const MODELO = 'claude-sonnet-5'
+// Si Google retira este modelo, cambia el nombre por uno vigente en
+// https://ai.google.dev/gemini-api/docs/models
+const MODELO = 'gemini-2.5-flash'
+const URL_GENERATE = `https://generativelanguage.googleapis.com/v1beta/models/${MODELO}:generateContent`
 
 const PROMPT_SISTEMA = `Eres un asistente experto en placas de características (placas de identificación) de equipos industriales: motores eléctricos, reductores/motorreductores, variadores de frecuencia y componentes neumáticos, de fabricantes como ABB, FESTO, Siemens, SEW, WEG, Danfoss, etc.
 
@@ -66,8 +65,8 @@ export type ProgresoLectura = 'comprimiendo' | 'enviando' | 'interpretando'
 
 /**
  * Envía una o varias fotos de placa (y opcionalmente una foto de conjunto) al modelo
- * de visión y devuelve la Lectura estructurada. Lanza LecturaNoParseable si el modelo
- * no devuelve JSON válido tras el reintento interno de parseLectura.
+ * de visión (Gemini) y devuelve la Lectura estructurada. Lanza LecturaNoParseable si
+ * el modelo no devuelve JSON válido tras el reintento interno de parseLectura.
  */
 export async function leerPlaca(
   fotosDataUrl: string[],
@@ -77,45 +76,42 @@ export async function leerPlaca(
     throw new Error('No hay ninguna foto para analizar.')
   }
 
-  const bloquesImagen = fotosDataUrl.map((dataUrl) => {
+  const partesImagen = fotosDataUrl.map((dataUrl) => {
     const { base64, mediaType } = dataUrlABase64(dataUrl)
-    return {
-      type: 'image' as const,
-      source: {
-        type: 'base64' as const,
-        media_type: mediaType as 'image/jpeg' | 'image/png' | 'image/webp',
-        data: base64,
-      },
-    }
+    return { inlineData: { mimeType: mediaType, data: base64 } }
   })
 
-  const respuesta = await client.messages.create(
-    {
-      model: MODELO,
-      max_tokens: 4096,
-      system: PROMPT_SISTEMA,
-      messages: [
+  const textoInstruccion =
+    fotosDataUrl.length > 1
+      ? 'Estas son varias fotos de la misma placa (y posiblemente del conjunto de la máquina). Combina la información de todas para dar el resultado más completo posible.'
+      : 'Analiza esta placa de características.'
+
+  const respuesta = await fetch(`${URL_GENERATE}?key=${API_KEY}`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    signal: senal,
+    body: JSON.stringify({
+      systemInstruction: { parts: [{ text: PROMPT_SISTEMA }] },
+      contents: [
         {
           role: 'user',
-          content: [
-            ...bloquesImagen,
-            {
-              type: 'text',
-              text:
-                fotosDataUrl.length > 1
-                  ? 'Estas son varias fotos de la misma placa (y posiblemente del conjunto de la máquina). Combina la información de todas para dar el resultado más completo posible.'
-                  : 'Analiza esta placa de características.',
-            },
-          ],
+          parts: [...partesImagen, { text: textoInstruccion }],
         },
       ],
-    },
-    { signal: senal },
-  )
+      generationConfig: {
+        responseMimeType: 'application/json',
+      },
+    }),
+  })
 
-  const textoRespuesta = respuesta.content
-    .filter((bloque) => bloque.type === 'text')
-    .map((bloque) => bloque.text)
+  if (!respuesta.ok) {
+    const detalle = await respuesta.text().catch(() => '')
+    throw new Error(`Error de la API de Gemini (${respuesta.status}): ${detalle.slice(0, 300)}`)
+  }
+
+  const datos = await respuesta.json()
+  const textoRespuesta: string = (datos.candidates?.[0]?.content?.parts ?? [])
+    .map((parte: { text?: string }) => parte.text ?? '')
     .join('\n')
 
   try {

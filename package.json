@@ -10,7 +10,6 @@
     "preview": "vite preview"
   },
   "dependencies": {
-    "@anthropic-ai/sdk": "^0.116.0",
     "@tailwindcss/vite": "^4.3.3",
     "idb": "^8.0.3",
     "react": "^19.2.8",

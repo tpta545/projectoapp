@@ -2,7 +2,7 @@
 
 PWA móvil para fotografiar la placa de un motor, reductor, variador o
 componente neumático y obtener sus datos técnicos estructurados mediante
-IA de visión (Anthropic), sin backend ni base de datos propia — fase 1 de
+IA de visión (Gemini), sin backend ni base de datos propia — fase 1 de
 validación de usabilidad y fiabilidad de lectura.
 
 ## Puesta en marcha
@@ -10,14 +10,14 @@ validación de usabilidad y fiabilidad de lectura.
 ```bash
 npm install
 cp .env.example .env
-# edita .env y añade tu VITE_ANTHROPIC_API_KEY
+# edita .env y añade tu VITE_GEMINI_API_KEY (consíguela en https://aistudio.google.com/apikey)
 npm run dev
 ```
 
-⚠️ La API key se usa directamente desde el navegador (`dangerouslyAllowBrowser`)
-solo para esta fase de validación. **Antes de producción** hay que mover la
-llamada de `src/services/vision.ts` a un proxy backend — está comentado en
-ese archivo.
+⚠️ La API key se usa directamente desde el navegador, lo que la expone en el
+cliente. Aceptable solo para esta fase de validación. **Antes de producción**
+hay que mover la llamada de `src/services/vision.ts` a un proxy backend —
+está comentado en ese archivo.
 
 ## Scripts
 
