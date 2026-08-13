@@ -1,0 +1,23 @@
+import { useSelectorImagenes } from '../../hooks/useCamera'
+import { Boton } from '../ui/Boton'
+
+export function SelectorGaleria({ onFotos }: { onFotos: (fotos: string[]) => void }) {
+  const { comprimiendo, inputRef, alCambiar, abrir } = useSelectorImagenes(onFotos)
+
+  return (
+    <>
+      <input
+        ref={inputRef}
+        type="file"
+        accept="image/*"
+        multiple
+        className="hidden"
+        onChange={alCambiar}
+      />
+      <Boton variante="fantasma" onClick={abrir} disabled={comprimiendo}>
+        <span aria-hidden>🖼️</span>
+        Subir desde galería
+      </Boton>
+    </>
+  )
+}

@@ -1,0 +1,54 @@
+@import 'tailwindcss';
+
+/*
+ * Paleta corporativa TRADE.
+ * Rojo reservado a acciones primarias y alertas; el resto sobrio (negro/blanco/grises).
+ * Contraste alto y tipografía grande: pensado para nave industrial, sol directo y uso con guantes.
+ */
+@theme {
+  --color-trade-red: #c81e1e;
+  --color-trade-red-dark: #9c1414;
+  --color-trade-black: #111111;
+  --color-trade-white: #ffffff;
+
+  --color-trade-bg: #f5f5f4;
+  --color-trade-surface: #ffffff;
+  --color-trade-border: #d4d4d4;
+
+  --color-trade-text: #171717;
+  --color-trade-text-muted: #525252;
+
+  --color-confianza-alta: #15803d;
+  --color-confianza-alta-bg: #dcfce7;
+  --color-confianza-media: #b45309;
+  --color-confianza-media-bg: #fef3c7;
+  --color-confianza-baja: #b91c1c;
+  --color-confianza-baja-bg: #fee2e2;
+
+  --font-sans: 'Inter', system-ui, -apple-system, 'Segoe UI', sans-serif;
+}
+
+html {
+  -webkit-tap-highlight-color: transparent;
+}
+
+body {
+  background-color: var(--color-trade-bg);
+  color: var(--color-trade-text);
+  font-family: var(--font-sans);
+  /* Evita zoom accidental al tocar inputs en móvil */
+  font-size: 16px;
+}
+
+/* Objetivo táctil mínimo de 56px en toda la app (se usa con guantes) */
+button,
+input,
+select,
+textarea {
+  min-height: 56px;
+}
+
+input[type='checkbox'],
+input[type='radio'] {
+  min-height: 0;
+}
