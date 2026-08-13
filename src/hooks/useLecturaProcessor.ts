@@ -72,9 +72,9 @@ export function useLecturaProcessor() {
           return null
         }
 
+        const detalle = err instanceof Error ? err.message : String(err)
         setError({
-          mensaje:
-            'No se ha podido leer la placa. Comprueba que la foto esté enfocada y bien iluminada, y vuelve a intentarlo.',
+          mensaje: `No se ha podido leer la placa (${detalle}). Comprueba tu conexión y vuelve a intentarlo.`,
           recuperable: true,
         })
         return null
