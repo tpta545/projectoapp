@@ -27,6 +27,11 @@ jobs:
       - run: npm run build
         env:
           GH_PAGES: 'true'
+          # Key de prueba con límite de gasto, añadida como repository secret.
+          # Queda incluida en el JS público del bundle: cualquiera con el
+          # link puede extraerla. Úsese solo con una key de gasto limitado,
+          # nunca con la key real de producción.
+          VITE_ANTHROPIC_API_KEY: ${{ secrets.VITE_ANTHROPIC_API_KEY }}
       - uses: actions/configure-pages@v5
       - uses: actions/upload-pages-artifact@v3
         with:
