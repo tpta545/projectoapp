@@ -3,7 +3,6 @@ name: Deploy demo a GitHub Pages
 on:
   push:
     branches: [claude/trade-plate-reader-fxompd]
-    paths-ignore: []
   workflow_dispatch:
 
 permissions:
