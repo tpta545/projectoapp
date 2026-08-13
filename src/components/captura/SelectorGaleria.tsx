@@ -11,7 +11,7 @@ export function SelectorGaleria({ onFotos }: { onFotos: (fotos: string[]) => voi
         type="file"
         accept="image/*"
         multiple
-        className="hidden"
+        className="input-archivo-oculto"
         onChange={alCambiar}
       />
       <Boton variante="fantasma" onClick={abrir} disabled={comprimiendo}>

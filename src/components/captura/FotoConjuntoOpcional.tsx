@@ -21,7 +21,7 @@ export function FotoConjuntoOpcional({
         type="file"
         accept="image/*"
         capture="environment"
-        className="hidden"
+        className="input-archivo-oculto"
         onChange={alCambiar}
       />
       <p className="mb-2 text-sm font-semibold text-trade-text-muted">

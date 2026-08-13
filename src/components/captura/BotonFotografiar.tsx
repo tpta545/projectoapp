@@ -12,7 +12,7 @@ export function BotonFotografiar({ onFotos }: { onFotos: (fotos: string[]) => vo
         accept="image/*"
         capture="environment"
         multiple
-        className="hidden"
+        className="input-archivo-oculto"
         onChange={alCambiar}
       />
       <Boton variante="primario" onClick={abrir} disabled={comprimiendo} className="py-6 text-xl">
