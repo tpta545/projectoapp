@@ -15,10 +15,40 @@ import { parseLectura, LecturaNoParseable } from './parseLectura'
  */
 const API_KEY = import.meta.env.VITE_GEMINI_API_KEY
 
-// Si Google retira este modelo, cambia el nombre por uno vigente en
-// https://ai.google.dev/gemini-api/docs/models
-const MODELO = 'gemini-2.5-flash'
+// Alias que Google mantiene apuntando al modelo flash vigente (evita tener
+// que actualizar el nombre a mano cada vez que retiran una versión).
+const MODELO = 'gemini-flash-latest'
 const URL_GENERATE = `https://generativelanguage.googleapis.com/v1beta/models/${MODELO}:generateContent`
+
+// Fuerza la forma exacta del JSON de salida (más fiable que pedirlo solo por
+// prompt: sin esto, Gemini a veces improvisa su propio esquema).
+const ESQUEMA_LECTURA = {
+  type: 'OBJECT',
+  properties: {
+    tipoEquipo: {
+      type: 'STRING',
+      enum: ['motor', 'reductor', 'variador', 'neumatica', 'desconocido'],
+    },
+    fabricante: { type: 'STRING', nullable: true },
+    campos: {
+      type: 'ARRAY',
+      items: {
+        type: 'OBJECT',
+        properties: {
+          clave: { type: 'STRING' },
+          etiqueta: { type: 'STRING' },
+          valor: { type: 'STRING', nullable: true },
+          unidad: { type: 'STRING', nullable: true },
+          confianza: { type: 'STRING', enum: ['alta', 'media', 'baja'] },
+        },
+        required: ['clave', 'etiqueta', 'valor', 'unidad', 'confianza'],
+      },
+    },
+    textoPlacaCrudo: { type: 'STRING' },
+    avisos: { type: 'ARRAY', items: { type: 'STRING' } },
+  },
+  required: ['tipoEquipo', 'fabricante', 'campos', 'textoPlacaCrudo', 'avisos'],
+}
 
 const PROMPT_SISTEMA = `Eres un asistente experto en placas de características (placas de identificación) de equipos industriales: motores eléctricos, reductores/motorreductores, variadores de frecuencia y componentes neumáticos, de fabricantes como ABB, FESTO, Siemens, SEW, WEG, Danfoss, etc.
 
@@ -100,6 +130,7 @@ export async function leerPlaca(
       ],
       generationConfig: {
         responseMimeType: 'application/json',
+        responseSchema: ESQUEMA_LECTURA,
       },
     }),
   })
