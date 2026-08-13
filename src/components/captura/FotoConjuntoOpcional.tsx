@@ -10,7 +10,7 @@ export function FotoConjuntoOpcional({
   onFoto: (fotos: string[]) => void
   onEliminar: () => void
 }) {
-  const { comprimiendo, inputRef, alCambiar, abrir } = useSelectorImagenes((fotos) =>
+  const { comprimiendo, error, inputRef, alCambiar, abrir } = useSelectorImagenes((fotos) =>
     onFoto([fotos[0]]),
   )
 
@@ -48,6 +48,7 @@ export function FotoConjuntoOpcional({
           Añadir foto de conjunto
         </Boton>
       )}
+      {error && <p className="mt-2 text-sm font-semibold text-confianza-baja">{error}</p>}
     </div>
   )
 }

@@ -13,15 +13,17 @@ export function useSelectorImagenes(onFotos: (fotos: string[]) => void) {
 
   const alCambiar = useCallback(
     async (e: React.ChangeEvent<HTMLInputElement>) => {
-      const archivos = e.target.files
+      // e.target.files es una FileList viva ligada al input: hay que copiarla
+      // a un array ANTES de resetear el value, o quedará vacía al leerla.
+      const archivos = e.target.files ? Array.from(e.target.files) : []
       e.target.value = '' // permite volver a elegir el mismo archivo
-      if (!archivos || archivos.length === 0) return
+      if (archivos.length === 0) return
 
       setError(null)
       setComprimiendo(true)
       try {
         const resultados: string[] = []
-        for (const archivo of Array.from(archivos)) {
+        for (const archivo of archivos) {
           if (!archivo.type.startsWith('image/')) continue
           resultados.push(await comprimirImagen(archivo))
         }

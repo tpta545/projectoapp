@@ -2,7 +2,7 @@ import { useSelectorImagenes } from '../../hooks/useCamera'
 import { Boton } from '../ui/Boton'
 
 export function SelectorGaleria({ onFotos }: { onFotos: (fotos: string[]) => void }) {
-  const { comprimiendo, inputRef, alCambiar, abrir } = useSelectorImagenes(onFotos)
+  const { comprimiendo, error, inputRef, alCambiar, abrir } = useSelectorImagenes(onFotos)
 
   return (
     <>
@@ -18,6 +18,7 @@ export function SelectorGaleria({ onFotos }: { onFotos: (fotos: string[]) => voi
         <span aria-hidden>🖼️</span>
         Subir desde galería
       </Boton>
+      {error && <p className="text-sm font-semibold text-confianza-baja">{error}</p>}
     </>
   )
 }

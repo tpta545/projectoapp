@@ -2,7 +2,7 @@ import { useSelectorImagenes } from '../../hooks/useCamera'
 import { Boton } from '../ui/Boton'
 
 export function BotonFotografiar({ onFotos }: { onFotos: (fotos: string[]) => void }) {
-  const { comprimiendo, inputRef, alCambiar, abrir } = useSelectorImagenes(onFotos)
+  const { comprimiendo, error, inputRef, alCambiar, abrir } = useSelectorImagenes(onFotos)
 
   return (
     <>
@@ -19,6 +19,7 @@ export function BotonFotografiar({ onFotos }: { onFotos: (fotos: string[]) => vo
         <span aria-hidden>📷</span>
         {comprimiendo ? 'Procesando foto…' : 'Fotografiar placa'}
       </Boton>
+      {error && <p className="text-sm font-semibold text-confianza-baja">{error}</p>}
     </>
   )
 }
