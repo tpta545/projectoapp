@@ -1,0 +1,234 @@
+---
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import { getCollection } from 'astro:content';
+import { EMPRESA, MARCAS_OFICIALES, FAMILIAS_PRODUCTO, DIFERENCIADORES } from '@/lib/empresa';
+
+const blogPosts = (await getCollection('blog'))
+  .sort((a, b) => b.data.fechaPublicacion.valueOf() - a.data.fechaPublicacion.valueOf())
+  .slice(0, 3);
+
+const mapaSrc = `https://www.openstreetmap.org/export/embed.html?bbox=${EMPRESA.coordenadas.lng - 0.01}%2C${EMPRESA.coordenadas.lat - 0.006}%2C${EMPRESA.coordenadas.lng + 0.01}%2C${EMPRESA.coordenadas.lat + 0.006}&marker=${EMPRESA.coordenadas.lat}%2C${EMPRESA.coordenadas.lng}&layer=mapnik`;
+---
+
+<BaseLayout
+  title="TRADE | Distribuidor industrial en Algemesí"
+  description="Rodamientos, transmisión, neumática y motores ABB, FESTO, ISB y Dodge. Stock propio, reparto en 24 h y reparación con informe técnico. Algemesí (Valencia)."
+>
+  <!-- 1. Héroe -->
+  <section class="border-b border-gris-borde bg-gris-fondo">
+    <div class="mx-auto grid max-w-6xl gap-8 px-4 py-14 sm:px-6 lg:grid-cols-[3fr_2fr] lg:items-center lg:py-20">
+      <div>
+        <h1 class="font-display text-4xl font-black leading-[1.05] text-negro sm:text-5xl lg:text-6xl">
+          Transmisión de potencia, neumática y automatización para industria de la Ribera
+        </h1>
+        <p class="mt-5 max-w-xl text-base leading-relaxed text-grafito sm:text-lg">
+          Distribuidor oficial ABB, FESTO, Dodge, ISB y Tellure Rota. Stock propio en Algemesí, reparto en la
+          comarca y servicio técnico de reparación con informe. Desde 2013 resolviendo paradas de línea en
+          Ribera Alta y Ribera Baixa.
+        </p>
+        <div class="mt-7 flex flex-wrap items-center gap-4">
+          <a
+            href="/presupuesto/"
+            class="bg-rojo px-6 py-3.5 text-base font-semibold text-blanco transition-colors hover:bg-rojo-hover active:bg-rojo-activo"
+          >
+            Solicitar presupuesto
+          </a>
+          <a
+            href={EMPRESA.telefonoHref}
+            class="flex items-center gap-2 border border-negro px-6 py-3.5 font-mono text-base font-semibold text-negro hover:bg-blanco"
+          >
+            ☎ {EMPRESA.telefono}
+          </a>
+        </div>
+      </div>
+      <dl class="grid grid-cols-2 gap-4 border border-gris-borde bg-blanco p-5">
+        <div class="border-l-2 border-rojo pl-3">
+          <dt class="text-xs uppercase tracking-wide text-grafito">Fundada en</dt>
+          <dd class="font-display text-2xl font-bold text-negro">{EMPRESA.fundacion}</dd>
+        </div>
+        <div class="border-l-2 border-rojo pl-3">
+          <dt class="text-xs uppercase tracking-wide text-grafito">Entrega sin stock</dt>
+          <dd class="font-display text-2xl font-bold text-negro">24 h</dd>
+        </div>
+        <div class="border-l-2 border-rojo pl-3">
+          <dt class="text-xs uppercase tracking-wide text-grafito">Marcas oficiales</dt>
+          <dd class="font-display text-2xl font-bold text-negro">5</dd>
+        </div>
+        <div class="border-l-2 border-rojo pl-3">
+          <dt class="text-xs uppercase tracking-wide text-grafito">Sede</dt>
+          <dd class="font-display text-2xl font-bold text-negro">Algemesí</dd>
+        </div>
+      </dl>
+    </div>
+  </section>
+
+  <!-- 2. Banda de marcas -->
+  <section class="border-b border-gris-borde bg-blanco py-8" aria-label="Marcas que distribuimos oficialmente">
+    <div class="mx-auto max-w-6xl px-4 sm:px-6">
+      <p class="mb-4 text-center text-xs font-semibold uppercase tracking-widest text-grafito">
+        Distribuidor oficial
+      </p>
+      <ul class="flex flex-wrap items-center justify-center gap-x-10 gap-y-4">
+        {
+          MARCAS_OFICIALES.map((marca) => (
+            <li>
+              <a
+                href={`/marcas/${marca.slug}/`}
+                class="font-display text-xl font-bold text-grafito transition-colors hover:text-rojo sm:text-2xl"
+              >
+                {marca.nombre}
+              </a>
+            </li>
+          ))
+        }
+      </ul>
+    </div>
+  </section>
+
+  <!-- 3. Familias de producto -->
+  <section class="border-b border-gris-borde bg-blanco py-14">
+    <div class="mx-auto max-w-6xl px-4 sm:px-6">
+      <h2 class="font-display text-3xl font-bold text-negro">Familias de producto</h2>
+      <p class="mt-2 max-w-2xl text-grafito">
+        Componentes de rotación, guiado y control de movimiento, con criterios de selección claros en cada ficha.
+      </p>
+      <ul class="mt-8 grid grid-cols-2 gap-4 sm:grid-cols-3">
+        {
+          FAMILIAS_PRODUCTO.map((f) => (
+            <li>
+              <a
+                href={`/productos/${f.slug}/`}
+                class="muesca block h-full border border-gris-borde bg-gris-fondo p-5 transition-colors hover:border-rojo"
+              >
+                <span class="font-display text-lg font-bold text-negro">{f.nombre}</span>
+              </a>
+            </li>
+          ))
+        }
+      </ul>
+    </div>
+  </section>
+
+  <!-- 4. Servicio de reparación destacado -->
+  <section class="border-b border-gris-borde bg-negro py-14 text-blanco">
+    <div class="mx-auto max-w-6xl px-4 sm:px-6">
+      <div class="grid gap-8 lg:grid-cols-[2fr_1fr] lg:items-center">
+        <div>
+          <p class="mb-2 inline-block border border-rojo px-2 py-0.5 text-xs font-semibold uppercase tracking-wide text-rojo">
+            Servicio técnico propio
+          </p>
+          <h2 class="font-display text-3xl font-bold sm:text-4xl">
+            Reparación de motores, reductores y variadores con informe técnico
+          </h2>
+          <p class="mt-4 max-w-2xl text-gray-300">
+            Diagnóstico en taller propio, presupuesto cerrado antes de intervenir y entrega con informe técnico
+            documentado: qué fallaba, qué se ha sustituido y qué vida útil cabe esperar. No es una caja negra.
+          </p>
+        </div>
+        <div class="flex flex-col gap-3">
+          <a href="/servicios/reparacion-equipos/" class="bg-rojo px-5 py-3.5 text-center text-sm font-semibold text-blanco hover:bg-rojo-hover">
+            Ver proceso de reparación
+          </a>
+          <a href={EMPRESA.telefonoHref} class="border border-white/40 px-5 py-3.5 text-center font-mono text-sm font-semibold hover:bg-white/10">
+            ☎ {EMPRESA.telefono}
+          </a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 5. Diferenciadores -->
+  <section class="border-b border-gris-borde bg-blanco py-14">
+    <div class="mx-auto max-w-6xl px-4 sm:px-6">
+      <h2 class="font-display text-3xl font-bold text-negro">Por qué trabajar con TRADE</h2>
+      <ol class="mt-8 grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
+        {
+          DIFERENCIADORES.map((d, i) => (
+            <li class="border-t-4 border-rojo pt-4">
+              <span class="font-mono text-sm text-grafito">0{i + 1}</span>
+              <p class="mt-1 font-display text-lg font-bold text-negro">{d.titulo}</p>
+              <p class="mt-2 text-sm leading-relaxed text-grafito">{d.texto}</p>
+            </li>
+          ))
+        }
+      </ol>
+    </div>
+  </section>
+
+  <!-- 6. Blog -->
+  {
+    blogPosts.length > 0 && (
+      <section class="border-b border-gris-borde bg-gris-fondo py-14">
+        <div class="mx-auto max-w-6xl px-4 sm:px-6">
+          <div class="flex items-end justify-between">
+            <h2 class="font-display text-3xl font-bold text-negro">Del blog técnico</h2>
+            <a href="/blog/" class="text-sm font-semibold text-rojo hover:underline">
+              Ver todos los artículos
+            </a>
+          </div>
+          <ul class="mt-8 grid gap-6 md:grid-cols-3">
+            {blogPosts.map((post) => (
+              <li class="border border-gris-borde bg-blanco">
+                <img
+                  src={post.data.imagen}
+                  alt={post.data.imagenAlt}
+                  loading="lazy"
+                  class="h-44 w-full object-cover"
+                  width="400"
+                  height="240"
+                />
+                <div class="p-5">
+                  <p class="text-xs font-semibold uppercase tracking-wide text-rojo">{post.data.categoria}</p>
+                  <h3 class="mt-2 font-display text-lg font-bold text-negro">
+                    <a href={`/blog/${post.id}/`} class="hover:underline">
+                      {post.data.titulo}
+                    </a>
+                  </h3>
+                  <p class="mt-2 text-sm text-grafito">{post.data.resumen}</p>
+                </div>
+              </li>
+            ))}
+          </ul>
+        </div>
+      </section>
+    )
+  }
+
+  <!-- 7. Contacto -->
+  <section class="bg-blanco py-14" id="contacto">
+    <div class="mx-auto grid max-w-6xl gap-8 px-4 sm:px-6 lg:grid-cols-2">
+      <div>
+        <h2 class="font-display text-3xl font-bold text-negro">Visítanos o llámanos</h2>
+        <dl class="mt-6 space-y-4 text-sm">
+          <div class="flex gap-3">
+            <dt class="w-24 shrink-0 font-semibold text-negro">Dirección</dt>
+            <dd class="text-grafito">{EMPRESA.direccion.completa}</dd>
+          </div>
+          <div class="flex gap-3">
+            <dt class="w-24 shrink-0 font-semibold text-negro">Teléfono</dt>
+            <dd><a href={EMPRESA.telefonoHref} class="font-mono text-negro hover:text-rojo">{EMPRESA.telefono}</a></dd>
+          </div>
+          <div class="flex gap-3">
+            <dt class="w-24 shrink-0 font-semibold text-negro">Email</dt>
+            <dd><a href={`mailto:${EMPRESA.email}`} class="text-negro hover:text-rojo">{EMPRESA.email}</a></dd>
+          </div>
+          <div class="flex gap-3">
+            <dt class="w-24 shrink-0 font-semibold text-negro">Horario</dt>
+            <dd class="text-grafito">{EMPRESA.horario.texto}</dd>
+          </div>
+        </dl>
+        <a href="/contacto/" class="mt-6 inline-block bg-rojo px-5 py-3 text-sm font-semibold text-blanco hover:bg-rojo-hover">
+          Ir a contacto
+        </a>
+      </div>
+      <div class="h-72 border border-gris-borde lg:h-full">
+        <iframe
+          title="Ubicación de TRADE en Algemesí"
+          src={mapaSrc}
+          class="h-full w-full"
+          loading="lazy"
+        ></iframe>
+      </div>
+    </div>
+  </section>
+</BaseLayout>

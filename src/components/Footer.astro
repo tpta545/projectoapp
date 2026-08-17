@@ -1,0 +1,85 @@
+---
+import { EMPRESA, FAMILIAS_PRODUCTO, MARCAS_OFICIALES } from '@/lib/empresa';
+const anio = new Date().getFullYear();
+---
+
+<footer class="border-t border-gris-borde bg-negro text-gris-fondo">
+  <div class="mx-auto grid max-w-6xl gap-10 px-4 py-12 sm:px-6 md:grid-cols-4">
+    <div>
+      <p class="font-display text-xl font-black text-blanco">TRADE</p>
+      <p class="mt-1 text-sm text-gris-borde">{EMPRESA.razonSocial}</p>
+      <address class="mt-4 not-italic text-sm leading-relaxed text-gris-borde">
+        {EMPRESA.direccion.calle}<br />
+        {EMPRESA.direccion.poligono}<br />
+        {EMPRESA.direccion.cp} {EMPRESA.direccion.localidad} (Valencia)
+      </address>
+      <p class="mt-4 text-sm">
+        <a href={EMPRESA.telefonoHref} class="font-mono text-blanco hover:text-rojo">{EMPRESA.telefono}</a>
+      </p>
+      <p class="mt-1 text-sm">
+        <a href={`mailto:${EMPRESA.email}`} class="text-blanco hover:text-rojo">{EMPRESA.email}</a>
+      </p>
+      <p class="mt-4 text-xs text-gris-borde">{EMPRESA.horario.texto}</p>
+    </div>
+
+    <div>
+      <h2 class="font-display text-sm font-bold uppercase tracking-wide text-blanco">Productos</h2>
+      <ul class="mt-3 space-y-2 text-sm text-gris-borde">
+        {
+          FAMILIAS_PRODUCTO.map((f) => (
+            <li>
+              <a href={`/productos/${f.slug}/`} class="hover:text-rojo">
+                {f.nombre}
+              </a>
+            </li>
+          ))
+        }
+      </ul>
+    </div>
+
+    <div>
+      <h2 class="font-display text-sm font-bold uppercase tracking-wide text-blanco">Marcas y servicios</h2>
+      <ul class="mt-3 space-y-2 text-sm text-gris-borde">
+        {
+          MARCAS_OFICIALES.map((m) => (
+            <li>
+              <a href={`/marcas/${m.slug}/`} class="hover:text-rojo">
+                {m.nombre}
+              </a>
+            </li>
+          ))
+        }
+        <li class="pt-1">
+          <a href="/servicios/reparacion-equipos/" class="hover:text-rojo">Reparación de equipos</a>
+        </li>
+        <li>
+          <a href="/servicios/asesoramiento-tecnico/" class="hover:text-rojo">Asesoramiento técnico</a>
+        </li>
+        <li>
+          <a href="/servicios/reparto-propio/" class="hover:text-rojo">Reparto propio</a>
+        </li>
+      </ul>
+    </div>
+
+    <div>
+      <h2 class="font-display text-sm font-bold uppercase tracking-wide text-blanco">Empresa</h2>
+      <ul class="mt-3 space-y-2 text-sm text-gris-borde">
+        <li><a href="/empresa/" class="hover:text-rojo">Quiénes somos</a></li>
+        <li><a href="/blog/" class="hover:text-rojo">Blog técnico</a></li>
+        <li><a href="/contacto/" class="hover:text-rojo">Contacto</a></li>
+        <li><a href="/presupuesto/" class="hover:text-rojo">Solicitar presupuesto</a></li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="border-t border-white/10">
+    <div class="mx-auto flex max-w-6xl flex-col gap-2 px-4 py-5 text-xs text-gris-borde sm:flex-row sm:items-center sm:justify-between sm:px-6">
+      <p>© {anio} {EMPRESA.razonSocial} · CIF {EMPRESA.cif} · Distribuidor industrial desde {EMPRESA.fundacion}</p>
+      <ul class="flex flex-wrap gap-x-4 gap-y-1">
+        <li><a href="/aviso-legal/" class="hover:text-rojo">Aviso legal</a></li>
+        <li><a href="/politica-privacidad/" class="hover:text-rojo">Política de privacidad</a></li>
+        <li><a href="/politica-cookies/" class="hover:text-rojo">Política de cookies</a></li>
+      </ul>
+    </div>
+  </div>
+</footer>

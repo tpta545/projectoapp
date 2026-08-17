@@ -1,0 +1,48 @@
+---
+import { EMPRESA } from '@/lib/empresa';
+
+interface Crumb {
+  nombre: string;
+  href: string;
+}
+
+interface Props {
+  items: Crumb[];
+}
+
+const { items } = Astro.props;
+const todos: Crumb[] = [{ nombre: 'Inicio', href: '/' }, ...items];
+
+const jsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'BreadcrumbList',
+  itemListElement: todos.map((item, i) => ({
+    '@type': 'ListItem',
+    position: i + 1,
+    name: item.nombre,
+    item: `${EMPRESA.urlBase}${item.href}`,
+  })),
+};
+---
+
+<nav aria-label="Migas de pan" class="border-b border-gris-borde bg-gris-fondo">
+  <ol class="mx-auto flex max-w-6xl flex-wrap items-center gap-1 px-4 py-2.5 text-sm text-grafito sm:px-6">
+    {
+      todos.map((item, i) => (
+        <li class="flex items-center gap-1">
+          {i > 0 && <span aria-hidden="true" class="px-1 text-gris-borde">/</span>}
+          {i === todos.length - 1 ? (
+            <span class="font-medium text-negro" aria-current="page">
+              {item.nombre}
+            </span>
+          ) : (
+            <a href={item.href} class="hover:text-rojo hover:underline">
+              {item.nombre}
+            </a>
+          )}
+        </li>
+      ))
+    }
+  </ol>
+</nav>
+<script type="application/ld+json" is:inline set:html={JSON.stringify(jsonLd)} />

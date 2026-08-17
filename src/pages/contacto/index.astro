@@ -1,0 +1,124 @@
+---
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import Breadcrumbs from '@/components/Breadcrumbs.astro';
+import { EMPRESA } from '@/lib/empresa';
+
+const mapaSrc = `https://www.openstreetmap.org/export/embed.html?bbox=${EMPRESA.coordenadas.lng - 0.01}%2C${EMPRESA.coordenadas.lat - 0.006}%2C${EMPRESA.coordenadas.lng + 0.01}%2C${EMPRESA.coordenadas.lat + 0.006}&marker=${EMPRESA.coordenadas.lat}%2C${EMPRESA.coordenadas.lng}&layer=mapnik`;
+---
+
+<BaseLayout
+  title="Contacto | TRADE Algemesí"
+  description="Contacta con TRADE: C/ Sabaters 32, Polígono Les Cotes, Algemesí. Teléfono 961 753 565, email info@grupotrade.es. Lunes a viernes."
+>
+  <Breadcrumbs items={[{ nombre: 'Contacto', href: '/contacto/' }]} />
+
+  <header class="border-b border-gris-borde bg-gris-fondo py-10">
+    <div class="mx-auto max-w-6xl px-4 sm:px-6">
+      <h1 class="font-display text-4xl font-black text-negro sm:text-5xl">Contacto</h1>
+      <p class="mt-3 max-w-2xl text-lg text-grafito">
+        Para pedir presupuesto de una pieza concreta, usa el <a href="/presupuesto/" class="text-rojo underline">formulario de presupuesto</a>.
+        Para cualquier otra consulta, aquí tienes nuestros datos y un formulario general.
+      </p>
+    </div>
+  </header>
+
+  <section class="mx-auto max-w-6xl gap-10 px-4 py-12 sm:px-6 lg:grid lg:grid-cols-2">
+    <div>
+      <dl class="space-y-4 text-sm">
+        <div class="flex gap-3">
+          <dt class="w-28 shrink-0 font-semibold text-negro">Razón social</dt>
+          <dd class="text-grafito">{EMPRESA.razonSocial}</dd>
+        </div>
+        <div class="flex gap-3">
+          <dt class="w-28 shrink-0 font-semibold text-negro">Dirección</dt>
+          <dd class="text-grafito">{EMPRESA.direccion.completa}</dd>
+        </div>
+        <div class="flex gap-3">
+          <dt class="w-28 shrink-0 font-semibold text-negro">Teléfono</dt>
+          <dd><a href={EMPRESA.telefonoHref} class="font-mono text-negro hover:text-rojo">{EMPRESA.telefono}</a></dd>
+        </div>
+        <div class="flex gap-3">
+          <dt class="w-28 shrink-0 font-semibold text-negro">Email</dt>
+          <dd><a href={`mailto:${EMPRESA.email}`} class="text-negro hover:text-rojo">{EMPRESA.email}</a></dd>
+        </div>
+        <div class="flex gap-3">
+          <dt class="w-28 shrink-0 font-semibold text-negro">Horario</dt>
+          <dd class="text-grafito">{EMPRESA.horario.texto}</dd>
+        </div>
+      </dl>
+
+      <div class="mt-8 h-72 border border-gris-borde">
+        <iframe title="Ubicación de TRADE en Algemesí" src={mapaSrc} class="h-full w-full" loading="lazy"></iframe>
+      </div>
+    </div>
+
+    <div>
+      <form id="form-contacto" class="space-y-5" novalidate>
+        <div>
+          <label for="c-nombre" class="block text-sm font-semibold text-negro">Nombre *</label>
+          <input id="c-nombre" name="nombre" type="text" required class="mt-1 w-full border border-gris-borde px-3 py-2.5 focus:border-rojo" />
+        </div>
+        <div>
+          <label for="c-email" class="block text-sm font-semibold text-negro">Email *</label>
+          <input id="c-email" name="email" type="email" required class="mt-1 w-full border border-gris-borde px-3 py-2.5 focus:border-rojo" />
+        </div>
+        <div>
+          <label for="c-telefono" class="block text-sm font-semibold text-negro">Teléfono</label>
+          <input id="c-telefono" name="telefono" type="tel" class="mt-1 w-full border border-gris-borde px-3 py-2.5 focus:border-rojo" />
+        </div>
+        <div>
+          <label for="c-mensaje" class="block text-sm font-semibold text-negro">Mensaje *</label>
+          <textarea id="c-mensaje" name="mensaje" required rows="5" class="mt-1 w-full border border-gris-borde px-3 py-2.5 focus:border-rojo"></textarea>
+        </div>
+
+        <div class="hidden" aria-hidden="true">
+          <label for="c-web">No rellenar</label>
+          <input id="c-web" name="web" type="text" tabindex="-1" autocomplete="off" />
+        </div>
+
+        <div class="flex items-start gap-2">
+          <input id="c-consentimiento" name="consentimiento" type="checkbox" required class="mt-1 h-4 w-4" />
+          <label for="c-consentimiento" class="text-sm text-grafito">
+            He leído y acepto la <a href="/politica-privacidad/" class="text-rojo underline">política de privacidad</a>. *
+          </label>
+        </div>
+
+        <button type="submit" class="bg-rojo px-6 py-3.5 text-sm font-semibold text-blanco hover:bg-rojo-hover">
+          Enviar mensaje
+        </button>
+
+        <p id="c-mensaje-estado" class="hidden text-sm" role="status"></p>
+      </form>
+    </div>
+  </section>
+</BaseLayout>
+
+<script>
+  const form = document.getElementById('form-contacto') as HTMLFormElement | null;
+  const mensaje = document.getElementById('c-mensaje-estado');
+
+  form?.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    if (!mensaje) return;
+    const datos = new FormData(form);
+
+    mensaje.classList.remove('hidden', 'text-rojo', 'text-grafito');
+    mensaje.textContent = 'Enviando…';
+
+    try {
+      const res = await fetch('/api/contacto', { method: 'POST', body: datos });
+      const json = await res.json();
+      if (res.ok) {
+        mensaje.classList.add('text-grafito');
+        mensaje.textContent = json.mensaje ?? 'Mensaje enviado. Te responderemos en el mismo día hábil.';
+        form.reset();
+      } else {
+        mensaje.classList.add('text-rojo');
+        mensaje.textContent = json.mensaje ?? 'No se ha podido enviar. Revisa los campos obligatorios e inténtalo de nuevo.';
+      }
+    } catch {
+      mensaje.classList.add('text-rojo');
+      mensaje.textContent = 'Error de conexión. Puedes llamarnos al 961 753 565 mientras lo solucionamos.';
+    }
+  });
+</script>

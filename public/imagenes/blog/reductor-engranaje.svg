@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 450">
+  <rect width="800" height="450" fill="#14140f"/>
+  <polygon points="0,0 90,0 0,90" fill="#c81e1e"/>
+  <g fill="none" stroke="#f4f3ef" stroke-width="3">
+    <circle cx="320" cy="230" r="90"/>
+    <circle cx="500" cy="230" r="45"/>
+  </g>
+  <g fill="#c81e1e">
+    <circle cx="320" cy="230" r="6"/>
+    <circle cx="500" cy="230" r="6"/>
+  </g>
+  <text x="220" y="370" font-family="monospace" font-size="18" fill="#d8d6d0">REDUCTOR · RELACIÓN 20:1</text>
+</svg>

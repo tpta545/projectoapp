@@ -1,0 +1,60 @@
+---
+import { getCollection } from 'astro:content';
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import Breadcrumbs from '@/components/Breadcrumbs.astro';
+import CtaPresupuesto from '@/components/CtaPresupuesto.astro';
+
+const familias = (await getCollection('productos')).sort((a, b) => a.data.orden - b.data.orden);
+
+const jsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'ItemList',
+  itemListElement: familias.map((f, i) => ({
+    '@type': 'ListItem',
+    position: i + 1,
+    name: f.data.titulo,
+    url: `https://www.grupotrade.es/productos/${f.id}/`,
+  })),
+};
+---
+
+<BaseLayout
+  title="Productos industriales | TRADE"
+  description="Rodamientos, transmisión, motores, variadores, neumática y reductores. Familias de producto con criterios de selección técnica. Algemesí."
+>
+  <Breadcrumbs items={[{ nombre: 'Productos', href: '/productos/' }]} />
+
+  <header class="border-b border-gris-borde bg-gris-fondo py-10">
+    <div class="mx-auto max-w-6xl px-4 sm:px-6">
+      <h1 class="font-display text-4xl font-black text-negro sm:text-5xl">Productos</h1>
+      <p class="mt-3 max-w-2xl text-lg text-grafito">
+        Componentes de transmisión de potencia, neumática, automatización y rodadura. Cada familia incluye
+        criterios de selección para pedir presupuesto sin errores.
+      </p>
+    </div>
+  </header>
+
+  <section class="mx-auto max-w-6xl px-4 py-12 sm:px-6">
+    <ul class="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
+      {
+        familias.map((f) => (
+          <li>
+            <a href={`/productos/${f.id}/`} class="muesca block h-full border border-gris-borde bg-blanco p-6 transition-colors hover:border-rojo">
+              <h2 class="font-display text-xl font-bold text-negro">{f.data.titulo}</h2>
+              <p class="mt-2 text-sm leading-relaxed text-grafito">{f.data.resumen}</p>
+              <span class="mt-4 inline-block text-sm font-semibold text-rojo">Ver ficha técnica →</span>
+            </a>
+          </li>
+        ))
+      }
+    </ul>
+  </section>
+
+  <section class="border-t border-gris-borde bg-gris-fondo py-12">
+    <div class="mx-auto max-w-6xl px-4 sm:px-6">
+      <CtaPresupuesto />
+    </div>
+  </section>
+
+  <script type="application/ld+json" is:inline set:html={JSON.stringify(jsonLd)} />
+</BaseLayout>

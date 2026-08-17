@@ -1,0 +1,85 @@
+---
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import Breadcrumbs from '@/components/Breadcrumbs.astro';
+import CtaPresupuesto from '@/components/CtaPresupuesto.astro';
+import { EMPRESA, DIFERENCIADORES, MARCAS_OFICIALES } from '@/lib/empresa';
+
+const antiguedad = new Date().getFullYear() - EMPRESA.fundacion;
+---
+
+<BaseLayout
+  title="Quiénes somos | TRADE Algemesí"
+  description="Transmisiones del Este, S.L. — TRADE. Distribuidor industrial en Algemesí desde 2013. Stock propio, reparto propio y servicio técnico de reparación."
+>
+  <Breadcrumbs items={[{ nombre: 'Empresa', href: '/empresa/' }]} />
+
+  <header class="border-b border-gris-borde bg-gris-fondo py-10">
+    <div class="mx-auto max-w-6xl px-4 sm:px-6">
+      <h1 class="font-display text-4xl font-black text-negro sm:text-5xl">Quiénes somos</h1>
+      <p class="mt-3 max-w-2xl text-lg text-grafito">
+        {EMPRESA.razonSocial} — marca comercial TRADE. {antiguedad} años distribuyendo componentes de
+        transmisión de potencia, neumática y automatización industrial en Algemesí.
+      </p>
+    </div>
+  </header>
+
+  <section class="mx-auto max-w-4xl px-4 py-12 sm:px-6">
+    <div class="prose-trade max-w-none">
+      <p>
+        TRADE es la marca comercial de <strong>Transmisiones del Este, S.L.</strong> (CIF {EMPRESA.cif}),
+        con sede en el Polígono Industrial Les Cotes de Algemesí. Desde {EMPRESA.fundacion} distribuimos
+        componentes de transmisión de potencia, neumática, automatización industrial y rodamientos para
+        empresas de mantenimiento, jefes de planta e ingenierías de la Ribera Alta y Ribera Baixa.
+      </p>
+
+      <h2>Qué hacemos</h2>
+      <p>
+        Suministramos el componente que mantiene una máquina en marcha: rodamientos, cadenas y correas,
+        motores eléctricos, variadores de frecuencia, elementos neumáticos, reductores, ruedas industriales,
+        lubricantes y herramienta de taller. A eso añadimos un servicio técnico propio de reparación de
+        equipos, con diagnóstico e informe técnico incluidos, para cuando la solución no es sustituir sino
+        arreglar lo que ya está instalado.
+      </p>
+
+      <h2>Distribución oficial</h2>
+      <p>
+        Somos distribuidor oficial de cinco fabricantes de referencia:
+      </p>
+      <ul class="not-prose grid gap-2 sm:grid-cols-2">
+        {
+          MARCAS_OFICIALES.map((m) => (
+            <li class="border-l-2 border-rojo bg-gris-fondo px-4 py-2">
+              <a href={`/marcas/${m.slug}/`} class="font-semibold text-negro hover:text-rojo">{m.nombre}</a>
+            </li>
+          ))
+        }
+      </ul>
+
+      <h2>Cómo trabajamos</h2>
+      <p>
+        Mantenemos stock propio en nuestro almacén de Algemesí para resolver averías el mismo día, y cuando
+        una referencia no está disponible, la gestionamos para tenerla en planta en 24 horas. El reparto en
+        la comarca lo hacemos con vehículo propio, sin depender de una agencia de transporte externa. Quien
+        atiende una consulta técnica —por teléfono, email o en el propio mostrador— tiene formación en el
+        sector: no es un centro de atención genérico repitiendo un guion.
+      </p>
+    </div>
+
+    <div class="mt-10 grid gap-4 sm:grid-cols-2">
+      {
+        DIFERENCIADORES.map((d) => (
+          <div class="border-t-4 border-rojo pt-3">
+            <p class="font-display text-lg font-bold text-negro">{d.titulo}</p>
+            <p class="mt-1 text-sm text-grafito">{d.texto}</p>
+          </div>
+        ))
+      }
+    </div>
+  </section>
+
+  <section class="border-t border-gris-borde bg-gris-fondo py-12">
+    <div class="mx-auto max-w-6xl px-4 sm:px-6">
+      <CtaPresupuesto />
+    </div>
+  </section>
+</BaseLayout>

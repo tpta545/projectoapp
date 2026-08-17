@@ -1,0 +1,150 @@
+@import 'tailwindcss';
+
+@import '@fontsource/big-shoulders/600.css';
+@import '@fontsource/big-shoulders/700.css';
+@import '@fontsource/big-shoulders/900.css';
+@import '@fontsource/ibm-plex-sans/400.css';
+@import '@fontsource/ibm-plex-sans/500.css';
+@import '@fontsource/ibm-plex-sans/600.css';
+@import '@fontsource/ibm-plex-sans/400-italic.css';
+@import '@fontsource/ibm-plex-mono/500.css';
+
+@theme {
+  /* Neutros — cálidos, no negro/blanco puro */
+  --color-negro: #14140f;
+  --color-grafito: #4a4a46;
+  --color-gris-borde: #d8d6d0;
+  --color-gris-fondo: #f4f3ef;
+  --color-blanco: #ffffff;
+
+  /* Acento — rojo TRADE, solo para CTA y marcadores estructurales */
+  --color-rojo: #c81e1e;
+  --color-rojo-hover: #a61818;
+  --color-rojo-activo: #841212;
+  --color-rojo-tinta: #fcebeb;
+
+  --font-display: 'Big Shoulders', 'Arial Narrow', sans-serif;
+  --font-sans: 'IBM Plex Sans', system-ui, sans-serif;
+  --font-mono: 'IBM Plex Mono', ui-monospace, monospace;
+
+  --breakpoint-xs: 22.5rem; /* 360px */
+}
+
+@layer base {
+  html {
+    font-family: var(--font-sans);
+    color: var(--color-negro);
+    -webkit-text-size-adjust: 100%;
+  }
+
+  body {
+    background-color: var(--color-blanco);
+  }
+
+  h1,
+  h2,
+  h3,
+  h4 {
+    font-family: var(--font-display);
+    font-weight: 700;
+    letter-spacing: -0.01em;
+    text-wrap: balance;
+  }
+
+  :focus-visible {
+    outline: 3px solid var(--color-rojo);
+    outline-offset: 2px;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+      scroll-behavior: auto !important;
+    }
+  }
+}
+
+@layer components {
+  /* Elemento firma: muesca de ficha técnica en la esquina superior izquierda */
+  .muesca {
+    position: relative;
+  }
+  .muesca::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 1.25rem;
+    height: 1.25rem;
+    background-color: var(--color-rojo);
+    clip-path: polygon(0 0, 100% 0, 0 100%);
+  }
+
+  /* Tipografía de contenido largo (fichas, artículos, páginas legales) */
+  .prose-trade {
+    max-width: 68ch;
+    color: var(--color-negro);
+    line-height: 1.7;
+  }
+  .prose-trade > * + * {
+    margin-top: 1.15em;
+  }
+  .prose-trade h2 {
+    margin-top: 2.2em;
+    font-size: 1.5rem;
+    border-bottom: 2px solid var(--color-rojo);
+    padding-bottom: 0.35em;
+  }
+  .prose-trade h3 {
+    margin-top: 1.6em;
+    font-size: 1.15rem;
+  }
+  .prose-trade p,
+  .prose-trade li {
+    color: var(--color-grafito);
+  }
+  .prose-trade strong {
+    color: var(--color-negro);
+    font-weight: 600;
+  }
+  .prose-trade ul,
+  .prose-trade ol {
+    padding-left: 1.4em;
+  }
+  .prose-trade ul {
+    list-style: disc;
+  }
+  .prose-trade ol {
+    list-style: decimal;
+  }
+  .prose-trade a {
+    color: var(--color-rojo);
+    text-decoration: underline;
+    text-underline-offset: 2px;
+  }
+  .prose-trade table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.9rem;
+  }
+  .prose-trade th {
+    text-align: left;
+    background-color: var(--color-negro);
+    color: var(--color-blanco);
+    padding: 0.6em 0.8em;
+  }
+  .prose-trade td {
+    border-top: 1px solid var(--color-gris-borde);
+    padding: 0.6em 0.8em;
+  }
+  .prose-trade blockquote {
+    border-left: 3px solid var(--color-rojo);
+    padding-left: 1em;
+    font-style: italic;
+    color: var(--color-grafito);
+  }
+}

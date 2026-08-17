@@ -1,0 +1,134 @@
+---
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import Breadcrumbs from '@/components/Breadcrumbs.astro';
+import { EMPRESA, FAMILIAS_PRODUCTO } from '@/lib/empresa';
+---
+
+<BaseLayout
+  title="Solicitar presupuesto | TRADE Algemesí"
+  description="Solicita presupuesto de rodamientos, transmisión, motores, neumática o cualquier componente industrial. Respuesta en el mismo día hábil."
+>
+  <Breadcrumbs items={[{ nombre: 'Solicitar presupuesto', href: '/presupuesto/' }]} />
+
+  <header class="border-b border-gris-borde bg-gris-fondo py-10">
+    <div class="mx-auto max-w-6xl px-4 sm:px-6">
+      <h1 class="font-display text-4xl font-black text-negro sm:text-5xl">Solicitar presupuesto</h1>
+      <p class="mt-3 max-w-2xl text-lg text-grafito">
+        Cuanta más información nos des sobre la pieza o el equipo, más rápido podremos responder. Contestamos
+        en el mismo día hábil.
+      </p>
+    </div>
+  </header>
+
+  <section class="mx-auto max-w-2xl px-4 py-12 sm:px-6">
+    <form id="form-presupuesto" class="space-y-5" novalidate>
+      <div class="grid gap-5 sm:grid-cols-2">
+        <div>
+          <label for="p-nombre" class="block text-sm font-semibold text-negro">Nombre y apellidos *</label>
+          <input id="p-nombre" name="nombre" type="text" required class="mt-1 w-full border border-gris-borde px-3 py-2.5 focus:border-rojo" />
+        </div>
+        <div>
+          <label for="p-empresa" class="block text-sm font-semibold text-negro">Empresa *</label>
+          <input id="p-empresa" name="empresa" type="text" required class="mt-1 w-full border border-gris-borde px-3 py-2.5 focus:border-rojo" />
+        </div>
+        <div>
+          <label for="p-email" class="block text-sm font-semibold text-negro">Email *</label>
+          <input id="p-email" name="email" type="email" required class="mt-1 w-full border border-gris-borde px-3 py-2.5 focus:border-rojo" />
+        </div>
+        <div>
+          <label for="p-telefono" class="block text-sm font-semibold text-negro">Teléfono *</label>
+          <input id="p-telefono" name="telefono" type="tel" required class="mt-1 w-full border border-gris-borde px-3 py-2.5 focus:border-rojo" />
+        </div>
+      </div>
+
+      <div>
+        <label for="p-familia" class="block text-sm font-semibold text-negro">Familia de producto</label>
+        <select id="p-familia" name="familia" class="mt-1 w-full border border-gris-borde px-3 py-2.5 focus:border-rojo">
+          <option value="">Selecciona una familia (opcional)</option>
+          {FAMILIAS_PRODUCTO.map((f) => <option value={f.slug}>{f.nombre}</option>)}
+        </select>
+      </div>
+
+      <div>
+        <label for="p-descripcion" class="block text-sm font-semibold text-negro">Referencia o descripción de la pieza *</label>
+        <textarea id="p-descripcion" name="descripcion" required rows="4" class="mt-1 w-full border border-gris-borde px-3 py-2.5 focus:border-rojo" placeholder="Referencia grabada, marca y modelo del equipo, o descripción de lo que necesitas."></textarea>
+      </div>
+
+      <div>
+        <p class="block text-sm font-semibold text-negro">Urgencia</p>
+        <div class="mt-2 flex gap-4 text-sm text-grafito">
+          <label class="flex items-center gap-2">
+            <input type="radio" name="urgencia" value="normal" checked class="h-4 w-4" />
+            Normal
+          </label>
+          <label class="flex items-center gap-2">
+            <input type="radio" name="urgencia" value="linea-parada" class="h-4 w-4" />
+            Línea parada — urgente
+          </label>
+        </div>
+      </div>
+
+      <div class="hidden" aria-hidden="true">
+        <label for="p-web">No rellenar</label>
+        <input id="p-web" name="web" type="text" tabindex="-1" autocomplete="off" />
+      </div>
+
+      <div class="flex items-start gap-2">
+        <input id="p-consentimiento" name="consentimiento" type="checkbox" required class="mt-1 h-4 w-4" />
+        <label for="p-consentimiento" class="text-sm text-grafito">
+          He leído y acepto la <a href="/politica-privacidad/" class="text-rojo underline">política de privacidad</a>. *
+        </label>
+      </div>
+
+      <button type="submit" class="bg-rojo px-6 py-3.5 text-sm font-semibold text-blanco hover:bg-rojo-hover">
+        Enviar solicitud
+      </button>
+
+      <p id="p-mensaje" class="hidden text-sm" role="status"></p>
+    </form>
+
+    <p class="mt-6 text-sm text-grafito">
+      ¿Prefieres hablarlo directamente? Llama al <a href={EMPRESA.telefonoHref} class="font-mono text-negro hover:text-rojo">{EMPRESA.telefono}</a>
+      o escribe a <a href={`mailto:${EMPRESA.email}`} class="text-negro hover:text-rojo">{EMPRESA.email}</a>.
+    </p>
+  </section>
+</BaseLayout>
+
+<script>
+  const parametros = new URLSearchParams(window.location.search);
+  const familia = parametros.get('familia');
+  if (familia) {
+    const select = document.getElementById('p-familia') as HTMLSelectElement | null;
+    if (select && [...select.options].some((o) => o.value === familia)) {
+      select.value = familia;
+    }
+  }
+
+  const form = document.getElementById('form-presupuesto') as HTMLFormElement | null;
+  const mensaje = document.getElementById('p-mensaje');
+
+  form?.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    if (!mensaje) return;
+    const datos = new FormData(form);
+
+    mensaje.classList.remove('hidden', 'text-rojo', 'text-grafito');
+    mensaje.textContent = 'Enviando…';
+
+    try {
+      const res = await fetch('/api/presupuesto', { method: 'POST', body: datos });
+      const json = await res.json();
+      if (res.ok) {
+        mensaje.classList.add('text-grafito');
+        mensaje.textContent = json.mensaje ?? 'Solicitud enviada. Te responderemos en el mismo día hábil.';
+        form.reset();
+      } else {
+        mensaje.classList.add('text-rojo');
+        mensaje.textContent = json.mensaje ?? 'No se ha podido enviar. Revisa los campos obligatorios e inténtalo de nuevo.';
+      }
+    } catch {
+      mensaje.classList.add('text-rojo');
+      mensaje.textContent = 'Error de conexión. Puedes llamarnos al 961 753 565 mientras lo solucionamos.';
+    }
+  });
+</script>

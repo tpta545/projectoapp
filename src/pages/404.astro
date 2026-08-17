@@ -1,0 +1,24 @@
+---
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import { EMPRESA } from '@/lib/empresa';
+---
+
+<BaseLayout title="Página no encontrada | TRADE" description="La página que buscas no existe o se ha movido. Consulta nuestros productos, marcas y servicios, o contacta directamente con nosotros." noindex={true}>
+  <section class="mx-auto max-w-2xl px-4 py-24 text-center sm:px-6">
+    <p class="font-mono text-sm text-rojo">Error 404</p>
+    <h1 class="mt-2 font-display text-4xl font-black text-negro sm:text-5xl">No encontramos esta página</h1>
+    <p class="mt-4 text-lg text-grafito">
+      Puede que el enlace esté desactualizado o que la página se haya movido. Prueba con alguno de estos
+      accesos:
+    </p>
+    <div class="mt-8 flex flex-wrap justify-center gap-3">
+      <a href="/productos/" class="border border-negro px-5 py-3 text-sm font-semibold text-negro hover:bg-gris-fondo">Productos</a>
+      <a href="/servicios/reparacion-equipos/" class="border border-negro px-5 py-3 text-sm font-semibold text-negro hover:bg-gris-fondo">Reparación de equipos</a>
+      <a href="/blog/" class="border border-negro px-5 py-3 text-sm font-semibold text-negro hover:bg-gris-fondo">Blog técnico</a>
+      <a href="/presupuesto/" class="bg-rojo px-5 py-3 text-sm font-semibold text-blanco hover:bg-rojo-hover">Solicitar presupuesto</a>
+    </div>
+    <p class="mt-8 text-sm text-grafito">
+      O llama directamente al <a href={EMPRESA.telefonoHref} class="font-mono text-negro hover:text-rojo">{EMPRESA.telefono}</a>.
+    </p>
+  </section>
+</BaseLayout>

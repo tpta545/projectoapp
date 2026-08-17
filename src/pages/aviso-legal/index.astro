@@ -1,0 +1,74 @@
+---
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import Breadcrumbs from '@/components/Breadcrumbs.astro';
+import { EMPRESA } from '@/lib/empresa';
+---
+
+<BaseLayout
+  title="Aviso legal | TRADE"
+  description="Aviso legal de Transmisiones del Este, S.L. (TRADE): datos identificativos, condiciones de uso del sitio web y régimen de propiedad intelectual."
+>
+  <Breadcrumbs items={[{ nombre: 'Aviso legal', href: '/aviso-legal/' }]} />
+
+  <section class="mx-auto max-w-3xl px-4 py-12 sm:px-6">
+    <h1 class="font-display text-4xl font-black text-negro">Aviso legal</h1>
+
+    <div class="prose-trade mt-8 max-w-none">
+      <h2>1. Datos identificativos</h2>
+      <p>
+        En cumplimiento del artículo 10 de la Ley 34/2002, de 11 de julio, de Servicios de la Sociedad de la
+        Información y de Comercio Electrónico (LSSI-CE), se informa de los siguientes datos:
+      </p>
+      <ul>
+        <li><strong>Denominación social:</strong> {EMPRESA.razonSocial}</li>
+        <li><strong>Nombre comercial:</strong> {EMPRESA.marca}</li>
+        <li><strong>CIF:</strong> {EMPRESA.cif}</li>
+        <li><strong>Domicilio social:</strong> {EMPRESA.direccion.completa}</li>
+        <li><strong>Correo electrónico:</strong> {EMPRESA.email}</li>
+        <li><strong>Teléfono:</strong> {EMPRESA.telefono}</li>
+        <li>
+          <strong>Datos registrales:</strong> Inscrita en el Registro Mercantil de Valencia
+          <em>[dato pendiente de completar por la empresa: tomo, folio, hoja e inscripción]</em>.
+        </li>
+      </ul>
+
+      <h2>2. Objeto</h2>
+      <p>
+        El presente sitio web ({EMPRESA.dominio}) tiene carácter informativo y comercial. A través de él,
+        {EMPRESA.marca} informa sobre sus productos y servicios de distribución industrial y permite solicitar
+        presupuesto o contacto. Este sitio no constituye una tienda online: no se realizan ventas ni cobros a
+        través de la web.
+      </p>
+
+      <h2>3. Condiciones de uso</h2>
+      <p>
+        El acceso y uso de este sitio web atribuye la condición de usuario y supone la aceptación de las
+        condiciones aquí recogidas. El usuario se compromete a hacer un uso adecuado de los contenidos y
+        servicios que {EMPRESA.marca} ofrece a través de su web, y a no emplearlos para incurrir en actividades
+        ilícitas o contrarias a la buena fe y al ordenamiento legal.
+      </p>
+
+      <h2>4. Propiedad intelectual e industrial</h2>
+      <p>
+        Los contenidos de este sitio web (textos, imágenes, diseño, código fuente, marcas y logotipos) son
+        titularidad de {EMPRESA.razonSocial} o de terceros que han autorizado su uso, y están protegidos por la
+        normativa de propiedad intelectual e industrial. Queda prohibida su reproducción, distribución o
+        comunicación pública total o parcial sin autorización expresa.
+      </p>
+
+      <h2>5. Enlaces a terceros</h2>
+      <p>
+        Este sitio incluye enlaces a webs de fabricantes (ABB, FESTO, Dodge, ISB, Tellure Rota) con fines
+        informativos. {EMPRESA.marca} no se hace responsable del contenido de sitios web de terceros a los que
+        se pueda acceder mediante estos enlaces.
+      </p>
+
+      <h2>6. Legislación aplicable</h2>
+      <p>
+        Las presentes condiciones se rigen por la legislación española. Para cualquier controversia derivada
+        del uso de este sitio web, las partes se someten a los juzgados y tribunales del domicilio del usuario,
+        salvo que la normativa aplicable disponga otra cosa.
+      </p>
+    </div>
+  </section>
+</BaseLayout>

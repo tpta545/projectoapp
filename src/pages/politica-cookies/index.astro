@@ -1,0 +1,82 @@
+---
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import Breadcrumbs from '@/components/Breadcrumbs.astro';
+import { EMPRESA } from '@/lib/empresa';
+
+const cookies = [
+  {
+    nombre: 'trade-consentimiento-cookies',
+    tipo: 'Necesaria',
+    finalidad: 'Almacena tu decisión sobre el uso de cookies para no volver a mostrar el aviso.',
+    duracion: '12 meses (localStorage del navegador)',
+  },
+  {
+    nombre: '_ga, _ga_*',
+    tipo: 'Analítica (Google Analytics 4)',
+    finalidad: 'Distingue usuarios y sesiones para generar estadísticas agregadas de uso del sitio.',
+    duracion: 'Hasta 13 meses',
+  },
+];
+---
+
+<BaseLayout
+  title="Política de cookies | TRADE"
+  description="Política de cookies de TRADE: qué cookies usamos, su finalidad y duración, y cómo aceptar, rechazar o configurar tu consentimiento."
+>
+  <Breadcrumbs items={[{ nombre: 'Política de cookies', href: '/politica-cookies/' }]} />
+
+  <section class="mx-auto max-w-3xl px-4 py-12 sm:px-6">
+    <h1 class="font-display text-4xl font-black text-negro">Política de cookies</h1>
+
+    <div class="prose-trade mt-8 max-w-none">
+      <p>
+        Una cookie es un pequeño archivo que se almacena en tu navegador al visitar una web. En
+        {EMPRESA.dominio} usamos únicamente las cookies necesarias para el funcionamiento del sitio y, si nos
+        das tu consentimiento, cookies analíticas de Google Analytics 4. No se carga ninguna cookie no esencial
+        sin tu consentimiento previo, conforme al artículo 22 de la LSSI y al RGPD.
+      </p>
+
+      <h2>Cookies que utilizamos</h2>
+      <div class="not-prose overflow-x-auto">
+        <table class="w-full border-collapse text-sm">
+          <thead>
+            <tr class="bg-negro text-left text-blanco">
+              <th class="px-4 py-3 font-display font-semibold">Cookie</th>
+              <th class="px-4 py-3 font-display font-semibold">Tipo</th>
+              <th class="px-4 py-3 font-display font-semibold">Finalidad</th>
+              <th class="px-4 py-3 font-display font-semibold">Duración</th>
+            </tr>
+          </thead>
+          <tbody>
+            {
+              cookies.map((c, i) => (
+                <tr class={i % 2 === 0 ? 'bg-gris-fondo' : 'bg-blanco'}>
+                  <td class="border-t border-gris-borde px-4 py-3 font-mono text-negro">{c.nombre}</td>
+                  <td class="border-t border-gris-borde px-4 py-3 text-negro">{c.tipo}</td>
+                  <td class="border-t border-gris-borde px-4 py-3 text-grafito">{c.finalidad}</td>
+                  <td class="border-t border-gris-borde px-4 py-3 text-grafito">{c.duracion}</td>
+                </tr>
+              ))
+            }
+          </tbody>
+        </table>
+      </div>
+
+      <h2>Cómo gestionar tu consentimiento</h2>
+      <p>
+        Al entrar por primera vez en la web verás un aviso con tres opciones con el mismo peso visual:
+        <strong>aceptar</strong> todas las cookies, <strong>rechazar</strong> las no esenciales, o
+        <strong>configurar</strong> tu elección cookie por cookie. Puedes cambiar tu decisión en cualquier
+        momento borrando la cookie <code>trade-consentimiento-cookies</code> desde los ajustes de tu navegador,
+        lo que hará que el aviso vuelva a mostrarse en tu próxima visita.
+      </p>
+
+      <h2>Cookies de terceros</h2>
+      <p>
+        Si aceptas las cookies analíticas, Google Ireland Limited instala cookies de Google Analytics 4 para
+        generar estadísticas agregadas de uso del sitio. Puedes consultar la política de privacidad de Google
+        en su propio sitio web. Estas cookies solo se cargan después de tu consentimiento explícito.
+      </p>
+    </div>
+  </section>
+</BaseLayout>

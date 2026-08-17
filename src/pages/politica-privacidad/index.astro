@@ -1,0 +1,79 @@
+---
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import Breadcrumbs from '@/components/Breadcrumbs.astro';
+import { EMPRESA } from '@/lib/empresa';
+---
+
+<BaseLayout
+  title="Política de privacidad | TRADE"
+  description="Política de privacidad de TRADE: responsable del tratamiento, finalidades, base legal, plazos de conservación y derechos ARCO."
+>
+  <Breadcrumbs items={[{ nombre: 'Política de privacidad', href: '/politica-privacidad/' }]} />
+
+  <section class="mx-auto max-w-3xl px-4 py-12 sm:px-6">
+    <h1 class="font-display text-4xl font-black text-negro">Política de privacidad</h1>
+
+    <div class="prose-trade mt-8 max-w-none">
+      <h2>1. Responsable del tratamiento</h2>
+      <ul>
+        <li><strong>Identidad:</strong> {EMPRESA.razonSocial} (TRADE)</li>
+        <li><strong>CIF:</strong> {EMPRESA.cif}</li>
+        <li><strong>Dirección:</strong> {EMPRESA.direccion.completa}</li>
+        <li><strong>Email:</strong> {EMPRESA.email}</li>
+      </ul>
+
+      <h2>2. Finalidad del tratamiento</h2>
+      <p>Tratamos los datos personales que nos facilitas a través de los formularios de este sitio web para:</p>
+      <ul>
+        <li>Gestionar y responder solicitudes de presupuesto sobre nuestros productos y servicios.</li>
+        <li>Gestionar solicitudes de diagnóstico y reparación de equipos.</li>
+        <li>Responder consultas generales enviadas a través del formulario de contacto.</li>
+        <li>Cuando lo consientes expresamente, analizar el uso agregado del sitio mediante Google Analytics 4.</li>
+      </ul>
+
+      <h2>3. Base legal</h2>
+      <p>
+        La base legal para el tratamiento de tus datos en los formularios de presupuesto, diagnóstico y
+        contacto es la <strong>ejecución de medidas precontractuales</strong> a solicitud tuya (artículo 6.1.b
+        RGPD), es decir, responder a tu petición comercial. En el caso de las cookies analíticas, la base legal
+        es tu <strong>consentimiento</strong> (artículo 6.1.a RGPD), que puedes retirar en cualquier momento
+        desde el panel de configuración de cookies.
+      </p>
+
+      <h2>4. Plazos de conservación</h2>
+      <p>
+        Los datos de solicitudes de presupuesto, diagnóstico y contacto se conservan mientras dure la relación
+        comercial derivada de la solicitud y, posteriormente, durante los plazos de prescripción legal
+        aplicables (con carácter general, hasta 6 años a efectos de obligaciones mercantiles y fiscales). Los
+        datos de navegación asociados a cookies analíticas se conservan según el plazo indicado en la
+        <a href="/politica-cookies/">política de cookies</a>.
+      </p>
+
+      <h2>5. Destinatarios</h2>
+      <p>
+        No cedemos tus datos a terceros salvo obligación legal. Los formularios se procesan mediante un
+        proveedor de alojamiento (hosting) que actúa como encargado del tratamiento conforme al artículo 28
+        RGPD. Si utilizas cookies analíticas, Google Ireland Limited actúa como encargado del tratamiento para
+        la prestación del servicio Google Analytics 4.
+      </p>
+
+      <h2>6. Derechos de las personas interesadas</h2>
+      <p>
+        Puedes ejercer en cualquier momento tus derechos de <strong>acceso, rectificación, cancelación (supresión)
+        y oposición</strong> (derechos ARCO), así como los derechos de limitación del tratamiento y portabilidad
+        reconocidos por el RGPD, dirigiéndote por escrito a {EMPRESA.email} o a la dirección postal indicada en
+        el apartado 1, adjuntando copia de un documento que acredite tu identidad. También tienes derecho a
+        presentar una reclamación ante la Agencia Española de Protección de Datos (www.aepd.es) si consideras
+        que el tratamiento no se ajusta a la normativa vigente.
+      </p>
+
+      <h2>7. Medidas de seguridad</h2>
+      <p>
+        Aplicamos las medidas técnicas y organizativas adecuadas para garantizar un nivel de seguridad
+        apropiado al riesgo, incluyendo el envío de formularios mediante conexión cifrada (HTTPS) y protección
+        frente a envíos automatizados (sistema antispam con casilla oculta y limitación de frecuencia de
+        envío).
+      </p>
+    </div>
+  </section>
+</BaseLayout>

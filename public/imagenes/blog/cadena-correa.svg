@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 450">
+  <rect width="800" height="450" fill="#14140f"/>
+  <polygon points="0,0 90,0 0,90" fill="#c81e1e"/>
+  <circle cx="260" cy="230" r="70" fill="none" stroke="#f4f3ef" stroke-width="4"/>
+  <circle cx="540" cy="230" r="45" fill="none" stroke="#f4f3ef" stroke-width="4"/>
+  <line x1="260" y1="160" x2="540" y2="185" stroke="#c81e1e" stroke-width="6"/>
+  <line x1="260" y1="300" x2="540" y2="275" stroke="#c81e1e" stroke-width="6"/>
+  <circle cx="260" cy="230" r="8" fill="#f4f3ef"/>
+  <circle cx="540" cy="230" r="8" fill="#f4f3ef"/>
+  <text x="220" y="380" font-family="monospace" font-size="18" fill="#d8d6d0">TRANSMISIÓN POR CORREA</text>
+</svg>

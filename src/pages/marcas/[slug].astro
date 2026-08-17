@@ -1,0 +1,59 @@
+---
+import { getCollection, render } from 'astro:content';
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import Breadcrumbs from '@/components/Breadcrumbs.astro';
+import CtaPresupuesto from '@/components/CtaPresupuesto.astro';
+
+export async function getStaticPaths() {
+  const entradas = await getCollection('marcas');
+  return entradas.map((entrada) => ({
+    params: { slug: entrada.id },
+    props: { entrada },
+  }));
+}
+
+const { entrada } = Astro.props;
+const { Content } = await render(entrada);
+---
+
+<BaseLayout title={entrada.data.seo.title} description={entrada.data.seo.description}>
+  <Breadcrumbs items={[{ nombre: 'Marcas', href: '/marcas/' }, { nombre: entrada.data.nombre, href: `/marcas/${entrada.id}/` }]} />
+
+  <header class="border-b border-gris-borde bg-gris-fondo py-10">
+    <div class="mx-auto max-w-6xl px-4 sm:px-6">
+      <p class="mb-2 inline-block border border-rojo px-2 py-0.5 text-xs font-semibold uppercase tracking-wide text-rojo">
+        Distribuidor oficial
+      </p>
+      <h1 class="font-display text-4xl font-black text-negro sm:text-5xl">{entrada.data.nombre}</h1>
+      <p class="mt-3 max-w-2xl text-lg text-grafito">{entrada.data.resumen}</p>
+    </div>
+  </header>
+
+  <div class="mx-auto max-w-6xl gap-10 px-4 py-10 sm:px-6 lg:grid lg:grid-cols-[2fr_1fr] lg:items-start">
+    <article class="prose-trade max-w-none">
+      <Content />
+
+      <h2 class="mt-10 font-display text-2xl font-bold text-negro">Gamas que distribuimos</h2>
+      <ul class="not-prose mt-3 grid gap-2 sm:grid-cols-2">
+        {
+          entrada.data.gamas.map((g) => (
+            <li class="border-l-2 border-rojo bg-gris-fondo px-4 py-2 text-sm text-negro">{g}</li>
+          ))
+        }
+      </ul>
+
+      <p class="mt-8">
+        <a href={entrada.data.catalogoUrl} target="_blank" rel="noopener noreferrer" class="font-semibold">
+          Consultar catálogo técnico oficial de {entrada.data.nombre} ↗
+        </a>
+      </p>
+    </article>
+
+    <aside class="mt-10 lg:sticky lg:top-24 lg:mt-0">
+      <CtaPresupuesto
+        titulo={`Presupuesto de producto ${entrada.data.nombre}`}
+        texto="Indica la referencia o describe la pieza que necesitas de esta marca."
+      />
+    </aside>
+  </div>
+</BaseLayout>

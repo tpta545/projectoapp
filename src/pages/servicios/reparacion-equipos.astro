@@ -1,0 +1,320 @@
+---
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import Breadcrumbs from '@/components/Breadcrumbs.astro';
+import FaqSchema from '@/components/FaqSchema.astro';
+import { EMPRESA } from '@/lib/empresa';
+
+const pasos = [
+  {
+    titulo: 'Recepción',
+    texto: 'El equipo llega a nuestro taller de Algemesí, por entrega directa del cliente o recogido con nuestro reparto propio.',
+  },
+  {
+    titulo: 'Diagnóstico',
+    texto: 'Desmontaje y verificación técnica para identificar la causa real del fallo, no solo el síntoma. Incluye comprobación eléctrica y mecánica según el equipo.',
+  },
+  {
+    titulo: 'Presupuesto',
+    texto: 'Presupuesto cerrado antes de intervenir, con el alcance exacto de la reparación. No se hace nada sin tu aprobación.',
+  },
+  {
+    titulo: 'Reparación',
+    texto: 'Sustitución de los componentes dañados (rodamientos, bobinado, retenes, tarjeta electrónica, según el caso) con recambio original o equivalente homologado.',
+  },
+  {
+    titulo: 'Pruebas',
+    texto: 'Verificación en banco de pruebas de que el equipo funciona dentro de sus parámetros nominales antes de darlo por reparado.',
+  },
+  {
+    titulo: 'Informe técnico',
+    texto: 'Documento con el diagnóstico inicial, los componentes sustituidos y el resultado de las pruebas finales.',
+  },
+  {
+    titulo: 'Entrega',
+    texto: 'Entrega en taller o con nuestro reparto propio en la comarca, junto con el informe técnico.',
+  },
+];
+
+const comparativa = [
+  {
+    situacion: 'Motor con bobinado en buen estado, fallo en rodamientos',
+    reparar: true,
+  },
+  {
+    situacion: 'Reductor con carcasa y engranajes principales intactos, fuga por retenes',
+    reparar: true,
+  },
+  {
+    situacion: 'Variador con fallo en ventilador o condensadores de bus DC',
+    reparar: true,
+  },
+  {
+    situacion: 'Motor con bobinado quemado por sobrecarga repetida',
+    reparar: false,
+  },
+  {
+    situacion: 'Equipo descatalogado sin recambio de componente principal disponible',
+    reparar: false,
+  },
+  {
+    situacion: 'Coste de reparación superior al 60-70% de un equipo nuevo equivalente',
+    reparar: false,
+  },
+];
+---
+
+<BaseLayout
+  title="Reparación de motores y reductores | TRADE"
+  description="Reparación de motores, reductores, variadores y equipos neumáticos con informe técnico. Diagnóstico previo y presupuesto cerrado en Algemesí."
+>
+  <Breadcrumbs items={[{ nombre: 'Servicios', href: '/servicios/' }, { nombre: 'Reparación de equipos', href: '/servicios/reparacion-equipos/' }]} />
+
+  <header class="border-b border-gris-borde bg-negro py-14 text-blanco">
+    <div class="mx-auto max-w-6xl px-4 sm:px-6">
+      <p class="mb-2 inline-block border border-rojo px-2 py-0.5 text-xs font-semibold uppercase tracking-wide text-rojo">
+        Servicio técnico propio
+      </p>
+      <h1 class="font-display text-4xl font-black sm:text-5xl">Reparación de equipos con informe técnico</h1>
+      <p class="mt-4 max-w-2xl text-lg text-gray-300">
+        Diagnóstico en taller propio, presupuesto cerrado antes de intervenir y entrega con informe técnico
+        documentado. No es una caja negra: sabrás qué fallaba, qué se ha sustituido y qué esperar del equipo.
+      </p>
+      <a href="#diagnostico" class="mt-6 inline-block bg-rojo px-6 py-3.5 text-sm font-semibold text-blanco hover:bg-rojo-hover">
+        Solicitar diagnóstico
+      </a>
+    </div>
+  </header>
+
+  <section class="border-b border-gris-borde bg-blanco py-14">
+    <div class="mx-auto max-w-6xl px-4 sm:px-6">
+      <h2 class="font-display text-3xl font-bold text-negro">Qué equipos reparamos</h2>
+      <ul class="mt-6 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+        <li class="border border-gris-borde bg-gris-fondo p-4"><strong class="text-negro">Motores eléctricos</strong> <span class="block text-sm text-grafito">Asíncronos trifásicos de baja tensión, cualquier marca.</span></li>
+        <li class="border border-gris-borde bg-gris-fondo p-4"><strong class="text-negro">Reductores</strong> <span class="block text-sm text-grafito">Ejes ortogonales, paralelos, coaxiales y motorreductores.</span></li>
+        <li class="border border-gris-borde bg-gris-fondo p-4"><strong class="text-negro">Variadores de frecuencia</strong> <span class="block text-sm text-grafito">Diagnóstico electrónico y sustitución de componentes.</span></li>
+        <li class="border border-gris-borde bg-gris-fondo p-4"><strong class="text-negro">Bombas</strong> <span class="block text-sm text-grafito">Centrífugas y de proceso, revisión de sellado y rodamiento.</span></li>
+        <li class="border border-gris-borde bg-gris-fondo p-4"><strong class="text-negro">Elementos neumáticos</strong> <span class="block text-sm text-grafito">Cilindros y electroválvulas con pérdida de estanqueidad o fallo eléctrico.</span></li>
+      </ul>
+    </div>
+  </section>
+
+  <section class="border-b border-gris-borde bg-gris-fondo py-14">
+    <div class="mx-auto max-w-6xl px-4 sm:px-6">
+      <h2 class="font-display text-3xl font-bold text-negro">Proceso paso a paso</h2>
+      <ol class="mt-8 grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
+        {
+          pasos.map((paso, i) => (
+            <li class="muesca border border-gris-borde bg-blanco p-5">
+              <span class="font-mono text-sm text-grafito">0{i + 1}</span>
+              <p class="mt-1 font-display text-lg font-bold text-negro">{paso.titulo}</p>
+              <p class="mt-2 text-sm leading-relaxed text-grafito">{paso.texto}</p>
+            </li>
+          ))
+        }
+      </ol>
+    </div>
+  </section>
+
+  <section class="border-b border-gris-borde bg-blanco py-14">
+    <div class="mx-auto max-w-6xl px-4 sm:px-6">
+      <div class="grid gap-8 lg:grid-cols-2">
+        <div>
+          <h2 class="font-display text-3xl font-bold text-negro">El informe técnico</h2>
+          <p class="mt-4 text-grafito">
+            Es el elemento que diferencia una reparación seria de un simple "ya funciona". Cada equipo reparado
+            sale de nuestro taller con un documento que recoge:
+          </p>
+          <ul class="mt-4 space-y-2 text-grafito">
+            <li class="border-l-2 border-rojo pl-3">El diagnóstico inicial: qué fallaba y por qué.</li>
+            <li class="border-l-2 border-rojo pl-3">Los componentes sustituidos, con referencia.</li>
+            <li class="border-l-2 border-rojo pl-3">El resultado de las pruebas finales en banco.</li>
+            <li class="border-l-2 border-rojo pl-3">Recomendaciones de mantenimiento si aplica, para evitar que se repita la avería.</li>
+          </ul>
+          <p class="mt-4 text-grafito">
+            Ese informe queda como respaldo documental para el departamento de mantenimiento del cliente, útil
+            tanto para su propio histórico de equipo como en caso de incidencia posterior.
+          </p>
+        </div>
+        <div>
+          <h2 class="font-display text-3xl font-bold text-negro">Plazos orientativos</h2>
+          <dl class="mt-4 divide-y divide-gris-borde border-t border-b border-gris-borde">
+            <div class="flex justify-between py-3">
+              <dt class="text-grafito">Diagnóstico y presupuesto</dt>
+              <dd class="font-mono font-semibold text-negro">1–2 días hábiles</dd>
+            </div>
+            <div class="flex justify-between py-3">
+              <dt class="text-grafito">Reparación tras aprobación, motor o variador</dt>
+              <dd class="font-mono font-semibold text-negro">3–5 días hábiles</dd>
+            </div>
+            <div class="flex justify-between py-3">
+              <dt class="text-grafito">Reparación tras aprobación, reductor</dt>
+              <dd class="font-mono font-semibold text-negro">5–8 días hábiles</dd>
+            </div>
+            <div class="flex justify-between py-3">
+              <dt class="text-grafito">Urgencia con línea parada</dt>
+              <dd class="font-mono font-semibold text-negro">consultar prioridad</dd>
+            </div>
+          </dl>
+          <p class="mt-3 text-sm text-grafito">
+            Plazos orientativos sobre disponibilidad de recambio estándar; se confirman en el presupuesto según
+            el equipo y la pieza necesaria.
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="border-b border-gris-borde bg-gris-fondo py-14">
+    <div class="mx-auto max-w-6xl px-4 sm:px-6">
+      <h2 class="font-display text-3xl font-bold text-negro">Cuándo compensa reparar y cuándo sustituir</h2>
+      <p class="mt-2 max-w-2xl text-grafito">
+        Nuestro diagnóstico incluye siempre esta valoración honesta. No proponemos reparación cuando no compensa.
+      </p>
+      <div class="mt-6 overflow-x-auto">
+        <table class="w-full border-collapse bg-blanco text-sm">
+          <thead>
+            <tr class="muesca bg-negro text-left text-blanco">
+              <th class="px-4 py-3 font-display font-semibold">Situación</th>
+              <th class="px-4 py-3 font-display font-semibold">Recomendación</th>
+            </tr>
+          </thead>
+          <tbody>
+            {
+              comparativa.map((c, i) => (
+                <tr class={i % 2 === 0 ? 'bg-gris-fondo' : 'bg-blanco'}>
+                  <td class="border-t border-gris-borde px-4 py-3 text-negro">{c.situacion}</td>
+                  <td class="border-t border-gris-borde px-4 py-3 font-semibold">
+                    <span class={c.reparar ? 'text-rojo' : 'text-grafito'}>{c.reparar ? 'Reparar' : 'Sustituir'}</span>
+                  </td>
+                </tr>
+              ))
+            }
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </section>
+
+  <section id="diagnostico" class="bg-blanco py-14">
+    <div class="mx-auto max-w-2xl px-4 sm:px-6">
+      <h2 class="font-display text-3xl font-bold text-negro">Solicitar diagnóstico</h2>
+      <p class="mt-2 text-grafito">
+        Cuéntanos qué equipo falla. Respondemos con cita de recepción o presupuesto de diagnóstico en el mismo
+        día hábil.
+      </p>
+
+      <form id="form-diagnostico" class="mt-8 space-y-5" novalidate>
+        <div class="grid gap-5 sm:grid-cols-2">
+          <div>
+            <label for="d-nombre" class="block text-sm font-semibold text-negro">Nombre y apellidos *</label>
+            <input id="d-nombre" name="nombre" type="text" required class="mt-1 w-full border border-gris-borde px-3 py-2.5 focus:border-rojo" />
+          </div>
+          <div>
+            <label for="d-empresa" class="block text-sm font-semibold text-negro">Empresa</label>
+            <input id="d-empresa" name="empresa" type="text" class="mt-1 w-full border border-gris-borde px-3 py-2.5 focus:border-rojo" />
+          </div>
+          <div>
+            <label for="d-email" class="block text-sm font-semibold text-negro">Email *</label>
+            <input id="d-email" name="email" type="email" required class="mt-1 w-full border border-gris-borde px-3 py-2.5 focus:border-rojo" />
+          </div>
+          <div>
+            <label for="d-telefono" class="block text-sm font-semibold text-negro">Teléfono *</label>
+            <input id="d-telefono" name="telefono" type="tel" required class="mt-1 w-full border border-gris-borde px-3 py-2.5 focus:border-rojo" />
+          </div>
+          <div>
+            <label for="d-marca" class="block text-sm font-semibold text-negro">Marca del equipo</label>
+            <input id="d-marca" name="marca" type="text" class="mt-1 w-full border border-gris-borde px-3 py-2.5 focus:border-rojo" />
+          </div>
+          <div>
+            <label for="d-modelo" class="block text-sm font-semibold text-negro">Modelo / referencia</label>
+            <input id="d-modelo" name="modelo" type="text" class="mt-1 w-full border border-gris-borde px-3 py-2.5 focus:border-rojo" />
+          </div>
+          <div>
+            <label for="d-potencia" class="block text-sm font-semibold text-negro">Potencia (kW) si aplica</label>
+            <input id="d-potencia" name="potencia" type="text" class="mt-1 w-full border border-gris-borde px-3 py-2.5 focus:border-rojo" />
+          </div>
+          <div>
+            <label for="d-urgencia" class="block text-sm font-semibold text-negro">Urgencia</label>
+            <select id="d-urgencia" name="urgencia" class="mt-1 w-full border border-gris-borde px-3 py-2.5 focus:border-rojo">
+              <option value="normal">Normal</option>
+              <option value="linea-parada">Línea parada — urgente</option>
+            </select>
+          </div>
+        </div>
+        <div>
+          <label for="d-averia" class="block text-sm font-semibold text-negro">Descripción de la avería *</label>
+          <textarea id="d-averia" name="averia" required rows="4" class="mt-1 w-full border border-gris-borde px-3 py-2.5 focus:border-rojo"></textarea>
+        </div>
+
+        <div class="hidden" aria-hidden="true">
+          <label for="d-web">No rellenar</label>
+          <input id="d-web" name="web" type="text" tabindex="-1" autocomplete="off" />
+        </div>
+
+        <div class="flex items-start gap-2">
+          <input id="d-consentimiento" name="consentimiento" type="checkbox" required class="mt-1 h-4 w-4" />
+          <label for="d-consentimiento" class="text-sm text-grafito">
+            He leído y acepto la <a href="/politica-privacidad/" class="text-rojo underline">política de privacidad</a>. *
+          </label>
+        </div>
+
+        <button type="submit" class="bg-rojo px-6 py-3.5 text-sm font-semibold text-blanco hover:bg-rojo-hover">
+          Enviar solicitud de diagnóstico
+        </button>
+
+        <p id="d-mensaje" class="hidden text-sm" role="status"></p>
+      </form>
+
+      <p class="mt-6 text-sm text-grafito">
+        ¿Prefieres hablarlo directamente? Llama al <a href={EMPRESA.telefonoHref} class="font-mono text-negro hover:text-rojo">{EMPRESA.telefono}</a>.
+      </p>
+    </div>
+  </section>
+
+  <FaqSchema
+    items={[
+      {
+        pregunta: '¿Reparáis motores y reductores de cualquier marca, no solo ABB y Dodge?',
+        respuesta: 'Sí, el servicio de reparación no se limita a las marcas que distribuimos oficialmente. Diagnosticamos y reparamos motores, reductores y variadores de cualquier fabricante presente en la instalación del cliente.',
+      },
+      {
+        pregunta: '¿El diagnóstico tiene coste si finalmente no se realiza la reparación?',
+        respuesta: 'El coste del diagnóstico se informa antes de recibir el equipo. En muchos casos se descuenta del importe final si el cliente aprueba la reparación; si no la aprueba, se factura únicamente el diagnóstico realizado.',
+      },
+      {
+        pregunta: '¿Puedo llevar el equipo directamente al taller sin cita previa?',
+        respuesta: 'Es preferible avisar antes, por teléfono o mediante el formulario de diagnóstico, para tener hueco en el taller y no demorar la recepción. En caso de línea parada, indícalo como urgente y lo priorizamos.',
+      },
+    ]}
+  />
+</BaseLayout>
+
+<script>
+  const form = document.getElementById('form-diagnostico') as HTMLFormElement | null;
+  const mensaje = document.getElementById('d-mensaje');
+
+  form?.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    if (!mensaje) return;
+    const datos = new FormData(form);
+
+    mensaje.classList.remove('hidden', 'text-rojo', 'text-grafito');
+    mensaje.textContent = 'Enviando…';
+
+    try {
+      const res = await fetch('/api/diagnostico', { method: 'POST', body: datos });
+      const json = await res.json();
+      if (res.ok) {
+        mensaje.classList.add('text-grafito');
+        mensaje.textContent = json.mensaje ?? 'Solicitud enviada. Te responderemos en el mismo día hábil.';
+        form.reset();
+      } else {
+        mensaje.classList.add('text-rojo');
+        mensaje.textContent = json.mensaje ?? 'No se ha podido enviar. Revisa los campos obligatorios e inténtalo de nuevo.';
+      }
+    } catch {
+      mensaje.classList.add('text-rojo');
+      mensaje.textContent = 'Error de conexión. Puedes llamarnos al 961 753 565 mientras lo solucionamos.';
+    }
+  });
+</script>

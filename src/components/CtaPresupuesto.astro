@@ -1,0 +1,33 @@
+---
+import { EMPRESA } from '@/lib/empresa';
+
+interface Props {
+  familia?: string;
+  titulo?: string;
+  texto?: string;
+}
+
+const {
+  familia,
+  titulo = '¿Necesitas esta pieza en planta?',
+  texto = 'Envíanos la referencia o describe la avería. Respondemos con presupuesto en el mismo día hábil.',
+} = Astro.props;
+
+const href = familia ? `/presupuesto/?familia=${familia}` : '/presupuesto/';
+---
+
+<div class="muesca border border-gris-borde bg-gris-fondo p-6 sm:p-8">
+  <p class="font-display text-xl font-bold text-negro sm:text-2xl">{titulo}</p>
+  <p class="mt-2 max-w-2xl text-sm text-grafito">{texto}</p>
+  <div class="mt-5 flex flex-wrap gap-3">
+    <a href={href} class="bg-rojo px-5 py-3 text-sm font-semibold text-blanco hover:bg-rojo-hover">
+      Solicitar presupuesto
+    </a>
+    <a
+      href={EMPRESA.telefonoHref}
+      class="border border-negro px-5 py-3 font-mono text-sm font-semibold text-negro hover:bg-blanco"
+    >
+      ☎ {EMPRESA.telefono}
+    </a>
+  </div>
+</div>

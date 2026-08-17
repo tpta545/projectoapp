@@ -1,0 +1,104 @@
+---
+import { EMPRESA } from '@/lib/empresa';
+
+const nav = [
+  { href: '/productos/', label: 'Productos' },
+  { href: '/marcas/', label: 'Marcas' },
+  { href: '/servicios/', label: 'Servicios' },
+  { href: '/zonas/', label: 'Zonas' },
+  { href: '/blog/', label: 'Blog' },
+  { href: '/empresa/', label: 'Empresa' },
+];
+
+const actual = Astro.url.pathname;
+---
+
+<header class="sticky top-0 z-40 border-b border-gris-borde bg-blanco/95 backdrop-blur">
+  <div class="mx-auto flex max-w-6xl items-center justify-between gap-4 px-4 py-3 sm:px-6">
+    <a href="/" class="flex items-center gap-2 shrink-0">
+      <span class="font-display text-2xl font-black tracking-tight text-negro">TRADE</span>
+      <span class="hidden font-sans text-xs leading-tight text-grafito sm:block">
+        Transmisiones<br />del Este
+      </span>
+    </a>
+
+    <nav aria-label="Principal" class="hidden lg:block">
+      <ul class="flex items-center gap-6 font-sans text-[0.95rem] font-medium">
+        {
+          nav.map((item) => {
+            const activo = actual === item.href || actual.startsWith(item.href);
+            return (
+              <li>
+                <a
+                  href={item.href}
+                  aria-current={activo ? 'page' : undefined}
+                  class={`border-b-2 py-1 transition-colors ${activo ? 'border-rojo text-negro' : 'border-transparent text-grafito hover:border-rojo hover:text-negro'}`}
+                >
+                  {item.label}
+                </a>
+              </li>
+            );
+          })
+        }
+      </ul>
+    </nav>
+
+    <div class="flex items-center gap-3">
+      <a
+        href={EMPRESA.telefonoHref}
+        class="hidden items-center gap-1.5 font-mono text-sm font-medium text-negro hover:text-rojo sm:flex"
+      >
+        <svg aria-hidden="true" viewBox="0 0 24 24" class="h-4 w-4 fill-current">
+          <path d="M6.62 10.79a15.05 15.05 0 0 0 6.59 6.59l2.2-2.2a1 1 0 0 1 1.02-.24 11.36 11.36 0 0 0 3.57.57 1 1 0 0 1 1 1V20a1 1 0 0 1-1 1A17 17 0 0 1 3 4a1 1 0 0 1 1-1h3.5a1 1 0 0 1 1 1 11.36 11.36 0 0 0 .57 3.57 1 1 0 0 1-.25 1.02z" />
+        </svg>
+        {EMPRESA.telefono}
+      </a>
+      <a
+        href="/presupuesto/"
+        class="rounded-none bg-rojo px-4 py-2.5 font-sans text-sm font-semibold text-blanco transition-colors hover:bg-rojo-hover active:bg-rojo-activo"
+      >
+        Solicitar presupuesto
+      </a>
+      <button
+        id="menu-toggle"
+        type="button"
+        aria-expanded="false"
+        aria-controls="menu-movil"
+        class="grid h-10 w-10 place-items-center border border-gris-borde lg:hidden"
+      >
+        <span class="sr-only">Abrir menú</span>
+        <svg aria-hidden="true" viewBox="0 0 24 24" class="h-5 w-5 fill-current">
+          <path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z" />
+        </svg>
+      </button>
+    </div>
+  </div>
+
+  <nav id="menu-movil" aria-label="Principal móvil" class="hidden border-t border-gris-borde bg-blanco lg:hidden">
+    <ul class="flex flex-col divide-y divide-gris-borde">
+      {
+        nav.map((item) => (
+          <li>
+            <a href={item.href} class="block px-4 py-3 font-sans text-sm font-medium text-negro">
+              {item.label}
+            </a>
+          </li>
+        ))
+      }
+      <li>
+        <a href={EMPRESA.telefonoHref} class="block px-4 py-3 font-mono text-sm text-negro">
+          ☎ {EMPRESA.telefono}
+        </a>
+      </li>
+    </ul>
+  </nav>
+</header>
+
+<script>
+  const toggle = document.getElementById('menu-toggle');
+  const menu = document.getElementById('menu-movil');
+  toggle?.addEventListener('click', () => {
+    const abierto = menu?.classList.toggle('hidden') === false;
+    toggle.setAttribute('aria-expanded', String(abierto));
+  });
+</script>

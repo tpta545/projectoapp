@@ -1,0 +1,56 @@
+---
+import { getCollection } from 'astro:content';
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import Breadcrumbs from '@/components/Breadcrumbs.astro';
+import { formatearFecha } from '@/lib/fechas';
+import { categoriaASlug } from '@/lib/blog';
+
+export async function getStaticPaths() {
+  const posts = await getCollection('blog');
+  const categorias = [...new Set(posts.map((p) => p.data.categoria))];
+  return categorias.map((categoria) => ({
+    params: { categoria: categoriaASlug(categoria) },
+    props: { categoria, posts: posts.filter((p) => p.data.categoria === categoria) },
+  }));
+}
+
+const { categoria, posts } = Astro.props;
+const ordenados = posts.sort((a, b) => b.data.fechaPublicacion.valueOf() - a.data.fechaPublicacion.valueOf());
+---
+
+<BaseLayout
+  title={`${categoria} | Blog TRADE`}
+  description={`Artículos de la categoría ${categoria} del blog técnico de TRADE: mantenimiento y componentes industriales en Algemesí.`}
+>
+  <Breadcrumbs items={[{ nombre: 'Blog', href: '/blog/' }, { nombre: categoria, href: `/blog/categoria/${categoriaASlug(categoria)}/` }]} />
+
+  <header class="border-b border-gris-borde bg-gris-fondo py-10">
+    <div class="mx-auto max-w-6xl px-4 sm:px-6">
+      <h1 class="font-display text-4xl font-black text-negro sm:text-5xl">{categoria}</h1>
+      <p class="mt-3 text-grafito">{ordenados.length} artículo{ordenados.length === 1 ? '' : 's'} en esta categoría.</p>
+    </div>
+  </header>
+
+  <section class="mx-auto max-w-6xl px-4 py-12 sm:px-6">
+    <ul class="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+      {
+        ordenados.map((post) => (
+          <li class="border border-gris-borde bg-blanco">
+            <img src={post.data.imagen} alt={post.data.imagenAlt} loading="lazy" class="h-44 w-full object-cover" width="400" height="240" />
+            <div class="p-5">
+              <h2 class="font-display text-lg font-bold text-negro">
+                <a href={`/blog/${post.id}/`} class="hover:underline">
+                  {post.data.titulo}
+                </a>
+              </h2>
+              <p class="mt-2 text-sm text-grafito">{post.data.resumen}</p>
+              <p class="mt-3 text-xs text-grafito">
+                {formatearFecha(post.data.fechaPublicacion)} · {post.data.tiempoLectura} min de lectura
+              </p>
+            </div>
+          </li>
+        ))
+      }
+    </ul>
+  </section>
+</BaseLayout>

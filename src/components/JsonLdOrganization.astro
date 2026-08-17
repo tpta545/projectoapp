@@ -1,0 +1,54 @@
+---
+import { EMPRESA } from '@/lib/empresa';
+
+const jsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'LocalBusiness',
+  '@id': `${EMPRESA.urlBase}/#negocio`,
+  name: EMPRESA.marca,
+  legalName: EMPRESA.razonSocial,
+  alternateName: EMPRESA.razonSocial,
+  taxID: EMPRESA.cif,
+  vatID: `ES${EMPRESA.cif}`,
+  description:
+    'Distribuidor industrial de rodamientos, transmisión mecánica, neumática, motores eléctricos y automatización. Servicio técnico de reparación con informe. Stock propio y reparto propio en la Ribera Alta y Ribera Baixa.',
+  url: EMPRESA.urlBase,
+  telephone: EMPRESA.telefonoHref.replace('tel:', ''),
+  email: EMPRESA.email,
+  foundingDate: String(EMPRESA.fundacion),
+  // Placeholders hasta disponer de fotografía real de fachada/almacén y del
+  // logotipo vectorial oficial del cliente — ver IMAGENES-PENDIENTES.md.
+  image: `${EMPRESA.urlBase}/imagenes/og-trade.webp`,
+  logo: `${EMPRESA.urlBase}/favicon.svg`,
+  priceRange: '$$',
+  address: {
+    '@type': 'PostalAddress',
+    streetAddress: `${EMPRESA.direccion.calle}, ${EMPRESA.direccion.poligono}`,
+    addressLocality: EMPRESA.direccion.localidad,
+    addressRegion: 'Valencia',
+    postalCode: EMPRESA.direccion.cp,
+    addressCountry: 'ES',
+  },
+  geo: {
+    '@type': 'GeoCoordinates',
+    latitude: EMPRESA.coordenadas.lat,
+    longitude: EMPRESA.coordenadas.lng,
+  },
+  openingHoursSpecification: {
+    '@type': 'OpeningHoursSpecification',
+    dayOfWeek: ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday'],
+    opens: '08:00',
+    closes: '18:00',
+  },
+  areaServed: [
+    { '@type': 'City', name: 'Algemesí' },
+    { '@type': 'City', name: 'Alzira' },
+    { '@type': 'City', name: 'Sueca' },
+    { '@type': 'City', name: 'Carcaixent' },
+    { '@type': 'City', name: 'Xàtiva' },
+  ],
+  sameAs: [],
+};
+---
+
+<script type="application/ld+json" is:inline set:html={JSON.stringify(jsonLd)} />
