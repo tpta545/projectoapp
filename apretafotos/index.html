@@ -4,14 +4,14 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Comprimir imágenes online gratis · ApretaFotos</title>
-<meta name="description" content="Comprime JPG, PNG y WebP en el navegador hasta dejarlas por debajo del peso que necesites. Presets para Vinted, Wallapop y Etsy. Sin subir tus fotos a ningún sitio.">
+<meta name="description" content="Comprime y reduce el peso de tus fotos en el navegador hasta el KB exacto. JPG, PNG, WebP. Presets Vinted, Wallapop, Etsy. Nada se sube a ningún servidor.">
 <link rel="canonical" href="https://apretafotos.es/">
 <meta name="theme-color" content="#1b6b5e">
 <link rel="icon" href="favicon.svg" type="image/svg+xml">
 
 <meta property="og:type" content="website">
 <meta property="og:title" content="Comprimir imágenes online gratis · ApretaFotos">
-<meta property="og:description" content="Deja tus fotos por debajo del peso que necesites: Vinted, Wallapop, Etsy o tu web. 100% en tu navegador, nada se sube a ningún servidor.">
+<meta property="og:description" content="Reduce el peso de tus fotos hasta el KB que necesites: Vinted, Wallapop, Etsy o tu web. 100% en tu navegador, nada se sube a ningún servidor.">
 <meta property="og:url" content="https://apretafotos.es/">
 <meta name="twitter:card" content="summary">
 
@@ -27,9 +27,11 @@
   "@type": "WebApplication",
   "name": "ApretaFotos",
   "url": "https://apretafotos.es/",
-  "description": "Comprimir imágenes online gratis hasta un peso objetivo, con presets para Vinted, Wallapop y Etsy. Todo el proceso ocurre en el navegador.",
+  "description": "Comprimir imágenes online gratis y reducir el peso de una foto hasta un peso objetivo, con presets para Vinted, Wallapop y Etsy. Todo el proceso ocurre en el navegador.",
   "applicationCategory": "MultimediaApplication",
   "operatingSystem": "Any (navegador web)",
+  "browserRequirements": "Requiere JavaScript",
+  "inLanguage": "es-ES",
   "offers": { "@type": "Offer", "price": "0", "priceCurrency": "EUR" }
 }
 </script>
@@ -72,10 +74,7 @@
 
 <header class="site-header">
   <div class="container header-row">
-    <a class="logo" href="/">Aprieta<span>Fotos</span></a>
-    <nav class="header-nav" aria-label="Más herramientas">
-      <a href="#mas-herramientas">Más herramientas</a>
-    </nav>
+    <a class="logo" href="/">Apreta<span>Fotos</span></a>
   </div>
 </header>
 
@@ -83,7 +82,7 @@
   <section class="tool-section" id="tool">
     <div class="container">
       <h1>Comprimir imágenes online gratis</h1>
-      <p class="subtitle">Suelta tus fotos, elige un peso objetivo y descárgalas listas para publicar. Sin subir nada a ningún sitio.</p>
+      <p class="subtitle">Suelta tus fotos, reduce el peso hasta el KB que necesites y descárgalas listas para publicar. Sin subir nada a ningún sitio.</p>
 
       <div class="tool-card" data-state="idle" id="toolCard">
 
@@ -192,8 +191,8 @@
       <li><strong>Descarga.</strong> Una a una o todas juntas en un ZIP, con el mismo nombre de siempre.</li>
     </ol>
 
-    <h2>Un compresor pensado para vender online</h2>
-    <p>La mayoría de compresores de imágenes te dan un slider de calidad y ya está. Pero si vendes en Vinted, Wallapop, Etsy o Milanuncios, lo que de verdad te preguntas no es "¿qué calidad quiero?" sino "¿cómo hago que esta foto pese menos de X para que la app no la rechace o no tarde una eternidad en subir?". ApretaFotos parte de esa pregunta: le dices el peso que necesitas y la herramienta itera —bajando calidad y, si hace falta, resolución— hasta conseguirlo. Sin subir tus fotos a ningún sitio: todo el trabajo lo hace tu propio navegador.</p>
+    <h2>Reducir el peso de una foto, no solo "comprimirla"</h2>
+    <p>La mayoría de compresores de imágenes te dan un slider de calidad y ya está. Pero si vendes en Vinted, Wallapop, Etsy o Milanuncios, lo que de verdad te preguntas no es "¿qué calidad quiero?" sino "¿cómo reduzco el peso de esta foto para que pese menos de X y la app no la rechace o no tarde una eternidad en subir?". ApretaFotos parte de esa pregunta: le dices el peso que necesitas y la herramienta itera —bajando calidad y, si hace falta, resolución— hasta conseguirlo. Sin subir tus fotos a ningún sitio: todo el trabajo lo hace tu propio navegador.</p>
 
     <h2>JPG, PNG o WebP: cuál usar</h2>
     <p>El JPG sigue siendo el formato más seguro para vender online: lo acepta cualquier app, cualquier navegador, cualquier año de fabricación del móvil del comprador. El PNG es un formato sin pérdida pensado para capturas de pantalla y gráficos con bordes duros, no para fotos: si subes un PNG de una foto real, vas a pesar mucho más de lo necesario sin ganar nada a cambio. El WebP consigue entre un 25% y un 35% menos de peso que un JPG a la misma calidad visual, así que es una buena opción si subes fotos a tu propia web y controlas qué navegador las va a mostrar; para marketplaces, JPG sigue siendo la apuesta segura.</p>
@@ -230,15 +229,6 @@
       <p>Las causas más habituales: la imagen es un PNG (formato sin pérdida, no pensado para fotos) — conviértela a JPG o WebP; la resolución original es enorme — activa el redimensionado por ancho máximo; o el objetivo de peso pedido es demasiado bajo para el contenido de la foto y la herramienta ha llegado a su límite razonable sin poder bajar más.</p>
     </details>
   </section>
-
-  <section class="more-tools container" id="mas-herramientas">
-    <h2>Más herramientas</h2>
-    <div class="more-tools-grid">
-      <a class="tool-card-link" href="#" data-todo="pendiente">Convertir imágenes (JPG ⇄ PNG ⇄ WebP)</a>
-      <a class="tool-card-link" href="#" data-todo="pendiente">Redimensionar para redes sociales</a>
-      <a class="tool-card-link" href="#" data-todo="pendiente">Limpiar metadatos EXIF</a>
-    </div>
-  </section>
 </main>
 
 <footer class="site-footer">
@@ -250,6 +240,15 @@
     </nav>
   </div>
 </footer>
+
+<dialog class="ad-dialog" id="adDialog" aria-label="Publicidad">
+  <button type="button" class="ad-dialog-close" id="adDialogClose" aria-label="Cerrar">×</button>
+  <div class="ad-slot ad-slot--dialog" aria-hidden="true">
+    <span>Publicidad</span>
+    <!-- PEGA AQUÍ TU CÓDIGO DE ADSENSE -->
+  </div>
+  <button type="button" class="btn btn-ghost ad-dialog-continue" id="adDialogContinue">Cerrar y seguir</button>
+</dialog>
 
 <script defer src="lib/manifest.js"></script>
 <script defer src="main.js?v=20260820"></script>

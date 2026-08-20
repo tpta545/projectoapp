@@ -85,8 +85,6 @@ h1, h2, h3 { text-wrap: balance; line-height: 1.15; letter-spacing: -0.01em; }
 .header-row { display: flex; align-items: center; justify-content: space-between; }
 .logo { font-weight: 800; font-size: 1.15rem; letter-spacing: -0.02em; }
 .logo span { color: var(--accent); }
-.header-nav a { font-size: .92rem; font-weight: 600; color: var(--text-dim); }
-.header-nav a:hover { color: var(--accent); }
 
 .site-footer { border-top: 1px solid var(--border); padding: 1.75rem 0 3rem; margin-top: 2.5rem; color: var(--text-dim); font-size: .9rem; }
 .footer-row { display: flex; flex-wrap: wrap; gap: .75rem 1.5rem; align-items: center; justify-content: space-between; }
@@ -265,14 +263,21 @@ input[type="range"] { width: 100%; accent-color: var(--accent); }
 .faq summary { font-weight: 700; cursor: pointer; }
 .faq p { color: var(--text-dim); margin-top: .6rem; max-width: 72ch; }
 
-.more-tools { margin-top: 1rem; }
-.more-tools h2 { font-size: 1.3rem; margin-bottom: 1rem; }
-.more-tools-grid { display: grid; gap: .75rem; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); }
-.tool-card-link {
-  display: block; padding: 1rem; border: 1px solid var(--border); border-radius: var(--radius-sm);
-  font-weight: 600; background: var(--surface); transition: border-color .15s var(--ease-out);
+/* Download ad dialog — shown after a download has already started, never
+   blocking it. Real close button, closes on backdrop click and Esc. */
+.ad-dialog {
+  margin: auto; border: 1px solid var(--border); border-radius: var(--radius);
+  padding: 1.25rem; max-width: min(420px, calc(100% - 2rem));
+  background: var(--surface); color: var(--text); box-shadow: var(--shadow);
 }
-.tool-card-link:hover { border-color: var(--accent); color: var(--accent); }
+.ad-dialog::backdrop { background: rgba(0, 0, 0, .5); }
+.ad-dialog-close {
+  position: absolute; top: .6rem; right: .6rem; width: 2rem; height: 2rem;
+  border-radius: 50%; font-size: 1.3rem; line-height: 1; color: var(--text-dim);
+}
+.ad-dialog-close:hover { background: var(--surface-2); color: var(--text); }
+.ad-dialog .ad-slot { margin: 0 0 1rem; }
+.ad-dialog-continue { width: 100%; justify-content: center; display: flex; }
 
 /* =============================================================
    8. Responsive
