@@ -1,19 +1,19 @@
 (function () {
   "use strict";
 
-  var ADSENSE_CLIENT = "ca-pub-8085702169119074";
   var STORAGE_KEY = "apretafotos_cookies";
 
   var $ = function (sel) { return document.querySelector(sel); };
 
-  function loadAdsense() {
-    if (document.querySelector("script[data-adsense]")) return;
-    var s = document.createElement("script");
-    s.async = true;
-    s.src = "https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=" + ADSENSE_CLIENT;
-    s.crossOrigin = "anonymous";
-    s.setAttribute("data-adsense", "1");
-    document.head.appendChild(s);
+  function gtagConsent(state) {
+    window.dataLayer = window.dataLayer || [];
+    function gtag() { window.dataLayer.push(arguments); }
+    window.gtag = window.gtag || gtag;
+    gtag("consent", "update", {
+      ad_storage: state,
+      ad_user_data: state,
+      ad_personalization: state
+    });
   }
 
   function showBanner() {
@@ -30,7 +30,7 @@
     try { choice = localStorage.getItem(STORAGE_KEY); } catch (e) {}
 
     if (choice === "accepted") {
-      loadAdsense();
+      gtagConsent("granted");
     } else if (choice !== "rejected") {
       showBanner();
     }
@@ -41,11 +41,12 @@
 
     if (acceptBtn) acceptBtn.addEventListener("click", function () {
       try { localStorage.setItem(STORAGE_KEY, "accepted"); } catch (e) {}
-      loadAdsense();
+      gtagConsent("granted");
       hideBanner();
     });
     if (rejectBtn) rejectBtn.addEventListener("click", function () {
       try { localStorage.setItem(STORAGE_KEY, "rejected"); } catch (e) {}
+      gtagConsent("denied");
       hideBanner();
     });
     if (settingsLink) settingsLink.addEventListener("click", function (e) {
