@@ -249,15 +249,6 @@ input[type="range"] { width: 100%; accent-color: var(--accent); }
 .compare-caption { text-align: center; font-size: .82rem; color: var(--text-dim); margin-top: .5rem; }
 
 /* =============================================================
-   6. Ad slots
-   ============================================================= */
-.ad-slot {
-  margin: 2.25rem auto; min-height: 90px; border: 1px dashed var(--border);
-  border-radius: var(--radius-sm); display: flex; align-items: center; justify-content: center;
-  color: var(--text-dim); font-size: .82rem; letter-spacing: .04em; text-transform: uppercase;
-}
-
-/* =============================================================
    7. SEO content / FAQ / more tools
    ============================================================= */
 .seo-content { margin-top: 2rem; }
@@ -274,22 +265,6 @@ input[type="range"] { width: 100%; accent-color: var(--accent); }
 }
 .faq summary { font-weight: 700; cursor: pointer; }
 .faq p { color: var(--text-dim); margin-top: .6rem; max-width: 72ch; }
-
-/* Download ad dialog — shown after a download has already started, never
-   blocking it. Real close button, closes on backdrop click and Esc. */
-.ad-dialog {
-  margin: auto; border: 1px solid var(--border); border-radius: var(--radius);
-  padding: 1.25rem; max-width: min(420px, calc(100% - 2rem));
-  background: var(--surface); color: var(--text); box-shadow: var(--shadow);
-}
-.ad-dialog::backdrop { background: rgba(0, 0, 0, .5); }
-.ad-dialog-close {
-  position: absolute; top: .6rem; right: .6rem; width: 2rem; height: 2rem;
-  border-radius: 50%; font-size: 1.3rem; line-height: 1; color: var(--text-dim);
-}
-.ad-dialog-close:hover { background: var(--surface-2); color: var(--text); }
-.ad-dialog .ad-slot { margin: 0 0 1rem; }
-.ad-dialog-continue { width: 100%; justify-content: center; display: flex; }
 
 /* =============================================================
    8. Responsive

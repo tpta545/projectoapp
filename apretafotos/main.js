@@ -38,7 +38,6 @@
     a.click();
     a.remove();
     setTimeout(function () { URL.revokeObjectURL(a.href); }, 4000);
-    document.dispatchEvent(new CustomEvent("apretafotos:downloaded"));
   }
 
   function formatBytes(n) {
@@ -504,23 +503,6 @@
     });
   }
 
-  // -------- Download ad dialog ---------------------------------------------
-  function initAdDialog() {
-    var dialog = $("#adDialog");
-    if (!dialog || typeof dialog.showModal !== "function") return;
-    document.addEventListener("apretafotos:downloaded", function () {
-      if (dialog.open) return;
-      setTimeout(function () {
-        try { dialog.showModal(); } catch (e) {}
-      }, 350);
-    });
-    $("#adDialogClose").addEventListener("click", function () { dialog.close(); });
-    $("#adDialogContinue").addEventListener("click", function () { dialog.close(); });
-    dialog.addEventListener("click", function (e) {
-      if (e.target === dialog) dialog.close();
-    });
-  }
-
   // -------- Errors ------------------------------------------------------
   function showError(msg) {
     var el = $("#errorState");
@@ -560,7 +542,6 @@
     safe(initZip, "initZip");
     safe(initReset, "initReset");
     safe(initCompareSlider, "initCompareSlider");
-    safe(initAdDialog, "initAdDialog");
 
     document.documentElement.classList.add("is-ready");
   }
