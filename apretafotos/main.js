@@ -14,6 +14,7 @@
   function safe(fn, name) {
     try { fn(); } catch (e) { console.warn("[" + name + "]", e); }
   }
+  var reduced = matchMedia("(prefers-reduced-motion: reduce)").matches;
 
   var LIB_COMPRESSION = "lib/vendor/browser-image-compression.js";
   var LIB_JSZIP = "lib/vendor/jszip.min.js";
@@ -237,10 +238,14 @@
       return entry;
     });
 
+    var wasHidden = $("#resultsWrap").hidden;
     state.files = state.files.concat(entries);
     hideError();
     renderTable();
     $("#resultsWrap").hidden = false;
+    if (wasHidden) {
+      $("#resultsWrap").scrollIntoView({ behavior: reduced ? "auto" : "smooth", block: "start" });
+    }
     runCompression(entries.filter(function (e) { return e.status !== "error"; }));
   }
 

@@ -197,7 +197,7 @@ input[type="range"] { width: 100%; accent-color: var(--accent); }
 /* =============================================================
    5. Results
    ============================================================= */
-.results { margin-top: 1.25rem; }
+.results { margin-top: 1.25rem; scroll-margin-top: 1rem; }
 .results-summary {
   font-weight: 700; font-size: 1.05rem; padding: .85rem 1rem;
   background: var(--surface-2); border-radius: var(--radius-sm); margin-bottom: 1rem;
