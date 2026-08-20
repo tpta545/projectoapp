@@ -91,6 +91,18 @@ h1, h2, h3 { text-wrap: balance; line-height: 1.15; letter-spacing: -0.01em; }
 .footer-row nav { display: flex; gap: 1.25rem; }
 .footer-row a:hover { color: var(--accent); }
 
+.cookie-banner {
+  position: fixed; left: 0; right: 0; bottom: 0; z-index: 70;
+  background: var(--surface); border-top: 1px solid var(--border);
+  box-shadow: 0 -8px 24px -12px rgba(20, 32, 28, .25);
+}
+.cookie-banner-inner {
+  display: flex; flex-wrap: wrap; gap: .75rem 1.5rem; align-items: center; justify-content: space-between;
+  padding: 1rem 0;
+}
+.cookie-banner p { flex: 1 1 320px; font-size: .86rem; color: var(--text-dim); max-width: 62ch; }
+.cookie-banner-actions { display: flex; gap: .6rem; flex-shrink: 0; }
+
 /* =============================================================
    4. Tool section
    ============================================================= */

@@ -35,9 +35,22 @@
     <nav aria-label="Legal">
       <a href="privacidad.html">Privacidad</a>
       <a href="aviso-legal.html">Aviso legal</a>
+      <a href="#" id="cookieSettingsLink">Cookies</a>
     </nav>
   </div>
 </footer>
+
+<div class="cookie-banner" id="cookieBanner" role="dialog" aria-label="Preferencias de cookies" hidden>
+  <div class="container cookie-banner-inner">
+    <p>Usamos cookies solo para mostrar publicidad (Google AdSense). No se activan hasta que las aceptas, y la herramienta funciona igual si las rechazas. Más info en <a href="privacidad.html">privacidad</a>.</p>
+    <div class="cookie-banner-actions">
+      <button type="button" class="btn btn-ghost" id="cookieReject">Rechazar</button>
+      <button type="button" class="btn btn-primary" id="cookieAccept">Aceptar</button>
+    </div>
+  </div>
+</div>
+
 <script defer>document.addEventListener("DOMContentLoaded",function(){document.getElementById("year").textContent=new Date().getFullYear();});</script>
+<script defer src="lib/consent.js?v=20260820"></script>
 </body>
 </html>

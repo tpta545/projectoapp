@@ -20,12 +20,13 @@
   <h1>Privacidad</h1>
   <p>ApretaFotos comprime tus imágenes enteramente en tu navegador. Los archivos que sueltas o seleccionas en la herramienta <strong>no se envían a ningún servidor</strong>: todo el procesamiento (lectura, compresión, redimensionado, generación del ZIP) ocurre en tu propio dispositivo mediante JavaScript.</p>
 
-  <h2>Qué datos se recogen</h2>
-  <!-- TODO: el titular del sitio debe completar esta sección con su proveedor de analítica (si lo hay), cookies de publicidad (AdSense) y base legal. -->
-  <p>[TODO — completar con la analítica y/o publicidad que active el titular del sitio, y la base legal de cada tratamiento.]</p>
+  <h2>Cookies y publicidad</h2>
+  <p>Esta web usa <strong>Google AdSense</strong> para mostrar anuncios. AdSense instala cookies y puede usar identificadores del dispositivo para medir el rendimiento de los anuncios y, si lo permites, personalizarlos según tu actividad de navegación. Esas cookies <strong>no se activan hasta que las aceptas</strong> en el aviso que aparece al entrar en la web (o desde el enlace "Cookies" del pie de página, si quieres cambiar tu elección más adelante). Si las rechazas, la herramienta funciona exactamente igual — solo dejas de ver publicidad personalizada.</p>
+  <p>Google explica con detalle qué datos trata y con qué fin en su <a href="https://policies.google.com/technologies/ads" target="_blank" rel="noopener">política de anuncios</a> y en su <a href="https://policies.google.com/privacy" target="_blank" rel="noopener">política de privacidad</a>. Puedes gestionar u optar por no recibir anuncios personalizados de Google desde <a href="https://adssettings.google.com" target="_blank" rel="noopener">adssettings.google.com</a>.</p>
 
-  <h2>Publicidad</h2>
-  <p>[TODO — si se activa AdSense u otro proveedor, describir aquí las cookies/identificadores que instala y enlazar su política de privacidad.]</p>
+  <h2>Qué otros datos se recogen</h2>
+  <!-- TODO: si el titular del sitio activa un proveedor de analítica (Google Analytics, Plausible, etc.), añadir aquí qué datos trata y con qué base legal. -->
+  <p>[TODO — completar si se activa algún proveedor de analítica adicional a la publicidad, y la base legal de ese tratamiento.]</p>
 
   <h2>Contacto</h2>
   <p>[TODO — datos de contacto del responsable del tratamiento.]</p>
@@ -36,9 +37,22 @@
     <nav aria-label="Legal">
       <a href="privacidad.html">Privacidad</a>
       <a href="aviso-legal.html">Aviso legal</a>
+      <a href="#" id="cookieSettingsLink">Cookies</a>
     </nav>
   </div>
 </footer>
+
+<div class="cookie-banner" id="cookieBanner" role="dialog" aria-label="Preferencias de cookies" hidden>
+  <div class="container cookie-banner-inner">
+    <p>Usamos cookies solo para mostrar publicidad (Google AdSense). No se activan hasta que las aceptas, y la herramienta funciona igual si las rechazas. Más info en <a href="privacidad.html">privacidad</a>.</p>
+    <div class="cookie-banner-actions">
+      <button type="button" class="btn btn-ghost" id="cookieReject">Rechazar</button>
+      <button type="button" class="btn btn-primary" id="cookieAccept">Aceptar</button>
+    </div>
+  </div>
+</div>
+
 <script defer>document.addEventListener("DOMContentLoaded",function(){document.getElementById("year").textContent=new Date().getFullYear();});</script>
+<script defer src="lib/consent.js?v=20260820"></script>
 </body>
 </html>
