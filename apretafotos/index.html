@@ -1,0 +1,257 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Comprimir imágenes online gratis · ApretaFotos</title>
+<meta name="description" content="Comprime JPG, PNG y WebP en el navegador hasta dejarlas por debajo del peso que necesites. Presets para Vinted, Wallapop y Etsy. Sin subir tus fotos a ningún sitio.">
+<link rel="canonical" href="https://apretafotos.es/">
+<meta name="theme-color" content="#1b6b5e">
+<link rel="icon" href="favicon.svg" type="image/svg+xml">
+
+<meta property="og:type" content="website">
+<meta property="og:title" content="Comprimir imágenes online gratis · ApretaFotos">
+<meta property="og:description" content="Deja tus fotos por debajo del peso que necesites: Vinted, Wallapop, Etsy o tu web. 100% en tu navegador, nada se sube a ningún servidor.">
+<meta property="og:url" content="https://apretafotos.es/">
+<meta name="twitter:card" content="summary">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap">
+
+<link rel="stylesheet" href="styles.css?v=20260820">
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "WebApplication",
+  "name": "ApretaFotos",
+  "url": "https://apretafotos.es/",
+  "description": "Comprimir imágenes online gratis hasta un peso objetivo, con presets para Vinted, Wallapop y Etsy. Todo el proceso ocurre en el navegador.",
+  "applicationCategory": "MultimediaApplication",
+  "operatingSystem": "Any (navegador web)",
+  "offers": { "@type": "Offer", "price": "0", "priceCurrency": "EUR" }
+}
+</script>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "mainEntity": [
+    {
+      "@type": "Question",
+      "name": "¿Comprimir una foto le quita calidad?",
+      "acceptedAnswer": { "@type": "Answer", "text": "Depende de cuánto aprietes. Bajar de calidad 100 a 80-85 casi nunca se nota a simple vista. Por debajo de 60 ya empiezan a verse artefactos, sobre todo en degradados suaves. El modo peso objetivo bajará calidad y tamaño hasta cumplir el peso pedido." }
+    },
+    {
+      "@type": "Question",
+      "name": "¿Se suben mis fotos a algún servidor?",
+      "acceptedAnswer": { "@type": "Answer", "text": "No. Todo el proceso ocurre en tu navegador. ApretaFotos no tiene servidor de subida, así que tus imágenes no salen de tu dispositivo en ningún momento." }
+    },
+    {
+      "@type": "Question",
+      "name": "¿Cuánto puedo comprimir una imagen sin que se note?",
+      "acceptedAnswer": { "@type": "Answer", "text": "En una foto de móvil normal puedes bajar de 4-8 MB a 300-600 KB con calidad 80-85 sin pérdida visible. Para un marketplace, calidad 70 y 1600 px de ancho suele bastar de sobra." }
+    },
+    {
+      "@type": "Question",
+      "name": "¿Qué formato conviene para vender online?",
+      "acceptedAnswer": { "@type": "Answer", "text": "JPG es el más compatible con marketplaces como Vinted o Wallapop. WebP pesa un 25-35% menos a la misma calidad, pero alguna app antigua puede no aceptarlo." }
+    },
+    {
+      "@type": "Question",
+      "name": "¿Por qué mi foto sigue pesando mucho después de comprimirla?",
+      "acceptedAnswer": { "@type": "Answer", "text": "Suele ser porque es un PNG (sin pérdida, no pensado para fotos), porque la resolución original es enorme, o porque el objetivo de peso pedido es demasiado bajo para ese contenido." }
+    }
+  ]
+}
+</script>
+</head>
+<body>
+<a class="skip-link" href="#tool">Saltar a la herramienta</a>
+
+<header class="site-header">
+  <div class="container header-row">
+    <a class="logo" href="/">Aprieta<span>Fotos</span></a>
+    <nav class="header-nav" aria-label="Más herramientas">
+      <a href="#mas-herramientas">Más herramientas</a>
+    </nav>
+  </div>
+</header>
+
+<main>
+  <section class="tool-section" id="tool">
+    <div class="container">
+      <h1>Comprimir imágenes online gratis</h1>
+      <p class="subtitle">Suelta tus fotos, elige un peso objetivo y descárgalas listas para publicar. Sin subir nada a ningún sitio.</p>
+
+      <div class="tool-card" data-state="idle" id="toolCard">
+
+        <label class="dropzone" id="dropzone" for="fileInput">
+          <input type="file" id="fileInput" accept="image/jpeg,image/png,image/webp,.jpg,.jpeg,.png,.webp" multiple hidden>
+          <svg class="dz-icon" viewBox="0 0 24 24" width="40" height="40" aria-hidden="true"><path fill="currentColor" d="M12 3a1 1 0 0 1 .7.29l4 4a1 1 0 0 1-1.4 1.42L13 6.41V15a1 1 0 1 1-2 0V6.41L8.7 8.7a1 1 0 1 1-1.4-1.42l4-4A1 1 0 0 1 12 3Zm-7 13a1 1 0 0 1 1 1v2a1 1 0 0 0 1 1h10a1 1 0 0 0 1-1v-2a1 1 0 1 1 2 0v2a3 3 0 0 1-3 3H7a3 3 0 0 1-3-3v-2a1 1 0 0 1 1-1Z"/></svg>
+          <span class="dz-text"><strong>Arrastra tus fotos aquí</strong> o toca para elegirlas</span>
+          <span class="dz-formats">JPG · PNG · WebP</span>
+        </label>
+
+        <p class="privacy-badge">🔒 100% privado — tus fotos se procesan en tu dispositivo, nunca se suben a ningún servidor.</p>
+        <p class="limits-note">Hasta <span id="limitFiles">40</span> archivos por lote, <span id="limitSize">25</span> MB por archivo. Las fotos HEIC de iPhone (.heic/.heif) no están soportadas todavía: expórtalas antes como JPG desde el propio iPhone.</p>
+
+        <div class="tabs" role="tablist" aria-label="Modo de compresión">
+          <button type="button" class="tab" role="tab" id="tabTarget" aria-controls="panelTarget" aria-selected="true" data-mode="target">Peso objetivo</button>
+          <button type="button" class="tab" role="tab" id="tabQuality" aria-controls="panelQuality" aria-selected="false" data-mode="quality">Calidad</button>
+        </div>
+
+        <div class="panel" id="panelTarget" role="tabpanel" aria-labelledby="tabTarget">
+          <div class="presets" id="presetButtons">
+            <!-- rellenado por JS desde manifest -->
+          </div>
+          <div class="target-input-row">
+            <label for="targetKB">Que pese menos de</label>
+            <input type="number" id="targetKB" min="10" max="20000" step="10" value="500" inputmode="numeric">
+            <span>KB</span>
+          </div>
+        </div>
+
+        <div class="panel is-hidden" id="panelQuality" role="tabpanel" aria-labelledby="tabQuality" hidden>
+          <label for="qualitySlider">Calidad: <output id="qualityValue" for="qualitySlider">80</output>/100</label>
+          <input type="range" id="qualitySlider" min="1" max="100" value="80">
+        </div>
+
+        <div class="options-row">
+          <label class="opt">
+            <input type="checkbox" id="optResize" checked>
+            Redimensionar a un ancho máximo de
+            <input type="number" id="resizeWidth" value="1600" min="100" max="8000" step="50" inputmode="numeric"> px
+          </label>
+          <label class="opt">
+            <input type="checkbox" id="optWebp">
+            Convertir la salida a WebP
+            <span class="opt-note" id="webpNote"></span>
+          </label>
+          <label class="opt">
+            <input type="checkbox" id="optExif" checked>
+            Eliminar datos EXIF (ubicación GPS, modelo de cámara)
+          </label>
+          <p class="opt-explain">Muchas fotos de móvil llevan tus coordenadas GPS exactas dentro del archivo. Al publicar un anuncio, eso puede revelar dónde vives.</p>
+        </div>
+
+        <div class="engine-status" id="engineStatus" hidden></div>
+
+        <div class="results" id="resultsWrap" hidden>
+          <div class="results-summary" id="resultsSummary"></div>
+
+          <div class="compare" id="compareWrap" hidden>
+            <div class="compare-frame" id="compareFrame">
+              <img class="compare-after" id="compareAfter" alt="Imagen comprimida">
+              <div class="compare-before-wrap" id="compareBeforeWrap">
+                <img class="compare-before" id="compareBefore" alt="Imagen original">
+              </div>
+              <input type="range" id="compareSlider" min="0" max="100" value="50" aria-label="Comparar antes y después">
+            </div>
+            <p class="compare-caption">Antes / después de <span id="compareName"></span></p>
+          </div>
+
+          <div class="table-wrap">
+            <table class="results-table" id="resultsTable">
+              <thead>
+                <tr>
+                  <th scope="col"></th>
+                  <th scope="col">Archivo</th>
+                  <th scope="col">Original</th>
+                  <th scope="col">Final</th>
+                  <th scope="col">Ahorro</th>
+                  <th scope="col"></th>
+                </tr>
+              </thead>
+              <tbody id="resultsBody"></tbody>
+            </table>
+          </div>
+
+          <div class="results-actions">
+            <button type="button" class="btn btn-primary" id="downloadZipBtn">Descargar todo (.zip)</button>
+            <button type="button" class="btn btn-ghost" id="resetBtn">Comprimir otro lote</button>
+          </div>
+        </div>
+
+        <div class="error-state" id="errorState" hidden></div>
+      </div>
+    </div>
+  </section>
+
+  <div class="ad-slot ad-slot--leaderboard container" aria-hidden="true">
+    <span>Publicidad</span>
+    <!-- PEGA AQUÍ TU CÓDIGO DE ADSENSE -->
+  </div>
+
+  <section class="seo-content container">
+    <h2>Cómo funciona</h2>
+    <ol class="steps">
+      <li><strong>Suelta tus fotos.</strong> Una o varias a la vez, JPG, PNG o WebP.</li>
+      <li><strong>Elige cuánto apretar.</strong> Un peso objetivo en KB, o un nivel de calidad si prefieres controlarlo a mano.</li>
+      <li><strong>Descarga.</strong> Una a una o todas juntas en un ZIP, con el mismo nombre de siempre.</li>
+    </ol>
+
+    <h2>Un compresor pensado para vender online</h2>
+    <p>La mayoría de compresores de imágenes te dan un slider de calidad y ya está. Pero si vendes en Vinted, Wallapop, Etsy o Milanuncios, lo que de verdad te preguntas no es "¿qué calidad quiero?" sino "¿cómo hago que esta foto pese menos de X para que la app no la rechace o no tarde una eternidad en subir?". ApretaFotos parte de esa pregunta: le dices el peso que necesitas y la herramienta itera —bajando calidad y, si hace falta, resolución— hasta conseguirlo. Sin subir tus fotos a ningún sitio: todo el trabajo lo hace tu propio navegador.</p>
+
+    <h2>JPG, PNG o WebP: cuál usar</h2>
+    <p>El JPG sigue siendo el formato más seguro para vender online: lo acepta cualquier app, cualquier navegador, cualquier año de fabricación del móvil del comprador. El PNG es un formato sin pérdida pensado para capturas de pantalla y gráficos con bordes duros, no para fotos: si subes un PNG de una foto real, vas a pesar mucho más de lo necesario sin ganar nada a cambio. El WebP consigue entre un 25% y un 35% menos de peso que un JPG a la misma calidad visual, así que es una buena opción si subes fotos a tu propia web y controlas qué navegador las va a mostrar; para marketplaces, JPG sigue siendo la apuesta segura.</p>
+
+    <h2>Qué hace exactamente esta herramienta</h2>
+    <p>Cuando comprimes una imagen, el navegador la vuelve a codificar desde cero: eso automáticamente elimina los metadatos EXIF (ubicación, modelo de cámara, fecha) salvo que decidas conservarlos. La orientación de la foto se respeta siempre, así que no te va a salir girada. Si activas el redimensionado, la imagen se reduce a un ancho máximo antes de comprimir; si pides un peso muy exigente, la herramienta puede seguir reduciendo resolución más allá de ese máximo para cumplir el objetivo — eso se avisa en el resultado de cada foto.</p>
+  </section>
+
+  <div class="ad-slot ad-slot--incontent container" aria-hidden="true">
+    <span>Publicidad</span>
+    <!-- PEGA AQUÍ TU CÓDIGO DE ADSENSE -->
+  </div>
+
+  <section class="faq container" id="faq">
+    <h2>Preguntas frecuentes</h2>
+    <details>
+      <summary>¿Comprimir una foto le quita calidad?</summary>
+      <p>Depende de cuánto aprietes. Bajar de calidad 100 a 80-85 casi nunca se nota a simple vista, porque el ojo no percibe esa pérdida en fotos con detalle normal. Por debajo de 60 ya empiezan a verse artefactos, sobre todo en degradados suaves como el cielo o una pared lisa. El modo peso objetivo bajará calidad y, si hace falta, tamaño hasta cumplir el peso pedido, así que cuanto más agresivo sea el objetivo, más se notará.</p>
+    </details>
+    <details>
+      <summary>¿Se suben mis fotos a algún servidor?</summary>
+      <p>No. Todo el proceso ocurre en tu navegador, en tu propio dispositivo. ApretaFotos no tiene servidor de subida: no hay ningún punto donde tus imágenes salgan de tu ordenador o tu móvil. Puedes comprobarlo desconectando internet después de cargar la página: la herramienta te seguirá funcionando.</p>
+    </details>
+    <details>
+      <summary>¿Cuánto puedo comprimir sin que se note?</summary>
+      <p>Como referencia, en una foto de móvil normal (12-48 megapíxeles) puedes bajar de 4-8 MB a 300-600 KB con calidad 80-85 sin pérdida visible en pantalla. Para publicar en una app de segunda mano, calidad 70 y un ancho máximo de 1600 px suele bastar de sobra.</p>
+    </details>
+    <details>
+      <summary>¿Qué formato conviene para vender online?</summary>
+      <p>JPG es el más compatible al 100% y el que mejor conocen apps como Vinted, Wallapop o Milanuncios. WebP pesa entre un 25% y un 35% menos a la misma calidad visual, pero alguna app o navegador antiguo puede no aceptarlo todavía. Si subes a tu propia web, usa WebP; si subes a un marketplace, quédate en JPG.</p>
+    </details>
+    <details>
+      <summary>¿Por qué mi foto sigue pesando mucho después de comprimirla?</summary>
+      <p>Las causas más habituales: la imagen es un PNG (formato sin pérdida, no pensado para fotos) — conviértela a JPG o WebP; la resolución original es enorme — activa el redimensionado por ancho máximo; o el objetivo de peso pedido es demasiado bajo para el contenido de la foto y la herramienta ha llegado a su límite razonable sin poder bajar más.</p>
+    </details>
+  </section>
+
+  <section class="more-tools container" id="mas-herramientas">
+    <h2>Más herramientas</h2>
+    <div class="more-tools-grid">
+      <a class="tool-card-link" href="#" data-todo="pendiente">Convertir imágenes (JPG ⇄ PNG ⇄ WebP)</a>
+      <a class="tool-card-link" href="#" data-todo="pendiente">Redimensionar para redes sociales</a>
+      <a class="tool-card-link" href="#" data-todo="pendiente">Limpiar metadatos EXIF</a>
+    </div>
+  </section>
+</main>
+
+<footer class="site-footer">
+  <div class="container footer-row">
+    <p>© <span id="year"></span> ApretaFotos</p>
+    <nav aria-label="Legal">
+      <a href="privacidad.html">Privacidad</a>
+      <a href="aviso-legal.html">Aviso legal</a>
+    </nav>
+  </div>
+</footer>
+
+<script defer src="lib/manifest.js"></script>
+<script defer src="main.js?v=20260820"></script>
+</body>
+</html>
