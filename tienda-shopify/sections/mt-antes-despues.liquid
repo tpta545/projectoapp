@@ -1,0 +1,76 @@
+{{ 'mt-styles.css' | asset_url | stylesheet_tag }}
+
+{% style %}
+  #shopify-section-{{ section.id }} {
+    padding-top: {{ section.settings.padding_top }}px;
+    padding-bottom: {{ section.settings.padding_bottom }}px;
+  }
+{% endstyle %}
+
+<section class="mt-antesdespues mt-section">
+  <div class="mt-container">
+    {%- if section.settings.eyebrow != blank -%}<p class="mt-eyebrow" style="text-align:center;">{{ section.settings.eyebrow }}</p>{%- endif -%}
+    <h2 class="mt-title mt-reveal mt-reveal-1" style="text-align:center;">{{ section.settings.headline }}</h2>
+    <p class="mt-body-text" style="text-align:center; max-width:560px; margin-left:auto; margin-right:auto;">{{ section.settings.texto }}</p>
+
+    <div class="mt-antesdespues__caja mt-reveal mt-reveal-2" data-mt-antesdespues>
+      {%- if section.settings.imagen_despues != blank -%}
+        <img class="mt-antesdespues__img mt-antesdespues__despues" src="{{ section.settings.imagen_despues | image_url: width: 1200 }}" alt="{{ section.settings.etiqueta_despues | escape }}" loading="lazy">
+      {%- else -%}
+        <img class="mt-antesdespues__img mt-antesdespues__despues" src="{{ 'mt-despues.jpg' | asset_url }}" alt="{{ section.settings.etiqueta_despues | escape }}" loading="lazy">
+      {%- endif -%}
+
+      <div class="mt-antesdespues__antes-wrap" data-mt-antesdespues-wrap>
+        {%- if section.settings.imagen_antes != blank -%}
+          <img class="mt-antesdespues__img" src="{{ section.settings.imagen_antes | image_url: width: 1200 }}" alt="{{ section.settings.etiqueta_antes | escape }}" loading="lazy">
+        {%- else -%}
+          <img class="mt-antesdespues__img" src="{{ 'mt-antes.jpg' | asset_url }}" alt="{{ section.settings.etiqueta_antes | escape }}" loading="lazy">
+        {%- endif -%}
+      </div>
+
+      <span class="mt-antesdespues__badge mt-antesdespues__badge--izq">{{ section.settings.etiqueta_antes }}</span>
+      <span class="mt-antesdespues__badge mt-antesdespues__badge--der">{{ section.settings.etiqueta_despues }}</span>
+
+      <div class="mt-antesdespues__linea" data-mt-antesdespues-linea></div>
+      <input type="range" min="0" max="100" value="50" class="mt-antesdespues__range" data-mt-antesdespues-range aria-label="{{ section.settings.etiqueta_antes | escape }} / {{ section.settings.etiqueta_despues | escape }}">
+    </div>
+  </div>
+</section>
+
+<script>
+  (function () {
+    document.querySelectorAll('[data-mt-antesdespues]').forEach(function (caja) {
+      var wrap = caja.querySelector('[data-mt-antesdespues-wrap]');
+      var linea = caja.querySelector('[data-mt-antesdespues-linea]');
+      var range = caja.querySelector('[data-mt-antesdespues-range]');
+      if (!wrap || !linea || !range) return;
+      function actualizar() {
+        var v = range.value;
+        wrap.style.clipPath = 'inset(0 ' + (100 - v) + '% 0 0)';
+        linea.style.left = v + '%';
+      }
+      range.addEventListener('input', actualizar);
+      actualizar();
+    });
+  })();
+</script>
+
+{% schema %}
+{
+  "name": "MT – Antes / Después",
+  "tag": "section",
+  "settings": [
+    { "type": "text", "id": "eyebrow", "label": "Texto pequeño", "default": "El cambio" },
+    { "type": "text", "id": "headline", "label": "Título", "default": "Arrastra y compara" },
+    { "type": "textarea", "id": "texto", "label": "Texto", "default": "El mismo rincón de casa, antes y después de un detalle con luz propia." },
+    { "type": "image_picker", "id": "imagen_antes", "label": "Foto \"antes\"" },
+    { "type": "text", "id": "etiqueta_antes", "label": "Etiqueta \"antes\"", "default": "ANTES" },
+    { "type": "image_picker", "id": "imagen_despues", "label": "Foto \"después\"" },
+    { "type": "text", "id": "etiqueta_despues", "label": "Etiqueta \"después\"", "default": "DESPUÉS" },
+    { "type": "header", "content": "Espaciado" },
+    { "type": "range", "id": "padding_top", "label": "Espacio superior (px)", "min": 0, "max": 160, "step": 8, "unit": "px", "default": 72 },
+    { "type": "range", "id": "padding_bottom", "label": "Espacio inferior (px)", "min": 0, "max": 160, "step": 8, "unit": "px", "default": 72 }
+  ],
+  "presets": [ { "name": "MT – Antes / Después" } ]
+}
+{% endschema %}

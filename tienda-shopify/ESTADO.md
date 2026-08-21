@@ -106,6 +106,36 @@ Qué se hizo:
   - **Limitación honesta**: el descuento se activa por CANTIDAD total del producto (2 o 3 unidades), no puede forzar técnicamente que sean diseños distintos sin una app de descuentos a medida — en la práctica el pack ya añade diseños distintos por defecto, así que casi siempre coincide.
 - Nuevo permiso de la tienda concedido por el usuario en esta ronda: `write_discounts` (para crear los descuentos de los packs).
 
+## Ronda 3 (petición: fotos antes/después + usar Vitals)
+Pidió imágenes de producto en formato "antes y después" de la decoración, y
+aprovechar la app **Vitals** (ya instalada en la tienda).
+
+- **Vitals**: investigado en el tema publicado ("Sense") vía `theme pull` —
+  solo tenía activado el bloque global "app embed" (`shopify://apps/vitals/blocks/app-embed/aeb48102-...`),
+  que enciende las funciones generales de Vitals configuradas desde SU PROPIA
+  app (badges de confianza, pop-ups, etc.) en todo el sitio. Lo he activado
+  también en nuestro tema (`config/settings_data.json`, `current.blocks`) para
+  que esas funciones generales también corran en el diseño nuevo.
+  Su función concreta de "comparador antes/después" no estaba usada en ningún
+  sitio del tema, así que no hay un identificador de bloque real que copiar —
+  inventar uno habría fallado silenciosamente o roto la subida. Por eso el
+  comparador antes/después está construido directamente por nosotros (más
+  control, mismo resultado visual, sin depender de un ID que no podíamos
+  verificar). Si el usuario prefiere el widget nativo de Vitals para esto en
+  el futuro, puede añadirlo él desde el editor (Añadir sección → Apps →
+  Vitals) y se lo dejamos configurado.
+- **Nueva sección** `sections/mt-antes-despues.liquid`: comparador con
+  deslizador (arrastrar o tocar), imagen "antes" y "después" editables desde
+  el editor (con las generadas por IA como valor por defecto). Añadida a
+  `templates/product.mt.json` justo después de la caja de compra.
+- **Fotos generadas** (Gemini): `assets/mt-antes.jpg` (una consola de entrada
+  sin decorar, de noche) y `assets/mt-despues.jpg` (la MISMA mesa, mismo
+  encuadre, con las arañas LED y una calabaza — generada usando la foto
+  "antes" como referencia para que el encuadre encajase al superponerlas).
+- Probado con Playwright arrastrando el slider a varias posiciones: el
+  recorte (`clip-path`) y la línea divisoria funcionan bien, sin errores de
+  consola.
+
 ## Verificación de esta ronda
 - `shopify theme dev` + Playwright: probado el flujo real de packs (clic en "Pack 2 diseños" → `/cart/add.js` responde 200 con las 2 unidades → confirmado con curl directo al dominio real que `/discount/PACK2DISENOS15?redirect=/cart` responde 302 a `/cart` con la cookie de descuento puesta).
 - Capturas de portada y producto completas, con scroll simulado para disparar animaciones — sin errores Liquid, todo en español, tipografía nueva aplicada.

@@ -26,6 +26,16 @@
       },
       "block_order": ["conf1", "conf2", "conf3", "ac1", "ac2", "ac3", "ac4"]
     },
+    "antesdespues": {
+      "type": "mt-antes-despues",
+      "settings": {
+        "eyebrow": "El cambio",
+        "headline": "Arrastra y compara",
+        "texto": "El mismo rincón de casa, antes y después de un detalle con luz propia.",
+        "etiqueta_antes": "ANTES",
+        "etiqueta_despues": "DESPUÉS"
+      }
+    },
     "problema1": {
       "type": "mt-problema",
       "settings": {
@@ -95,5 +105,5 @@
       }
     }
   },
-  "order": ["principal", "problema1", "pasos", "caracteristicas", "problema2", "resenas", "cierre"]
+  "order": ["principal", "antesdespues", "problema1", "pasos", "caracteristicas", "problema2", "resenas", "cierre"]
 }
