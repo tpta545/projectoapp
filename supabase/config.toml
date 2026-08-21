@@ -1,0 +1,13 @@
+project_id = "testario"
+
+[db]
+port = 54322
+
+[api]
+port = 54321
+
+[studio]
+port = 54323
+
+[auth]
+enable_signup = true

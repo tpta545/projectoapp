@@ -1,28 +1,35 @@
-import type { ButtonHTMLAttributes, ReactNode } from 'react'
+import { forwardRef } from "react";
+import type { ButtonHTMLAttributes } from "react";
+import { Spinner } from "./Spinner";
 
-type Variante = 'primario' | 'secundario' | 'peligro' | 'fantasma'
+type Variante = "primario" | "secundario" | "peligro" | "fantasma";
 
-type Props = ButtonHTMLAttributes<HTMLButtonElement> & {
-  variante?: Variante
-  children: ReactNode
+interface Props extends ButtonHTMLAttributes<HTMLButtonElement> {
+  variante?: Variante;
+  cargando?: boolean;
 }
 
-const ESTILOS: Record<Variante, string> = {
-  primario: 'bg-trade-red text-trade-white active:bg-trade-red-dark disabled:bg-neutral-300',
+const CLASES_VARIANTE: Record<Variante, string> = {
+  primario: "bg-[var(--color-primario)] text-white hover:bg-[var(--color-primario-hover)]",
   secundario:
-    'bg-trade-black text-trade-white active:bg-neutral-800 disabled:bg-neutral-300',
-  peligro: 'bg-confianza-baja text-trade-white active:brightness-90 disabled:bg-neutral-300',
-  fantasma:
-    'bg-transparent text-trade-black border-2 border-trade-black active:bg-neutral-100 disabled:border-neutral-300 disabled:text-neutral-300',
-}
+    "bg-[var(--color-superficie)] text-[var(--color-texto)] border border-[var(--color-borde)] hover:bg-[var(--color-primario-suave)]",
+  peligro: "bg-[var(--color-error)] text-white hover:opacity-90",
+  fantasma: "bg-transparent text-[var(--color-texto)] hover:bg-[var(--color-primario-suave)]",
+};
 
-export function Boton({ variante = 'primario', className = '', children, ...resto }: Props) {
+export const Boton = forwardRef<HTMLButtonElement, Props>(function Boton(
+  { variante = "primario", cargando = false, disabled, className = "", children, ...resto },
+  ref
+) {
   return (
     <button
-      className={`flex w-full items-center justify-center gap-2 rounded-lg px-6 py-4 text-lg font-bold tracking-tight transition-colors disabled:cursor-not-allowed ${ESTILOS[variante]} ${className}`}
+      ref={ref}
+      disabled={disabled || cargando}
+      className={`inline-flex items-center justify-center gap-2 rounded-xl px-4 py-3 text-sm font-medium transition-colors disabled:cursor-not-allowed disabled:opacity-60 ${CLASES_VARIANTE[variante]} ${className}`}
       {...resto}
     >
+      {cargando && <Spinner />}
       {children}
     </button>
-  )
-}
+  );
+});

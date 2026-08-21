@@ -1,23 +1,17 @@
-import type { NivelConfianza } from '../../types/lectura'
+type Tono = "neutro" | "exito" | "error" | "aviso" | "primario";
 
-const ESTILOS: Record<NivelConfianza, string> = {
-  alta: 'bg-confianza-alta-bg text-confianza-alta',
-  media: 'bg-confianza-media-bg text-confianza-media',
-  baja: 'bg-confianza-baja-bg text-confianza-baja',
-}
+const CLASES_TONO: Record<Tono, string> = {
+  neutro: "bg-[var(--color-borde)] text-[var(--color-texto)]",
+  exito: "bg-[var(--color-exito-suave)] text-[var(--color-exito)]",
+  error: "bg-[var(--color-error-suave)] text-[var(--color-error)]",
+  aviso: "bg-[var(--color-aviso-suave)] text-[var(--color-aviso)]",
+  primario: "bg-[var(--color-primario-suave)] text-[var(--color-primario)]",
+};
 
-const ETIQUETAS: Record<NivelConfianza, string> = {
-  alta: 'Claro',
-  media: 'Revisar',
-  baja: 'Sin leer',
-}
-
-export function BadgeConfianza({ nivel }: { nivel: NivelConfianza }) {
+export function Badge({ tono = "neutro", children }: { tono?: Tono; children: React.ReactNode }) {
   return (
-    <span
-      className={`inline-flex shrink-0 items-center rounded-full px-3 py-1 text-sm font-bold ${ESTILOS[nivel]}`}
-    >
-      {ETIQUETAS[nivel]}
+    <span className={`inline-flex items-center rounded-full px-2.5 py-1 text-xs font-medium ${CLASES_TONO[tono]}`}>
+      {children}
     </span>
-  )
+  );
 }
