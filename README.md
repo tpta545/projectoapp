@@ -17,9 +17,9 @@ ver [`/aviso-legal`](src/app/(marketing)/aviso-legal/page.tsx).
 - **Next.js 15** (App Router) + TypeScript + Tailwind CSS v4
 - **Supabase**: Postgres, Auth (email/contraseña), Storage (PDFs privados),
   pgvector para embeddings
-- **OpenAI**: `gpt-4o-mini` para generación/verificación/auditoría de
-  preguntas, `text-embedding-3-small` para embeddings (proveedor
-  intercambiable, ver `src/lib/ia/proveedor.ts`)
+- **Gemini** (Google AI Studio): `gemini-2.5-flash` para generación/
+  verificación/auditoría de preguntas, `gemini-embedding-001` para embeddings
+  (proveedor intercambiable, ver `src/lib/ia/proveedor.ts`)
 - Diseño **mobile-first** (390px de ancho como referencia)
 - Sin dependencias de UI/estado innecesarias: componentes propios en
   `src/components/ui`
@@ -58,6 +58,12 @@ tres capas independientes (`src/lib/validacion/`, con tests en
 Toda decisión de cada capa queda trazada en la tabla `validaciones`, visible
 agregada por capa y por documento en `/admin`.
 
+> Nota sobre Gemini: su salida JSON estructurada es, en general, fiable, pero
+> puede fallar puntualmente (JSON incompleto, envuelto en \`\`\`json\`\`\`, etc.).
+> El proveedor lo parsea de forma defensiva y, si algo no encaja, la Capa 0/1/2
+> simplemente descarta esa pregunta candidata — nunca deja pasar algo a medias.
+> Si ves una tasa de descarte alta en `/admin`, es la razón más probable.
+
 Al generar un test se sobregenera `N × factor_sobregeneracion` preguntas y se
 validan en paralelo; se sirven las primeras `N` que superan las tres capas.
 Las preguntas ya validadas para un documento se cachean y reutilizan (el
@@ -70,7 +76,7 @@ plan gratuito puede servir tests instantáneos sin llamar a la IA.
 
 - Node.js 20+
 - Un proyecto de [Supabase](https://supabase.com) (plan gratuito vale)
-- Una clave de API de [OpenAI](https://platform.openai.com)
+- Una clave de API de [Google AI Studio](https://aistudio.google.com/apikey) (Gemini)
 
 ### 2. Base de datos
 
@@ -100,9 +106,9 @@ cp .env.example .env.local
 | `NEXT_PUBLIC_SUPABASE_URL` | Project Settings → API → Project URL |
 | `NEXT_PUBLIC_SUPABASE_ANON_KEY` | Project Settings → API → anon public key |
 | `SUPABASE_SERVICE_ROLE_KEY` | Project Settings → API → service_role key (**solo servidor**) |
-| `OPENAI_API_KEY` | platform.openai.com → API keys |
-| `OPENAI_MODEL_GENERACION` (opcional) | por defecto `gpt-4o-mini` |
-| `OPENAI_MODEL_EMBEDDINGS` (opcional) | por defecto `text-embedding-3-small` |
+| `GEMINI_API_KEY` | aistudio.google.com/apikey |
+| `GEMINI_MODEL_GENERACION` (opcional) | por defecto `gemini-2.5-flash` |
+| `GEMINI_MODEL_EMBEDDINGS` (opcional) | por defecto `gemini-embedding-001` |
 
 ### 4. Instalar y arrancar
 

@@ -1,10 +1,10 @@
-import OpenAI from "openai";
-import { zodResponseFormat } from "openai/helpers/zod";
 import { z } from "zod";
 import type { ProveedorIA } from "./tipos";
 
-const MODELO_EMBEDDINGS = process.env.OPENAI_MODEL_EMBEDDINGS || "text-embedding-3-small";
-const MODELO_GENERACION = process.env.OPENAI_MODEL_GENERACION || "gpt-4o-mini";
+const MODELO_EMBEDDINGS = process.env.GEMINI_MODEL_EMBEDDINGS || "gemini-embedding-001";
+const MODELO_GENERACION = process.env.GEMINI_MODEL_GENERACION || "gemini-2.5-flash";
+const DIMENSION_EMBEDDING = 1536;
+const URL_BASE = "https://generativelanguage.googleapis.com/v1beta/models";
 
 const EsquemaOpcion = z.object({
   letra: z.enum(["A", "B", "C", "D"]),
@@ -33,20 +33,125 @@ const EsquemaAuditorCalidad = z.object({
   motivo: z.string(),
 });
 
-class ProveedorOpenAI implements ProveedorIA {
-  private cliente: OpenAI;
+// Equivalentes en JSON Schema (formato que acepta responseSchema de Gemini)
+// de los esquemas zod anteriores.
+const OPCION_JSON_SCHEMA = {
+  type: "object",
+  properties: {
+    letra: { type: "string", enum: ["A", "B", "C", "D"] },
+    texto: { type: "string" },
+  },
+  required: ["letra", "texto"],
+};
+
+const JSON_SCHEMA_LOTE_PREGUNTAS = {
+  type: "object",
+  properties: {
+    preguntas: {
+      type: "array",
+      items: {
+        type: "object",
+        properties: {
+          enunciado: { type: "string" },
+          opciones: { type: "array", items: OPCION_JSON_SCHEMA },
+          respuestaCorrecta: { type: "string", enum: ["A", "B", "C", "D"] },
+          explicacion: { type: "string" },
+        },
+        required: ["enunciado", "opciones", "respuestaCorrecta", "explicacion"],
+      },
+    },
+  },
+  required: ["preguntas"],
+};
+
+const JSON_SCHEMA_VERIFICADOR = {
+  type: "object",
+  properties: {
+    puedeResponderse: { type: "boolean" },
+    opcionElegida: { type: "string", enum: ["A", "B", "C", "D", "NINGUNA"] },
+    fraseLiteral: { type: "string" },
+  },
+  required: ["puedeResponderse", "opcionElegida", "fraseLiteral"],
+};
+
+const JSON_SCHEMA_AUDITOR = {
+  type: "object",
+  properties: {
+    puntuacion: { type: "integer" },
+    motivo: { type: "string" },
+  },
+  required: ["puntuacion", "motivo"],
+};
+
+function extraerTextoJson(texto: string): string {
+  // Defensivo: Gemini normalmente devuelve JSON puro con responseMimeType,
+  // pero a veces lo envuelve en un bloque ```json ... ```.
+  const coincidencia = texto.match(/```(?:json)?\s*([\s\S]*?)```/);
+  return (coincidencia?.[1] ?? texto).trim();
+}
+
+class ProveedorGemini implements ProveedorIA {
+  private apiKey: string;
 
   constructor() {
-    this.cliente = new OpenAI({ apiKey: process.env.OPENAI_API_KEY });
+    this.apiKey = process.env.GEMINI_API_KEY ?? "";
+  }
+
+  private async generarJson(prompt: string, esquemaJson: object): Promise<unknown> {
+    const respuesta = await fetch(`${URL_BASE}/${MODELO_GENERACION}:generateContent`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        "x-goog-api-key": this.apiKey,
+      },
+      body: JSON.stringify({
+        contents: [{ parts: [{ text: prompt }] }],
+        generationConfig: {
+          responseMimeType: "application/json",
+          responseSchema: esquemaJson,
+        },
+      }),
+    });
+
+    if (!respuesta.ok) {
+      throw new Error(`Gemini devolvió ${respuesta.status}: ${await respuesta.text()}`);
+    }
+
+    const datos = await respuesta.json();
+    const texto = datos.candidates?.[0]?.content?.parts?.[0]?.text;
+    if (typeof texto !== "string") return null;
+
+    try {
+      return JSON.parse(extraerTextoJson(texto));
+    } catch {
+      return null;
+    }
   }
 
   async crearEmbeddings(textos: string[]): Promise<number[][]> {
     if (textos.length === 0) return [];
-    const respuesta = await this.cliente.embeddings.create({
-      model: MODELO_EMBEDDINGS,
-      input: textos,
+
+    const respuesta = await fetch(`${URL_BASE}/${MODELO_EMBEDDINGS}:batchEmbedContents`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        "x-goog-api-key": this.apiKey,
+      },
+      body: JSON.stringify({
+        requests: textos.map((texto) => ({
+          model: `models/${MODELO_EMBEDDINGS}`,
+          content: { parts: [{ text: texto }] },
+          outputDimensionality: DIMENSION_EMBEDDING,
+        })),
+      }),
     });
-    return respuesta.data.map((item) => item.embedding);
+
+    if (!respuesta.ok) {
+      throw new Error(`Gemini (embeddings) devolvió ${respuesta.status}: ${await respuesta.text()}`);
+    }
+
+    const datos = await respuesta.json();
+    return (datos.embeddings ?? []).map((e: { values: number[] }) => e.values);
   }
 
   async generarPreguntas(params: {
@@ -55,7 +160,7 @@ class ProveedorOpenAI implements ProveedorIA {
     dificultad: string;
     oposicion: string;
   }) {
-    const instrucciones = `Eres un generador de preguntas tipo test para opositores españoles a ${
+    const prompt = `Eres un generador de preguntas tipo test para opositores españoles a ${
       params.oposicion === "guardia_civil" ? "Guardia Civil" : "Policía Nacional"
     }.
 
@@ -74,17 +179,11 @@ FRAGMENTO DE TEMARIO:
 ${params.fragmento}
 """`;
 
-    const respuesta = await this.cliente.beta.chat.completions.parse({
-      model: MODELO_GENERACION,
-      messages: [{ role: "system", content: instrucciones }],
-      response_format: zodResponseFormat(EsquemaLotePreguntas, "lote_preguntas"),
-      temperature: 0.4,
-    });
+    const json = await this.generarJson(prompt, JSON_SCHEMA_LOTE_PREGUNTAS);
+    const analizado = EsquemaLotePreguntas.safeParse(json);
+    if (!analizado.success) return [];
 
-    const analizado = respuesta.choices[0]?.message.parsed;
-    if (!analizado) return [];
-
-    return analizado.preguntas.map((p) => ({
+    return analizado.data.preguntas.map((p) => ({
       enunciado: p.enunciado,
       opciones: p.opciones,
       respuestaCorrecta: p.respuestaCorrecta,
@@ -97,16 +196,16 @@ ${params.fragmento}
     enunciado: string;
     opcionesDesordenadas: { letra: string; texto: string }[];
   }) {
-    const instrucciones = `Se te da un fragmento de texto, una pregunta y 4 opciones. NO sabes
+    const prompt = `Se te da un fragmento de texto, una pregunta y 4 opciones. NO sabes
 cuál es la opción correcta: debes deducirla solo a partir del fragmento.
 
-Responde:
+Responde en JSON con:
 - puedeResponderse: false si el fragmento NO contiene información suficiente para elegir
   una opción con seguridad.
-- opcionElegida: la letra (A/B/C/D) que el fragmento respalda como correcta, o null si no
-  puede responderse.
-- fraseLiteral: una frase copiada TEXTUALMENTE del fragmento que justifique tu elección,
-  o null si no puede responderse. Debe ser una copia exacta, no un resumen.
+- opcionElegida: la letra (A/B/C/D) que el fragmento respalda como correcta, o "NINGUNA" si
+  no puede responderse.
+- fraseLiteral: una frase copiada TEXTUALMENTE del fragmento que justifique tu elección, o
+  una cadena vacía si no puede responderse. Debe ser una copia exacta, no un resumen.
 
 FRAGMENTO:
 """
@@ -118,17 +217,20 @@ PREGUNTA: ${params.enunciado}
 OPCIONES:
 ${params.opcionesDesordenadas.map((o) => `${o.letra}) ${o.texto}`).join("\n")}`;
 
-    const respuesta = await this.cliente.beta.chat.completions.parse({
-      model: MODELO_GENERACION,
-      messages: [{ role: "system", content: instrucciones }],
-      response_format: zodResponseFormat(EsquemaVerificadorCiego, "verificacion"),
-      temperature: 0,
-    });
+    const json = await this.generarJson(prompt, JSON_SCHEMA_VERIFICADOR);
+    const analizado = EsquemaVerificadorCiego.extend({
+      opcionElegida: z.enum(["A", "B", "C", "D", "NINGUNA"]).nullable(),
+    }).safeParse(json);
 
-    const analizado = respuesta.choices[0]?.message.parsed;
-    return (
-      analizado ?? { puedeResponderse: false, opcionElegida: null, fraseLiteral: null }
-    );
+    if (!analizado.success) {
+      return { puedeResponderse: false, opcionElegida: null, fraseLiteral: null };
+    }
+
+    const opcionElegida =
+      analizado.data.opcionElegida === "NINGUNA" ? null : analizado.data.opcionElegida;
+    const fraseLiteral = analizado.data.fraseLiteral?.trim() || null;
+
+    return { puedeResponderse: analizado.data.puedeResponderse, opcionElegida, fraseLiteral };
   }
 
   async auditarCalidad(params: {
@@ -136,7 +238,7 @@ ${params.opcionesDesordenadas.map((o) => `${o.letra}) ${o.texto}`).join("\n")}`;
     enunciado: string;
     opciones: { letra: string; texto: string }[];
   }) {
-    const instrucciones = `Audita la calidad de esta pregunta tipo test de oposición. Puntúa
+    const prompt = `Audita la calidad de esta pregunta tipo test de oposición. Puntúa
 de 1 (muy mala) a 5 (excelente) considerando:
 - Ambigüedad: ¿el enunciado admite más de una interpretación?
 - ¿Hay más de una respuesta defendible entre las opciones?
@@ -156,21 +258,18 @@ PREGUNTA: ${params.enunciado}
 OPCIONES:
 ${params.opciones.map((o) => `${o.letra}) ${o.texto}`).join("\n")}`;
 
-    const respuesta = await this.cliente.beta.chat.completions.parse({
-      model: MODELO_GENERACION,
-      messages: [{ role: "system", content: instrucciones }],
-      response_format: zodResponseFormat(EsquemaAuditorCalidad, "auditoria"),
-      temperature: 0,
-    });
-
-    const analizado = respuesta.choices[0]?.message.parsed;
-    return analizado ?? { puntuacion: 1, motivo: "El auditor no devolvió una respuesta válida." };
+    const json = await this.generarJson(prompt, JSON_SCHEMA_AUDITOR);
+    const analizado = EsquemaAuditorCalidad.safeParse(json);
+    if (!analizado.success) {
+      return { puntuacion: 1, motivo: "El auditor no devolvió una respuesta válida." };
+    }
+    return analizado.data;
   }
 }
 
 let instancia: ProveedorIA | null = null;
 
 export function obtenerProveedorIA(): ProveedorIA {
-  if (!instancia) instancia = new ProveedorOpenAI();
+  if (!instancia) instancia = new ProveedorGemini();
   return instancia;
 }
