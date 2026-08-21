@@ -20,6 +20,9 @@
       <div class="mt-carrusel">
         {%- for block in section.blocks -%}
           <div class="mt-resena mt-reveal mt-reveal-{{ forloop.index | at_most: 4 }}" {{ block.shopify_attributes }}>
+            {%- if block.settings.foto != blank -%}
+              <img class="mt-resena__foto" src="{{ block.settings.foto | image_url: width: 120 }}" alt="{{ block.settings.autor | escape }}" loading="lazy">
+            {%- endif -%}
             <div class="mt-resena__estrellas">{% for i in (1..5) %}{% if i <= block.settings.estrellas %}★{% else %}☆{% endif %}{% endfor %}</div>
             <p class="mt-resena__texto">"{{ block.settings.texto }}"</p>
             <p class="mt-resena__autor">{{ block.settings.autor }}</p>
@@ -54,6 +57,7 @@
       "type": "resena",
       "name": "Reseña",
       "settings": [
+        { "type": "image_picker", "id": "foto", "label": "Foto del cliente (opcional)" },
         { "type": "range", "id": "estrellas", "label": "Estrellas", "min": 1, "max": 5, "step": 1, "default": 5 },
         { "type": "textarea", "id": "texto", "label": "Texto de la reseña", "default": "Mucho mejor de lo que esperaba, la luz queda genial de noche." },
         { "type": "text", "id": "autor", "label": "Nombre", "default": "Cliente verificado" }

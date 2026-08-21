@@ -6,7 +6,7 @@
   --mt-color-texto-suave: #cabfc4;
   --mt-color-acento: #ff7a1a;
   --mt-color-acento-2: #b3261e;
-  --mt-fuente-titulo: 'Butcherman', 'Georgia', serif;
+  --mt-fuente-titulo: 'Archivo Black', 'Poppins', -apple-system, sans-serif;
   --mt-fuente: 'Poppins', -apple-system, BlinkMacSystemFont, sans-serif;
   --mt-radio: 20px;
   --mt-margen: 24px;
@@ -121,6 +121,37 @@
 .mt-beneficio__body { color: var(--mt-color-texto-suave); font-size: 15px; margin: 0; }
 @media (max-width: 780px) { .mt-beneficios__grid { grid-template-columns: 1fr; } }
 
+.mt-beneficios--acento .mt-eyebrow { color: #1a0f05; }
+.mt-beneficios--acento .mt-title { color: #1a0f05; }
+.mt-beneficios--acento .mt-beneficio { background: rgba(26,15,5,0.08); border-color: rgba(26,15,5,0.15); }
+.mt-beneficios--acento .mt-beneficio:hover { border-color: rgba(26,15,5,0.35); }
+.mt-beneficios--acento .mt-beneficio__title { color: #1a0f05; }
+.mt-beneficios--acento .mt-beneficio__body { color: rgba(26,15,5,0.75); }
+
+/* ===== PROBLEMA / SOLUCIÓN ===== */
+.mt-problema { background: var(--mt-color-fondo-alt); }
+.mt-problema__wrap { display: grid; grid-template-columns: 1fr 1fr; gap: 56px; align-items: center; }
+.mt-problema__wrap--inv .mt-problema__media { order: 2; }
+.mt-problema__wrap--inv .mt-problema__texto { order: 1; }
+.mt-problema__media { border-radius: var(--mt-radio); overflow: hidden; box-shadow: 0 30px 60px rgba(0,0,0,0.4); }
+.mt-problema__media img { width: 100%; height: 100%; object-fit: cover; display: block; aspect-ratio: 4/5; }
+.mt-problema__titulo { font-size: clamp(28px, 3.4vw, 40px); }
+@media (max-width: 780px) {
+  .mt-problema__wrap, .mt-problema__wrap--inv { grid-template-columns: 1fr; gap: 24px; }
+  .mt-problema__wrap--inv .mt-problema__media, .mt-problema__wrap--inv .mt-problema__texto { order: initial; }
+}
+
+/* ===== PASOS (banda de color) ===== */
+.mt-pasos__titulo { text-align: center; color: #1a0f05; margin-bottom: 40px; }
+.mt-pasos__grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 28px; }
+.mt-paso { text-align: center; }
+.mt-paso__img { border-radius: var(--mt-radio); overflow: hidden; aspect-ratio: 1/1; margin-bottom: 16px; box-shadow: 0 16px 30px rgba(0,0,0,0.25); }
+.mt-paso__img img { width: 100%; height: 100%; object-fit: cover; display: block; }
+.mt-paso__num { display: block; font-family: var(--mt-fuente); font-weight: 800; font-size: 12px; letter-spacing: 0.1em; text-transform: uppercase; color: rgba(26,15,5,0.6); margin-bottom: 6px; }
+.mt-paso p.mt-paso__titulo { font-family: var(--mt-fuente); font-weight: 700; color: #1a0f05; font-size: 18px; margin: 0 0 6px; }
+.mt-paso__texto { color: rgba(26,15,5,0.75); font-size: 14px; margin: 0; }
+@media (max-width: 780px) { .mt-pasos__grid { grid-template-columns: 1fr; } }
+
 /* ===== VARIANTES ===== */
 .mt-variantes { background: var(--mt-color-fondo); }
 .mt-variantes__grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 28px; margin-top: 40px; }
@@ -153,6 +184,7 @@
 .mt-carrusel::-webkit-scrollbar { display: none; }
 .mt-resena { flex: 0 0 320px; scroll-snap-align: start; background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.08); border-radius: var(--mt-radio); padding: 26px; transition: transform 0.3s var(--mt-ease), box-shadow 0.3s var(--mt-ease); }
 .mt-resena:hover { transform: translateY(-6px); box-shadow: 0 20px 40px rgba(0,0,0,0.35); }
+.mt-resena__foto { width: 48px; height: 48px; border-radius: 50%; object-fit: cover; margin-bottom: 14px; border: 2px solid rgba(255,122,26,0.4); }
 .mt-resena__estrellas { color: var(--mt-color-acento); letter-spacing: 2px; margin-bottom: 12px; font-size: 15px; }
 .mt-resena__texto { color: var(--mt-color-texto); font-size: 15px; line-height: 1.6; margin: 0 0 16px; }
 .mt-resena__autor { color: var(--mt-color-texto-suave); font-size: 13px; font-weight: 600; }
@@ -216,3 +248,30 @@
   .mt-producto__wrap { grid-template-columns: 1fr; }
   .mt-producto__descripcion { padding-top: 48px; }
 }
+
+/* ===== OFERTAS / PACKS ===== */
+.mt-ofertas { display: flex; flex-direction: column; gap: 12px; margin-bottom: 20px; }
+.mt-oferta { display: flex; align-items: center; gap: 14px; padding: 16px 18px; border-radius: 14px; border: 1.5px solid rgba(255,255,255,0.14); cursor: pointer; transition: border-color 0.2s var(--mt-ease), background-color 0.2s var(--mt-ease); }
+.mt-oferta input { position: absolute; opacity: 0; pointer-events: none; }
+.mt-oferta__radio { width: 20px; height: 20px; min-width: 20px; border-radius: 50%; border: 2px solid rgba(255,255,255,0.35); position: relative; }
+.mt-oferta--activa { border-color: var(--mt-color-acento); background: rgba(255,122,26,0.08); }
+.mt-oferta--activa .mt-oferta__radio { border-color: var(--mt-color-acento); }
+.mt-oferta--activa .mt-oferta__radio::after { content: ""; position: absolute; inset: 3px; border-radius: 50%; background: var(--mt-color-acento); }
+.mt-oferta__info { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; color: var(--mt-color-texto); font-size: 15px; flex: 1; }
+.mt-oferta__badge { background: var(--mt-color-acento); color: #1a0f05; font-weight: 800; font-size: 12px; padding: 2px 8px; border-radius: 999px; }
+.mt-oferta__precio { margin-left: auto; font-family: var(--mt-fuente); font-weight: 700; color: var(--mt-color-acento); }
+
+.mt-producto__aviso { margin-top: 12px; font-size: 14px; color: var(--mt-color-texto-suave); }
+.mt-producto__aviso--error { color: #ff8a80; }
+
+.mt-pagos { display: flex; gap: 8px; flex-wrap: wrap; list-style: none; margin: 12px 0 0; padding: 0; }
+.mt-pagos__icono { height: 24px; width: auto; border-radius: 4px; }
+
+.mt-acordeones { margin-top: 28px; border-top: 1px solid rgba(255,255,255,0.08); }
+.mt-acordeon { border-bottom: 1px solid rgba(255,255,255,0.08); }
+.mt-acordeon__titulo { display: flex; align-items: center; justify-content: space-between; padding: 16px 4px; font-family: var(--mt-fuente); font-weight: 600; color: var(--mt-color-texto); cursor: pointer; list-style: none; }
+.mt-acordeon__titulo::-webkit-details-marker { display: none; }
+.mt-acordeon__mas { font-size: 20px; color: var(--mt-color-acento); transition: transform 0.25s var(--mt-ease); }
+.mt-acordeon[open] .mt-acordeon__mas { transform: rotate(45deg); }
+.mt-acordeon__cuerpo { padding: 0 4px 16px; color: var(--mt-color-texto-suave); font-size: 14px; line-height: 1.6; }
+.mt-acordeon__cuerpo p { margin: 0 0 10px; }

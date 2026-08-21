@@ -1,0 +1,62 @@
+{{ 'mt-styles.css' | asset_url | stylesheet_tag }}
+
+{% style %}
+  #shopify-section-{{ section.id }} {
+    padding-top: {{ section.settings.padding_top }}px;
+    padding-bottom: {{ section.settings.padding_bottom }}px;
+    background: {{ section.settings.color_fondo }};
+  }
+{% endstyle %}
+
+<section class="mt-pasos mt-section">
+  <div class="mt-container">
+    <h2 class="mt-title mt-pasos__titulo mt-reveal mt-reveal-1">{{ section.settings.headline }}</h2>
+    <div class="mt-pasos__grid">
+      {%- for block in section.blocks -%}
+        <div class="mt-paso mt-reveal mt-reveal-{{ forloop.index | at_most: 4 }}" {{ block.shopify_attributes }}>
+          {%- if block.settings.imagen != blank -%}
+            <div class="mt-paso__img"><img src="{{ block.settings.imagen | image_url: width: 500 }}" alt="{{ block.settings.titulo | escape }}" loading="lazy"></div>
+          {%- endif -%}
+          <span class="mt-paso__num">Paso {{ forloop.index }}</span>
+          <p class="mt-paso__titulo">{{ block.settings.titulo }}</p>
+          <p class="mt-paso__texto">{{ block.settings.texto }}</p>
+        </div>
+      {%- endfor -%}
+    </div>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "MT – Pasos",
+  "tag": "section",
+  "settings": [
+    { "type": "text", "id": "headline", "label": "Título", "default": "3 pasos y ya está lista" },
+    { "type": "color", "id": "color_fondo", "label": "Color de fondo de la banda", "default": "#ff7a1a" },
+    { "type": "header", "content": "Espaciado" },
+    { "type": "range", "id": "padding_top", "label": "Espacio superior (px)", "min": 0, "max": 160, "step": 8, "unit": "px", "default": 64 },
+    { "type": "range", "id": "padding_bottom", "label": "Espacio inferior (px)", "min": 0, "max": 160, "step": 8, "unit": "px", "default": 64 }
+  ],
+  "blocks": [
+    {
+      "type": "paso",
+      "name": "Paso",
+      "settings": [
+        { "type": "image_picker", "id": "imagen", "label": "Foto" },
+        { "type": "text", "id": "titulo", "label": "Título", "default": "Sácala de la caja" },
+        { "type": "textarea", "id": "texto", "label": "Texto" }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "MT – Pasos",
+      "blocks": [
+        { "type": "paso", "settings": { "titulo": "Compruébala", "texto": "El interruptor ya viene listo — solo actívalo si llegó apagado." } },
+        { "type": "paso", "settings": { "titulo": "Colócala", "texto": "En tu mesa, tu estantería o donde quieras dar el toque de misterio." } },
+        { "type": "paso", "settings": { "titulo": "Disfruta", "texto": "La luz LED parpadeante hace el resto durante horas." } }
+      ]
+    }
+  ]
+}
+{% endschema %}

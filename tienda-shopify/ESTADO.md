@@ -78,5 +78,34 @@ Script usado: `scripts/generar-foto-gemini.mjs` (en el scratchpad de la sesión,
 
 ## Pendientes del lado del usuario (no bloquean la entrega)
 - [ ] Rellenar Configuración → Políticas (privacidad, términos, devoluciones, envíos) — los enlaces del footer ya están listos para mostrarlas en cuanto existan.
-- [ ] Revisar/editar el texto de "Sobre nosotros" del footer y el menú "footer" (Contenido → Menús) si quiere enlaces distintos a los de por defecto.
+- [ ] Configurar un proveedor de pagos (Shopify Payments u otro) para que aparezcan los sellos de pago en la página de producto — de momento no salen porque la tienda aún no tiene ninguno activo.
 - [ ] Confirmar si quiere el tema publicado en vivo (sustituye a "Sense", que queda guardado y se puede recuperar).
+
+## Ronda 2 de cambios (petición del usuario tras ver la primera versión)
+Pidió: (1) que la página de producto tuviera más elementos tipo landing de venta
+(como capturas de referencia que pasó — antes/después, pasos, ingredientes,
+reseñas con foto, acordeones, packs con descuento); (2) cambiar la tipografía
+"spooky" (Butcherman) porque no le convencía; (3) traducir todo lo que
+estuviera en inglés; (4) crear packs: 2 diseños distintos -15%, los 3 diseños
+-35%.
+
+Qué se hizo:
+- **Tipografía**: Butcherman → **Archivo Black** (títulos) + Poppins (texto). Más legible, sigue siendo de impacto.
+- **Traducción**: se copió la traducción oficial de Shopify (`locales/es.json` → `locales/en.default.json`, y su `.schema.json`) para que TODO lo nativo de Dawn (carrito, buscador, cuenta, 404, accesibilidad...) salga en español sin tener que traducir a mano miles de cadenas. Barra de anuncio y footer reescritos en español (antes tenían texto de ejemplo de Dawn en inglés). El único texto que sigue en inglés es el aviso de cookies (lo pone Shopify directamente, fuera del tema — sigue el idioma de la tienda, no del theme).
+- **Página de producto ampliada** (`templates/product.mt.json` + secciones nuevas):
+  - `sections/mt-problema.liquid` (nueva): bloques editoriales "problema/agitación" con foto grande + titular — usados dos veces en la página de producto.
+  - `sections/mt-pasos.liquid` (nueva): banda de color con 3 pasos (like "3 simples pasos" de la referencia).
+  - `sections/mt-beneficios.liquid`: añadido ajuste "Fondo" (oscuro/acento) para poder reutilizarla como banda de "ingredientes/características".
+  - `sections/mt-resenas.liquid`: añadida foto opcional por reseña (`image_picker`) — de momento vacío por defecto: no he inventado fotos de clientes falsas (sería engañoso hacerlas pasar por reales); cuando el usuario tenga reseñas de verdad con foto, puede subirlas desde el editor.
+  - `sections/mt-producto.liquid`: rediseñada la columna de compra con **3 tarjetas tipo radio** ("1 diseño", "Pack 2 diseños -15%", "Pack 3 diseños -35%"), selector de pareja de diseños para el pack de 2, sellos de pago (`payment_type_svg_tag`), y **4 desplegables (acordeón)**: Modo de uso, Envío y entrega, Sobre el producto, Atención al cliente.
+  - Bug encontrado y corregido: el script de la sección usaba `document.currentScript.closest('.mt-producto')`, pero el `<script>` estaba FUERA de la sección (como hermano, no como hijo) — `closest` nunca la encontraba y todo el JS (miniaturas, selector de variante, packs) quedaba muerto en silencio. Cambiado a `previousElementSibling` con respaldo por `id`.
+- **Packs con descuento real**: creados dos descuentos automáticos por código en Shopify (Admin API, `discountCodeBasicCreate`, scope `write_discounts`):
+  - `PACK2DISENOS15` — 15% dto., mínimo 2 unidades de este producto, solo aplica a este producto, no se combina con otros descuentos.
+  - `PACK3DISENOS35` — 35% dto., mínimo 3 unidades, mismas restricciones.
+  - Al pulsar un pack, el JS añade las unidades correspondientes al carrito (`/cart/add.js`) y redirige a `/discount/<código>?redirect=/cart`, que aplica el descuento automáticamente (probado en el dominio real: responde 302 a `/cart` con el descuento aplicado).
+  - **Limitación honesta**: el descuento se activa por CANTIDAD total del producto (2 o 3 unidades), no puede forzar técnicamente que sean diseños distintos sin una app de descuentos a medida — en la práctica el pack ya añade diseños distintos por defecto, así que casi siempre coincide.
+- Nuevo permiso de la tienda concedido por el usuario en esta ronda: `write_discounts` (para crear los descuentos de los packs).
+
+## Verificación de esta ronda
+- `shopify theme dev` + Playwright: probado el flujo real de packs (clic en "Pack 2 diseños" → `/cart/add.js` responde 200 con las 2 unidades → confirmado con curl directo al dominio real que `/discount/PACK2DISENOS15?redirect=/cart` responde 302 a `/cart` con la cookie de descuento puesta).
+- Capturas de portada y producto completas, con scroll simulado para disparar animaciones — sin errores Liquid, todo en español, tipografía nueva aplicada.

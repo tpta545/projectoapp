@@ -5,23 +5,22 @@
     "footer": {
       "type": "footer",
       "blocks": {
-        "brand": {
-          "type": "brand_information",
-          "settings": { "show_social": true }
-        },
         "sobre": {
           "type": "text",
           "settings": {
             "heading": "Sobre nosotros",
-            "body": "<p>Decoración de Halloween con luz LED, pensada para dar ese toque justo de misterio a tu casa o tu fiesta.</p>"
+            "subtext": "<p>Decoración de Halloween con luz LED, pensada para dar ese toque justo de misterio a tu casa o tu fiesta.</p>"
           }
         },
-        "enlaces": {
-          "type": "link_list",
-          "settings": { "heading": "Enlaces", "menu": "footer" }
+        "legal": {
+          "type": "text",
+          "settings": {
+            "heading": "Enlaces",
+            "subtext": "<p><a href=\"/policies/privacy-policy\">Política de privacidad</a><br><a href=\"/policies/terms-of-service\">Términos y condiciones</a><br><a href=\"/policies/refund-policy\">Devoluciones</a><br><a href=\"/policies/shipping-policy\">Envíos</a></p>"
+          }
         }
       },
-      "block_order": ["brand", "sobre", "enlaces"],
+      "block_order": ["sobre", "legal"],
       "settings": {
         "color_scheme": "scheme-1",
         "newsletter_enable": false,

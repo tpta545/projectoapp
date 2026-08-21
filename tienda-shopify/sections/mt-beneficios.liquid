@@ -4,11 +4,14 @@
   #shopify-section-{{ section.id }} {
     padding-top: {{ section.settings.padding_top }}px;
     padding-bottom: {{ section.settings.padding_bottom }}px;
+    {%- if section.settings.fondo == 'acento' -%}
+      background: var(--mt-color-acento);
+    {%- endif -%}
   }
   #shopify-section-{{ section.id }} .mt-title { text-align: {{ section.settings.text_align }}; font-size: {{ section.settings.heading_size }}px; }
 {% endstyle %}
 
-<section class="mt-beneficios mt-section">
+<section class="mt-beneficios mt-section {% if section.settings.fondo == 'acento' %}mt-beneficios--acento{% endif %}">
   <div class="mt-container">
     {%- if section.settings.eyebrow != blank -%}
       <p class="mt-eyebrow" style="text-align:{{ section.settings.text_align }};">{{ section.settings.eyebrow }}</p>
@@ -39,6 +42,10 @@
         {"value": "center", "label": "Centro"}
       ], "default": "center" },
     { "type": "range", "id": "heading_size", "label": "Tamaño del título (px)", "min": 22, "max": 56, "step": 2, "unit": "px", "default": 38 },
+    { "type": "select", "id": "fondo", "label": "Fondo", "options": [
+        {"value": "oscuro", "label": "Oscuro (tema)"},
+        {"value": "acento", "label": "Color de acento"}
+      ], "default": "oscuro" },
     { "type": "header", "content": "Espaciado" },
     { "type": "range", "id": "padding_top", "label": "Espacio superior (px)", "min": 0, "max": 160, "step": 8, "unit": "px", "default": 80 },
     { "type": "range", "id": "padding_bottom", "label": "Espacio inferior (px)", "min": 0, "max": 160, "step": 8, "unit": "px", "default": 80 }

@@ -11,7 +11,7 @@
 
 {% assign current_variant = product.selected_or_first_available_variant %}
 
-<section class="mt-producto mt-section">
+<section id="mt-comprar" class="mt-producto mt-section">
   <div class="mt-container mt-producto__wrap">
 
     <div class="mt-producto__galeria mt-reveal mt-reveal-1">
@@ -50,9 +50,36 @@
 
       {%- if section.settings.intro != blank -%}<p class="mt-body-text">{{ section.settings.intro }}</p>{%- endif -%}
 
-      {% form 'product', product, id: 'mt-product-form' %}
-        <input type="hidden" name="id" id="mt-variant-id" value="{{ current_variant.id }}">
+      {%- if product.variants.size > 1 and section.settings.mostrar_packs -%}
+        <div class="mt-ofertas" data-mt-ofertas>
+          <label class="mt-oferta mt-oferta--activa" data-mt-oferta="1">
+            <input type="radio" name="mt-oferta-{{ section.id }}" value="1" checked>
+            <span class="mt-oferta__radio"></span>
+            <span class="mt-oferta__info">
+              <strong>{{ section.settings.pack1_titulo }}</strong>
+              <span class="mt-oferta__precio" data-mt-precio-1>{{ current_variant.price | money }}</span>
+            </span>
+          </label>
+          <label class="mt-oferta" data-mt-oferta="2">
+            <input type="radio" name="mt-oferta-{{ section.id }}" value="2">
+            <span class="mt-oferta__radio"></span>
+            <span class="mt-oferta__info">
+              <strong>{{ section.settings.pack2_titulo }}</strong> <span class="mt-oferta__badge">-15%</span>
+              <span class="mt-oferta__precio" data-mt-precio-2></span>
+            </span>
+          </label>
+          <label class="mt-oferta" data-mt-oferta="3">
+            <input type="radio" name="mt-oferta-{{ section.id }}" value="3">
+            <span class="mt-oferta__radio"></span>
+            <span class="mt-oferta__info">
+              <strong>{{ section.settings.pack3_titulo }}</strong> <span class="mt-oferta__badge">-35%</span>
+              <span class="mt-oferta__precio" data-mt-precio-3></span>
+            </span>
+          </label>
+        </div>
+      {%- endif -%}
 
+      <div data-mt-panel="1">
         {%- unless product.has_only_default_variant -%}
           <div class="mt-producto__opciones">
             {%- for option in product.options_with_values -%}
@@ -67,17 +94,31 @@
             {%- endfor -%}
           </div>
         {%- endunless -%}
+      </div>
 
-        <button type="submit" name="add" class="mt-btn mt-btn-primary mt-producto__comprar" {% if current_variant.available == false %}disabled{% endif %}>
-          <span data-mt-btn-text>
-            {%- if current_variant.available == false -%}{{ section.settings.texto_agotado }}{%- else -%}{{ section.settings.boton_texto }}{%- endif -%}
-          </span>
-        </button>
-      {% endform %}
+      <div class="mt-producto__opciones" data-mt-panel="2" hidden>
+        <label class="mt-opcion__label">{{ section.settings.pack2_elige }}</label>
+        <div class="mt-opcion__valores" data-mt-pack2-pills></div>
+      </div>
+
+      <div data-mt-panel="3" hidden>
+        <p class="mt-body-text" style="margin:0 0 8px;" data-mt-pack3-detalle></p>
+      </div>
+
+      <input type="hidden" id="mt-variant-id" value="{{ current_variant.id }}">
+      <button type="button" class="mt-btn mt-btn-primary mt-producto__comprar" data-mt-comprar {% if current_variant.available == false %}disabled{% endif %}>
+        <span data-mt-btn-text>
+          {%- if current_variant.available == false -%}{{ section.settings.texto_agotado }}{%- else -%}{{ section.settings.boton_texto }}{%- endif -%}
+        </span>
+      </button>
+      <p class="mt-producto__aviso" data-mt-aviso hidden></p>
 
       {%- if product.variants.size > 1 -%}
         <script type="application/json" id="mt-variantes-json">{{ product.variants | json }}</script>
       {%- endif -%}
+      <script type="application/json" id="mt-packs-json">
+        { "code2": {{ section.settings.pack2_codigo | json }}, "code3": {{ section.settings.pack3_codigo | json }} }
+      </script>
 
       <div class="mt-producto__confianza">
         {%- for block in section.blocks -%}
@@ -88,7 +129,26 @@
             </div>
           {%- endif -%}
         {%- endfor -%}
+        {%- if shop.enabled_payment_types.size > 0 -%}
+          <ul class="mt-pagos" role="list">
+            {%- for type in shop.enabled_payment_types -%}
+              <li class="mt-pagos__item">{{ type | payment_type_svg_tag: class: 'mt-pagos__icono' }}</li>
+            {%- endfor -%}
+          </ul>
+        {%- endif -%}
       </div>
+
+      {%- assign acordeones = section.blocks | where: "type", "acordeon" -%}
+      {%- if acordeones.size > 0 -%}
+        <div class="mt-acordeones">
+          {%- for block in acordeones -%}
+            <details class="mt-acordeon" {{ block.shopify_attributes }}>
+              <summary class="mt-acordeon__titulo">{{ block.settings.titulo }}<span class="mt-acordeon__mas">+</span></summary>
+              <div class="mt-acordeon__cuerpo">{{ block.settings.texto }}</div>
+            </details>
+          {%- endfor -%}
+        </div>
+      {%- endif -%}
     </div>
   </div>
 
@@ -125,7 +185,10 @@
 
 <script>
   (function () {
-    var seccion = document.currentScript.closest('.mt-producto');
+    var seccion = document.currentScript.previousElementSibling;
+    if (!seccion || !seccion.classList || !seccion.classList.contains('mt-producto')) {
+      seccion = document.getElementById('mt-comprar');
+    }
     if (!seccion) return;
     var thumbs = seccion.querySelectorAll('[data-mt-thumb]');
     var principal = seccion.querySelector('#mt-galeria-principal-img');
@@ -139,13 +202,27 @@
 
     var variantesEl = seccion.querySelector('#mt-variantes-json');
     var variantes = variantesEl ? JSON.parse(variantesEl.textContent) : null;
+    var packsEl = seccion.querySelector('#mt-packs-json');
+    var packs = packsEl ? JSON.parse(packsEl.textContent) : { code2: '', code3: '' };
     var grupos = seccion.querySelectorAll('[data-mt-option-index]');
     var idInput = seccion.querySelector('#mt-variant-id');
-    var btn = seccion.querySelector('.mt-producto__comprar');
+    var btn = seccion.querySelector('[data-mt-comprar]');
     var btnText = seccion.querySelector('[data-mt-btn-text]');
+    var avisoEl = seccion.querySelector('[data-mt-aviso]');
     var precioActual = seccion.querySelector('.mt-producto__precio-actual');
     var precioAntes = seccion.querySelector('.mt-producto__precio-antes');
+    var textoComprar = {{ section.settings.boton_texto | json }};
+    var textoAgotado = {{ section.settings.texto_agotado | json }};
 
+    function formatoDinero(centavos) {
+      return (centavos / 100).toLocaleString('es-ES', { style: 'currency', currency: {{ cart.currency.iso_code | json }} });
+    }
+
+    function nombreVariante(v) {
+      return (v.public_title || v.title || '').split(' / ')[0];
+    }
+
+    // --- selector de variante única (oferta 1) ---
     function seleccionActual() {
       var sel = [];
       grupos.forEach(function (g) {
@@ -155,11 +232,7 @@
       return sel;
     }
 
-    function formatoDinero(centavos) {
-      return (centavos / 100).toLocaleString(document.documentElement.lang || 'es', { style: 'currency', currency: {{ cart.currency.iso_code | json }} });
-    }
-
-    function actualizar() {
+    function actualizarVarianteUnica() {
       if (!variantes) return;
       var sel = seleccionActual();
       var variante = variantes.find(function (v) {
@@ -176,12 +249,18 @@
           precioAntes.style.display = 'none';
         }
       }
-      if (variante.available) {
+      var precio1 = seccion.querySelector('[data-mt-precio-1]');
+      if (precio1) precio1.textContent = formatoDinero(variante.price);
+      actualizarDisponibilidad(variante.available);
+    }
+
+    function actualizarDisponibilidad(disponible) {
+      if (disponible) {
         btn.removeAttribute('disabled');
-        if (btnText) btnText.textContent = {{ section.settings.boton_texto | json }};
+        if (btnText) btnText.textContent = textoComprar;
       } else {
         btn.setAttribute('disabled', 'disabled');
-        if (btnText) btnText.textContent = {{ section.settings.texto_agotado | json }};
+        if (btnText) btnText.textContent = textoAgotado;
       }
     }
 
@@ -190,7 +269,129 @@
         valorBtn.addEventListener('click', function () {
           grupo.querySelectorAll('[data-mt-value]').forEach(function (b) { b.classList.remove('mt-opcion__valor--activo'); });
           valorBtn.classList.add('mt-opcion__valor--activo');
-          actualizar();
+          actualizarVarianteUnica();
+        });
+      });
+    });
+
+    // --- packs (ofertas 2 y 3) ---
+    var pack2Seleccion = null;
+    if (variantes && variantes.length >= 2) {
+      var pares = [];
+      for (var i = 0; i < variantes.length; i++) {
+        for (var j = i + 1; j < variantes.length; j++) pares.push([variantes[i], variantes[j]]);
+      }
+      pack2Seleccion = pares[0];
+      var pillsWrap = seccion.querySelector('[data-mt-pack2-pills]');
+      if (pillsWrap) {
+        pares.forEach(function (par, idx) {
+          var pill = document.createElement('button');
+          pill.type = 'button';
+          pill.className = 'mt-opcion__valor' + (idx === 0 ? ' mt-opcion__valor--activo' : '');
+          pill.textContent = nombreVariante(par[0]) + ' + ' + nombreVariante(par[1]);
+          pill.addEventListener('click', function () {
+            pillsWrap.querySelectorAll('.mt-opcion__valor').forEach(function (b) { b.classList.remove('mt-opcion__valor--activo'); });
+            pill.classList.add('mt-opcion__valor--activo');
+            pack2Seleccion = par;
+            actualizarPrecioPack2();
+          });
+          pillsWrap.appendChild(pill);
+        });
+      }
+    }
+
+    function actualizarPrecioPack2() {
+      var el = seccion.querySelector('[data-mt-precio-2]');
+      if (!el || !pack2Seleccion) return;
+      var total = pack2Seleccion[0].price + pack2Seleccion[1].price;
+      el.textContent = formatoDinero(Math.round(total * 0.85));
+    }
+
+    function actualizarPrecioPack3() {
+      var el = seccion.querySelector('[data-mt-precio-3]');
+      var detalle = seccion.querySelector('[data-mt-pack3-detalle]');
+      if (!variantes) return;
+      var total = variantes.reduce(function (acc, v) { return acc + v.price; }, 0);
+      if (el) el.textContent = formatoDinero(Math.round(total * 0.65));
+      if (detalle) detalle.textContent = 'Incluye: ' + variantes.map(nombreVariante).join(' + ');
+    }
+
+    actualizarPrecioPack2();
+    actualizarPrecioPack3();
+
+    // --- cambio de oferta (radios) ---
+    var ofertaActual = '1';
+    seccion.querySelectorAll('[data-mt-ofertas] input[type="radio"]').forEach(function (radio) {
+      radio.addEventListener('change', function () {
+        ofertaActual = radio.value;
+        seccion.querySelectorAll('[data-mt-oferta]').forEach(function (label) {
+          label.classList.toggle('mt-oferta--activa', label.getAttribute('data-mt-oferta') === ofertaActual);
+        });
+        seccion.querySelectorAll('[data-mt-panel]').forEach(function (panel) {
+          panel.hidden = panel.getAttribute('data-mt-panel') !== ofertaActual;
+        });
+        if (avisoEl) avisoEl.hidden = true;
+        actualizarDisponibilidad(true);
+      });
+    });
+
+    // --- añadir al carrito (unidad suelta o pack) ---
+    function mostrarAviso(msg, esError) {
+      if (!avisoEl) return;
+      avisoEl.textContent = msg;
+      avisoEl.hidden = false;
+      avisoEl.classList.toggle('mt-producto__aviso--error', !!esError);
+    }
+
+    function anadirAlCarrito(items) {
+      return fetch('/cart/add.js', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ items: items }),
+      }).then(function (res) {
+        if (!res.ok) return res.json().then(function (d) { throw new Error(d.description || 'No se pudo añadir al carrito'); });
+        return res.json();
+      });
+    }
+
+    btn.addEventListener('click', function () {
+      btn.setAttribute('disabled', 'disabled');
+      var textoOriginal = btnText ? btnText.textContent : '';
+      if (btnText) btnText.textContent = 'Añadiendo…';
+
+      var promesa;
+      if (ofertaActual === '1') {
+        promesa = anadirAlCarrito([{ id: parseInt(idInput.value, 10), quantity: 1 }]).then(function () {
+          window.location.href = '/cart';
+        });
+      } else if (ofertaActual === '2' && pack2Seleccion) {
+        promesa = anadirAlCarrito([
+          { id: pack2Seleccion[0].id, quantity: 1 },
+          { id: pack2Seleccion[1].id, quantity: 1 },
+        ]).then(function () {
+          window.location.href = '/discount/' + encodeURIComponent(packs.code2) + '?redirect=/cart';
+        });
+      } else if (ofertaActual === '3' && variantes) {
+        promesa = anadirAlCarrito(variantes.map(function (v) { return { id: v.id, quantity: 1 }; })).then(function () {
+          window.location.href = '/discount/' + encodeURIComponent(packs.code3) + '?redirect=/cart';
+        });
+      } else {
+        promesa = Promise.reject(new Error('Elige una opción'));
+      }
+
+      promesa.catch(function (err) {
+        mostrarAviso(err.message || 'No se pudo añadir al carrito. Inténtalo de nuevo.', true);
+        btn.removeAttribute('disabled');
+        if (btnText) btnText.textContent = textoOriginal;
+      });
+    });
+
+    // --- acordeones: solo uno abierto a la vez ---
+    seccion.querySelectorAll('.mt-acordeon').forEach(function (det) {
+      det.addEventListener('toggle', function () {
+        if (!det.open) return;
+        seccion.querySelectorAll('.mt-acordeon').forEach(function (otro) {
+          if (otro !== det) otro.removeAttribute('open');
         });
       });
     });
@@ -206,6 +407,14 @@
     { "type": "textarea", "id": "intro", "label": "Frase introductoria" },
     { "type": "text", "id": "boton_texto", "label": "Texto del botón de compra", "default": "Añadir al carrito" },
     { "type": "text", "id": "texto_agotado", "label": "Texto si está agotado", "default": "Agotado" },
+    { "type": "header", "content": "Packs con descuento" },
+    { "type": "checkbox", "id": "mostrar_packs", "label": "Mostrar opciones de pack", "default": true },
+    { "type": "text", "id": "pack1_titulo", "label": "Nombre de la opción 1 (unidad suelta)", "default": "1 diseño" },
+    { "type": "text", "id": "pack2_titulo", "label": "Nombre del pack de 2", "default": "Pack 2 diseños" },
+    { "type": "text", "id": "pack2_elige", "label": "Texto para elegir la pareja del pack de 2", "default": "Elige tus 2 diseños" },
+    { "type": "text", "id": "pack2_codigo", "label": "Código de descuento del pack de 2", "default": "PACK2DISENOS15", "info": "Debe existir ya un descuento con este código en Shopify (15%, mínimo 2 unidades)." },
+    { "type": "text", "id": "pack3_titulo", "label": "Nombre del pack completo", "default": "Pack 3 diseños" },
+    { "type": "text", "id": "pack3_codigo", "label": "Código de descuento del pack completo", "default": "PACK3DISENOS35", "info": "Debe existir ya un descuento con este código en Shopify (35%, mínimo 3 unidades)." },
     { "type": "header", "content": "Descripción" },
     { "type": "text", "id": "descripcion_titulo", "label": "Título de la descripción", "default": "Todo lo que trae" },
     { "type": "text", "id": "incluye_titulo", "label": "Título del listado \"qué incluye\"", "default": "Qué incluye" },
@@ -231,6 +440,14 @@
         { "type": "text", "id": "titulo", "label": "Título", "default": "Luz LED realista" },
         { "type": "textarea", "id": "texto", "label": "Texto" }
       ]
+    },
+    {
+      "type": "acordeon",
+      "name": "Desplegable",
+      "settings": [
+        { "type": "text", "id": "titulo", "label": "Título", "default": "Modo de uso" },
+        { "type": "richtext", "id": "texto", "label": "Texto", "default": "<p>Escribe aquí el contenido.</p>" }
+      ]
     }
   ],
   "default": {
@@ -240,7 +457,11 @@
       { "type": "confianza", "settings": { "icono": "🔒", "texto": "Pago 100% seguro" } },
       { "type": "caracteristica", "settings": { "icono": "🕯️", "titulo": "Llama LED parpadeante", "texto": "Efecto de vela real, sin fuego ni humo." } },
       { "type": "caracteristica", "settings": { "icono": "🔋", "titulo": "Pilas incluidas", "texto": "Lista para usar nada más abrir la caja." } },
-      { "type": "caracteristica", "settings": { "icono": "🎃", "titulo": "3 diseños a elegir", "texto": "Ojo, calavera o vela — elige el que más te guste." } }
+      { "type": "caracteristica", "settings": { "icono": "🎃", "titulo": "3 diseños a elegir", "texto": "Ojo, calavera o vela — elige el que más te guste." } },
+      { "type": "acordeon", "settings": { "titulo": "Modo de uso", "texto": "<p>Retira la pestaña de plástico del compartimento de pilas (ya vienen colocadas) y colócala donde quieras. Apaga y enciende desde el interruptor de debajo.</p>" } },
+      { "type": "acordeon", "settings": { "titulo": "Envío y entrega", "texto": "<p>Envío en 3-7 días laborables. Recibirás un correo con el seguimiento en cuanto salga del almacén.</p>" } },
+      { "type": "acordeon", "settings": { "titulo": "Sobre el producto", "texto": "<p>Araña decorativa de Halloween con luz LED de larga duración. Funciona con pilas (incluidas). Tamaño compacto, ideal para mesa o estantería.</p>" } },
+      { "type": "acordeon", "settings": { "titulo": "Atención al cliente", "texto": "<p>¿Alguna duda antes o después de tu compra? Escríbenos, te respondemos en menos de 24h.</p>" } }
     ]
   }
 }

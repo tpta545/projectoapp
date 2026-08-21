@@ -1,0 +1,43 @@
+{{ 'mt-styles.css' | asset_url | stylesheet_tag }}
+
+{% style %}
+  #shopify-section-{{ section.id }} {
+    padding-top: {{ section.settings.padding_top }}px;
+    padding-bottom: {{ section.settings.padding_bottom }}px;
+  }
+{% endstyle %}
+
+<section class="mt-problema mt-section">
+  <div class="mt-container mt-problema__wrap {% if section.settings.imagen_derecha %}mt-problema__wrap--inv{% endif %}">
+    <div class="mt-problema__media mt-reveal mt-reveal-1">
+      {%- if section.settings.imagen != blank -%}
+        <img src="{{ section.settings.imagen | image_url: width: 1000 }}" alt="{{ section.settings.titulo | escape }}" loading="lazy">
+      {%- else -%}
+        <img src="{{ 'mt-detalle-macro.jpg' | asset_url }}" alt="{{ section.settings.titulo | escape }}" loading="lazy">
+      {%- endif -%}
+    </div>
+    <div class="mt-problema__texto mt-reveal mt-reveal-2">
+      {%- if section.settings.eyebrow != blank -%}<p class="mt-eyebrow">{{ section.settings.eyebrow }}</p>{%- endif -%}
+      <h2 class="mt-title mt-problema__titulo">{{ section.settings.titulo }}</h2>
+      <p class="mt-body-text">{{ section.settings.texto | newline_to_br }}</p>
+    </div>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "MT – Problema/Solución",
+  "tag": "section",
+  "settings": [
+    { "type": "text", "id": "eyebrow", "label": "Texto pequeño" },
+    { "type": "text", "id": "titulo", "label": "Título", "default": "Las decoraciones normales de Halloween se ven todas iguales" },
+    { "type": "textarea", "id": "texto", "label": "Texto", "default": "Una guirnalda más no sorprende a nadie. Un detalle con luz propia, que parpadea y llama la atención, sí." },
+    { "type": "image_picker", "id": "imagen", "label": "Foto" },
+    { "type": "checkbox", "id": "imagen_derecha", "label": "Foto a la derecha", "default": false },
+    { "type": "header", "content": "Espaciado" },
+    { "type": "range", "id": "padding_top", "label": "Espacio superior (px)", "min": 0, "max": 160, "step": 8, "unit": "px", "default": 64 },
+    { "type": "range", "id": "padding_bottom", "label": "Espacio inferior (px)", "min": 0, "max": 160, "step": 8, "unit": "px", "default": 64 }
+  ],
+  "presets": [ { "name": "MT – Problema/Solución" } ]
+}
+{% endschema %}

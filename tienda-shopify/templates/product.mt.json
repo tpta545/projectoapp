@@ -6,7 +6,69 @@
         "eyebrow": "Edición Halloween",
         "intro": "Decoración de Halloween con luz LED realista. Elige entre ojo, calavera o vela.",
         "boton_texto": "Añadir al carrito",
-        "texto_agotado": "Agotado"
+        "texto_agotado": "Agotado",
+        "mostrar_packs": true,
+        "pack1_titulo": "1 diseño",
+        "pack2_titulo": "Pack 2 diseños",
+        "pack2_elige": "Elige tus 2 diseños",
+        "pack2_codigo": "PACK2DISENOS15",
+        "pack3_titulo": "Pack 3 diseños (todos)",
+        "pack3_codigo": "PACK3DISENOS35"
+      },
+      "blocks": {
+        "conf1": { "type": "confianza", "settings": { "icono": "🚚", "texto": "Envío en 3-7 días" } },
+        "conf2": { "type": "confianza", "settings": { "icono": "🔄", "texto": "Devolución fácil 14 días" } },
+        "conf3": { "type": "confianza", "settings": { "icono": "🔒", "texto": "Pago 100% seguro" } },
+        "ac1": { "type": "acordeon", "settings": { "titulo": "Modo de uso", "texto": "<p>Retira la pestaña de plástico del compartimento de pilas (ya vienen colocadas) y colócala donde quieras. Apaga y enciende desde el interruptor de debajo.</p>" } },
+        "ac2": { "type": "acordeon", "settings": { "titulo": "Envío y entrega", "texto": "<p>Envío en 3-7 días laborables. Recibirás un correo con el seguimiento en cuanto salga del almacén.</p>" } },
+        "ac3": { "type": "acordeon", "settings": { "titulo": "Sobre el producto", "texto": "<p>Araña decorativa de Halloween con luz LED de larga duración. Funciona con pilas (incluidas). Tamaño compacto, ideal para mesa o estantería.</p>" } },
+        "ac4": { "type": "acordeon", "settings": { "titulo": "Atención al cliente", "texto": "<p>¿Alguna duda antes o después de tu compra? Escríbenos, te respondemos en menos de 24h.</p>" } }
+      },
+      "block_order": ["conf1", "conf2", "conf3", "ac1", "ac2", "ac3", "ac4"]
+    },
+    "problema1": {
+      "type": "mt-problema",
+      "settings": {
+        "eyebrow": "El problema",
+        "titulo": "Las decoraciones normales de Halloween se ven todas iguales",
+        "texto": "Una guirnalda de plástico más no sorprende a nadie. Un detalle con luz propia, que parpadea de verdad y llama la atención nada más entrar, sí.",
+        "imagen_derecha": false
+      }
+    },
+    "pasos": {
+      "type": "mt-pasos",
+      "settings": {
+        "headline": "3 pasos y ya está lista",
+        "color_fondo": "#ff7a1a"
+      },
+      "blocks": {
+        "p1": { "type": "paso", "settings": { "titulo": "Compruébala", "texto": "El interruptor ya viene listo — solo actívalo si llegó apagado." } },
+        "p2": { "type": "paso", "settings": { "titulo": "Colócala", "texto": "En tu mesa, tu estantería o donde quieras dar el toque de misterio." } },
+        "p3": { "type": "paso", "settings": { "titulo": "Disfruta", "texto": "La luz LED parpadeante hace el resto durante horas." } }
+      },
+      "block_order": ["p1", "p2", "p3"]
+    },
+    "caracteristicas": {
+      "type": "mt-beneficios",
+      "settings": {
+        "eyebrow": "Lo que hay dentro",
+        "headline": "Lo que hay dentro es lo que cuenta",
+        "fondo": "oscuro"
+      },
+      "blocks": {
+        "c1": { "type": "beneficio", "settings": { "icono": "🕯️", "titulo": "Llama LED realista", "texto": "Efecto de vela parpadeante, sin fuego ni humo ni cables." } },
+        "c2": { "type": "beneficio", "settings": { "icono": "🔋", "titulo": "Pilas incluidas", "texto": "Ya vienen colocadas — lista para usar nada más abrir la caja." } },
+        "c3": { "type": "beneficio", "settings": { "icono": "🎃", "titulo": "3 diseños a elegir", "texto": "Ojo, calavera o vela — o llévate los tres con descuento." } }
+      },
+      "block_order": ["c1", "c2", "c3"]
+    },
+    "problema2": {
+      "type": "mt-problema",
+      "settings": {
+        "eyebrow": "Detalle real",
+        "titulo": "Cada araña se enciende sola, cada noche",
+        "texto": "Nada de acordarte de encenderla tú: colócala una vez y disfruta del ambiente todas las noches de la temporada.",
+        "imagen_derecha": true
       }
     },
     "resenas": {
@@ -21,7 +83,17 @@
         "r3": { "type": "resena", "settings": { "texto": "Llegó rápido y funciona a la primera. Le he comprado las tres variantes.", "autor": "Laura P." } }
       },
       "block_order": ["r1", "r2", "r3"]
+    },
+    "cierre": {
+      "type": "mt-cta-cierre",
+      "settings": {
+        "headline": "Llévate las 3 y ahorra un 35%",
+        "body": "Ojo, calavera y vela — el set completo para no repetir decoración en toda la temporada.",
+        "mostrar_precio": false,
+        "boton_texto": "Ver packs arriba",
+        "boton_link": "#mt-comprar"
+      }
     }
   },
-  "order": ["principal", "resenas"]
+  "order": ["principal", "problema1", "pasos", "caracteristicas", "problema2", "resenas", "cierre"]
 }
