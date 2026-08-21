@@ -1,75 +1,77 @@
 {
   "sections": {
-    "image_banner": {
-      "type": "image-banner",
-      "blocks": {
-        "heading": {
-          "type": "heading",
-          "settings": {
-            "heading": "Browse our latest products",
-            "heading_size": "h0"
-          }
-        },
-        "button": {
-          "type": "buttons",
-          "settings": {
-            "button_label_1": "Shop all",
-            "button_link_1": "shopify://collections/all",
-            "button_style_secondary_1": true,
-            "button_label_2": "",
-            "button_link_2": "",
-            "button_style_secondary_2": false
-          }
-        }
-      },
-      "block_order": [
-        "heading",
-        "button"
-      ],
+    "mt-hero": {
+      "type": "mt-hero",
       "settings": {
-        "image_overlay_opacity": 40,
-        "image_height": "large",
-        "desktop_content_position": "bottom-center",
-        "show_text_box": false,
-        "image_behavior": "none",
-        "desktop_content_alignment": "center",
-        "color_scheme": "scheme-3",
-        "mobile_content_alignment": "center",
-        "stack_images_on_mobile": false,
-        "show_text_below": false
+        "eyebrow": "Edición Halloween",
+        "headline": "Ilumina tu Halloween con algo que da un poco de miedo",
+        "body": "Arañas decorativas con luz LED realista. El detalle perfecto para tu mesa, tu estantería o tu fiesta — elige ojo, calavera o vela.",
+        "boton_texto": "Comprar ahora",
+        "boton_link": "/products/3-12-24pcs-halloween-spider-night-light-led-horror-spider-light-spider-back-eye-popping-candle-lamp-party-decoration-props",
+        "boton2_texto": "Ver variantes",
+        "boton2_link": "#variantes",
+        "text_align": "left"
       }
     },
-    "featured_collection": {
-      "type": "featured-collection",
+    "mt-beneficios": {
+      "type": "mt-beneficios",
       "settings": {
-        "title": "Featured products",
-        "heading_size": "h2",
-        "description": "",
-        "show_description": false,
-        "description_style": "body",
-        "collection": "all",
-        "products_to_show": 8,
-        "columns_desktop": 4,
-        "color_scheme": "scheme-1",
-        "full_width": false,
-        "show_view_all": true,
-        "view_all_style": "solid",
-        "enable_desktop_slider": false,
-        "swipe_on_mobile": false,
-        "image_ratio": "adapt",
-        "image_shape": "default",
-        "show_secondary_image": true,
-        "show_vendor": false,
-        "show_rating": false,
-        "quick_add": "none",
-        "columns_mobile": "2",
-        "padding_top": 44,
-        "padding_bottom": 36
+        "eyebrow": "Por qué te va a encantar",
+        "headline": "Tres motivos para tenerla en tu mesa"
+      },
+      "blocks": {
+        "b1": { "type": "beneficio", "settings": { "icono": "🕯️", "titulo": "Luz LED realista", "texto": "Llama parpadeante que imita el movimiento de una vela de verdad." } },
+        "b2": { "type": "beneficio", "settings": { "icono": "🔋", "titulo": "Pilas incluidas", "texto": "Lista para encender nada más sacarla de la caja, sin cables." } },
+        "b3": { "type": "beneficio", "settings": { "icono": "🕸️", "titulo": "Tamaño perfecto", "texto": "Ideal para mesa, estantería o entrada — decora sin ocupar espacio." } }
+      },
+      "block_order": ["b1", "b2", "b3"]
+    },
+    "mt-variantes": {
+      "type": "mt-variantes",
+      "settings": {
+        "eyebrow": "3 diseños",
+        "headline": "Elige tu variante"
+      },
+      "blocks": {
+        "v1": { "type": "variante", "settings": { "imagen_defecto": "mt-producto-vela.jpg", "titulo": "Vela", "texto": "Llama LED parpadeante, la más vendida.", "link": "/products/3-12-24pcs-halloween-spider-night-light-led-horror-spider-light-spider-back-eye-popping-candle-lamp-party-decoration-props?variant=64087404675443" } },
+        "v2": { "type": "variante", "settings": { "imagen_defecto": "mt-producto-ojo.jpg", "titulo": "Ojo", "texto": "Ojo inyectado en sangre con luz LED.", "link": "/products/3-12-24pcs-halloween-spider-night-light-led-horror-spider-light-spider-back-eye-popping-candle-lamp-party-decoration-props?variant=64087404413299" } },
+        "v3": { "type": "variante", "settings": { "imagen_defecto": "mt-producto-calavera.jpg", "titulo": "Calavera", "texto": "Calavera con luz cálida en las cuencas.", "link": "/products/3-12-24pcs-halloween-spider-night-light-led-horror-spider-light-spider-back-eye-popping-candle-lamp-party-decoration-props?variant=64087404446067" } }
+      },
+      "block_order": ["v1", "v2", "v3"]
+    },
+    "mt-ambiente": {
+      "type": "mt-ambiente",
+      "blocks": {
+        "a1": { "type": "fila", "settings": { "imagen_defecto": "mt-ambiente-mesa.jpg", "titulo": "En tu mesa de Halloween", "texto": "El centro de mesa perfecto para una cena que da un poco de miedo (y mucho estilo)." } },
+        "a2": { "type": "fila", "settings": { "imagen_defecto": "mt-ambiente-estanteria.jpg", "titulo": "También en tu estantería", "texto": "Entre libros y calabazas, la luz cálida crea el ambiente sin necesidad de fuego de verdad.", "invertir": true } },
+        "a3": { "type": "fila", "settings": { "imagen_defecto": "mt-ambiente-fiesta.jpg", "titulo": "La estrella de tu fiesta", "texto": "Reparte varias por la sala — cada una da para hablar." } }
+      },
+      "block_order": ["a1", "a2", "a3"]
+    },
+    "mt-resenas": {
+      "type": "mt-resenas",
+      "settings": {
+        "eyebrow": "Lo que dicen",
+        "headline": "Clientes que ya le tienen cariño a su araña"
+      },
+      "blocks": {
+        "r1": { "type": "resena", "settings": { "texto": "Mucho mejor de lo que esperaba, la luz queda genial de noche y las patitas son súper monas.", "autor": "Marta G." } },
+        "r2": { "type": "resena", "settings": { "texto": "Las compré para decorar la mesa de la cena de Halloween y fueron lo que más se comentó.", "autor": "Diego R." } },
+        "r3": { "type": "resena", "settings": { "texto": "Llegó rápido y funciona a la primera. Le he comprado las tres variantes.", "autor": "Laura P." } }
+      },
+      "block_order": ["r1", "r2", "r3"]
+    },
+    "mt-cta-cierre": {
+      "type": "mt-cta-cierre",
+      "settings": {
+        "headline": "Tu Halloween se merece un poco de luz tenebrosa",
+        "body": "Elige tu variante favorita y que llegue antes de la fiesta.",
+        "mostrar_precio": true,
+        "precio": "14,99 €",
+        "boton_texto": "Comprar ahora",
+        "boton_link": "/products/3-12-24pcs-halloween-spider-night-light-led-horror-spider-light-spider-back-eye-popping-candle-lamp-party-decoration-props"
       }
     }
   },
-  "order": [
-    "image_banner",
-    "featured_collection"
-  ]
+  "order": ["mt-hero", "mt-beneficios", "mt-variantes", "mt-ambiente", "mt-resenas", "mt-cta-cierre"]
 }

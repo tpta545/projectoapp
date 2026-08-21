@@ -37,8 +37,46 @@
 - [ ] 5 Páginas
 - [ ] 6 Publicación
 
-## Decisiones de diseño
-(se rellena en la fase 3, tras la respuesta del usuario a la propuesta)
+## Decisiones de diseño (fase 3, confirmadas por el usuario)
+- Estilo: oscuro y "spooky-divertido" (no gore serio). Fondo casi negro #0e0b10, acento naranja calabaza #ff7a1a, rojo sangre #b3261e puntual.
+- Tipografía: Butcherman (títulos, vía Google Fonts) + Poppins (texto). Fuentes nativas de Dawn alineadas en config/settings_data.json (abril_fatface_n4 / poppins_n4, lo más parecido disponible en la librería de Shopify).
+- Botones píldora (radio 30px), sin borde.
+- Fotos: el usuario pidió generar TODAS las fotos nuevas con Gemini (no OpenAI). Clave guardada en `clave-gemini.txt` (ignorada por git, nunca subida a Shopify).
+- Estructura de portada acordada: hero > beneficios > elige tu variante > ambiente (bandas alternas) > reseñas > CTA cierre.
 
-## Secciones creadas
-(se rellena en la fase 4)
+## Fotos generadas con IA (Gemini, modelo gemini-2.5-flash-image)
+Script usado: `scripts/generar-foto-gemini.mjs` (en el scratchpad de la sesión, no en el repo). Todas a partir de fotos reales del producto como referencia.
+- `assets/mt-producto-vela.jpg`, `mt-producto-ojo.jpg`, `mt-producto-calavera.jpg` — fotos de catálogo limpias de las 3 variantes (fondo estudio gris). Subidas también a la GALERÍA del producto vía Admin API (ver abajo); las 5 fotos antiguas del proveedor se borraron del producto.
+- `assets/mt-hero-fondo.jpg` (16:9) — hero de portada.
+- `assets/mt-trio-variantes.jpg`, `mt-ambiente-mesa.jpg`, `mt-ambiente-estanteria.jpg` (3:4), `mt-ambiente-fiesta.jpg` (16:9), `mt-detalle-macro.jpg`, `mt-cta-cierre.jpg` (16:9) — secciones narrativas de la landing.
+- `assets/mt-favicon.png` — icono de pestaña (araña + punto naranja).
+- Truco técnico: Gemini ignora el aspecto pedido solo por texto (deja barras grises) — hay que pasar `--aspecto` al script (usa `generationConfig.imageConfig.aspectRatio`).
+
+## Secciones creadas (fase 4)
+- `sections/mt-hero.liquid` — portada, imagen de fondo editable + 2 botones.
+- `sections/mt-beneficios.liquid` — 3 tarjetas de beneficio (bloques repetibles).
+- `sections/mt-variantes.liquid` — "Elige tu variante", 3 tarjetas con foto+enlace (bloques repetibles).
+- `sections/mt-ambiente.liquid` — bandas alternas imagen/texto (bloques repetibles, con selector de foto de respaldo).
+- `sections/mt-resenas.liquid` — carrusel de reseñas (bloques repetibles), reutilizada también en la página de producto.
+- `sections/mt-cta-cierre.liquid` — banda de cierre con precio y botón.
+- `sections/mt-producto.liquid` — página de producto completa: galería con miniaturas, columna de compra con selector de variantes en JS (lee `product.variants` serializado), confianza, descripción rica + características + "qué incluye".
+- `assets/mt-styles.css` (tokens de marca + todos los estilos) y `assets/mt-scripts.js` (reveal on scroll + carrusel).
+- `templates/index.json` — portada montada con las secciones de arriba.
+- `templates/product.mt.json` — plantilla del producto (sufijo `mt`): secciones `mt-producto` + `mt-resenas`.
+- Ajustes globales: `config/settings_data.json` (scheme-1/2 oscuro+naranja, fuentes, botones píldora), `sections/footer-group.json` (newsletter apagada, selectores país/idioma apagados, bloques marca+texto+enlaces), `layout/theme.liquid` (Google Fonts, mt-styles.css global, favicon).
+
+## Producto — cambios vía Admin API (fase 5, automático, sin pedir nada al usuario)
+- Título reescrito: "Araña LED de Halloween — Vela, Ojo o Calavera con Luz Realista".
+- `descriptionHtml` reescrito con beneficios y lista.
+- `templateSuffix` asignado: `mt` (la página de producto ya usa nuestro diseño, incluso en preview).
+- Galería del producto: subidas las 3 fotos limpias generadas (vela/ojo/calavera) y borradas las 5 fotos originales del proveedor.
+- Todo con `userErrors`/`mediaUserErrors` vacíos — sin fallos.
+
+## Auto-revisión (fase 6)
+- `shopify theme dev` + Playwright (capturas de portada y producto con scroll simulado para disparar animaciones): sin errores Liquid, precio dinámico correcto (14,99 €), galería y selector de variantes funcionando, todas las secciones mt- renderizando con sus fotos.
+- Pendiente de revisar por el usuario: contenido del footer (columna "Sobre nosotros"/"Enlaces" quedó con placeholders de Dawn — ver pendientes abajo).
+
+## Pendientes del lado del usuario (no bloquean la entrega)
+- [ ] Rellenar Configuración → Políticas (privacidad, términos, devoluciones, envíos) — los enlaces del footer ya están listos para mostrarlas en cuanto existan.
+- [ ] Revisar/editar el texto de "Sobre nosotros" del footer y el menú "footer" (Contenido → Menús) si quiere enlaces distintos a los de por defecto.
+- [ ] Confirmar si quiere el tema publicado en vivo (sustituye a "Sense", que queda guardado y se puede recuperar).

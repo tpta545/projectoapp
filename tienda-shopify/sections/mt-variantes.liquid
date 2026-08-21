@@ -1,0 +1,80 @@
+{{ 'mt-styles.css' | asset_url | stylesheet_tag }}
+
+{% style %}
+  #shopify-section-{{ section.id }} {
+    padding-top: {{ section.settings.padding_top }}px;
+    padding-bottom: {{ section.settings.padding_bottom }}px;
+  }
+  #shopify-section-{{ section.id }} .mt-title { text-align: {{ section.settings.text_align }}; font-size: {{ section.settings.heading_size }}px; }
+{% endstyle %}
+
+<section class="mt-variantes mt-section">
+  <div class="mt-container">
+    {%- if section.settings.eyebrow != blank -%}
+      <p class="mt-eyebrow" style="text-align:{{ section.settings.text_align }};">{{ section.settings.eyebrow }}</p>
+    {%- endif -%}
+    <h2 class="mt-title mt-reveal mt-reveal-1">{{ section.settings.headline }}</h2>
+
+    <div class="mt-variantes__grid">
+      {%- for block in section.blocks -%}
+        <a href="{{ block.settings.link | default: '#' }}" class="mt-variante mt-reveal mt-reveal-{{ forloop.index | at_most: 4 }}" {{ block.shopify_attributes }}>
+          <span class="mt-variante__num">Paso {{ forloop.index }}</span>
+          {%- if block.settings.imagen != blank -%}
+            <img class="mt-variante__img" src="{{ block.settings.imagen | image_url: width: 800 }}" alt="{{ block.settings.titulo | escape }}" loading="lazy">
+          {%- else -%}
+            <img class="mt-variante__img" src="{{ block.settings.imagen_defecto | asset_url }}" alt="{{ block.settings.titulo | escape }}" loading="lazy">
+          {%- endif -%}
+          <p class="mt-variante__title">{{ block.settings.titulo }}</p>
+          <p class="mt-variante__body">{{ block.settings.texto }}</p>
+        </a>
+      {%- endfor -%}
+    </div>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "MT – Elige tu variante",
+  "tag": "section",
+  "settings": [
+    { "type": "text", "id": "eyebrow", "label": "Texto pequeño de apertura", "default": "3 pasos" },
+    { "type": "text", "id": "headline", "label": "Título", "default": "Elige tu variante" },
+    { "type": "select", "id": "text_align", "label": "Alineación del título", "options": [
+        {"value": "left", "label": "Izquierda"},
+        {"value": "center", "label": "Centro"}
+      ], "default": "center" },
+    { "type": "range", "id": "heading_size", "label": "Tamaño del título (px)", "min": 22, "max": 56, "step": 2, "unit": "px", "default": 38 },
+    { "type": "header", "content": "Espaciado" },
+    { "type": "range", "id": "padding_top", "label": "Espacio superior (px)", "min": 0, "max": 160, "step": 8, "unit": "px", "default": 80 },
+    { "type": "range", "id": "padding_bottom", "label": "Espacio inferior (px)", "min": 0, "max": 160, "step": 8, "unit": "px", "default": 80 }
+  ],
+  "blocks": [
+    {
+      "type": "variante",
+      "name": "Variante",
+      "settings": [
+        { "type": "image_picker", "id": "imagen", "label": "Foto" },
+        { "type": "select", "id": "imagen_defecto", "label": "Foto de respaldo (si no eliges una foto arriba)",
+          "options": [
+            {"value": "mt-producto-vela.jpg", "label": "Vela"},
+            {"value": "mt-producto-ojo.jpg", "label": "Ojo"},
+            {"value": "mt-producto-calavera.jpg", "label": "Calavera"}
+          ], "default": "mt-producto-vela.jpg" },
+        { "type": "text", "id": "titulo", "label": "Nombre", "default": "Ojo" },
+        { "type": "textarea", "id": "texto", "label": "Texto", "default": "Ojo inyectado en sangre con luz LED." },
+        { "type": "url", "id": "link", "label": "Enlace (a la página de producto)" }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "MT – Elige tu variante",
+      "blocks": [
+        { "type": "variante", "settings": { "titulo": "Vela", "texto": "Llama LED parpadeante, la más vendida.", "imagen_defecto": "mt-producto-vela.jpg" } },
+        { "type": "variante", "settings": { "titulo": "Ojo", "texto": "Ojo inyectado en sangre con luz LED.", "imagen_defecto": "mt-producto-ojo.jpg" } },
+        { "type": "variante", "settings": { "titulo": "Calavera", "texto": "Calavera con luz cálida en las cuencas.", "imagen_defecto": "mt-producto-calavera.jpg" } }
+      ]
+    }
+  ]
+}
+{% endschema %}

@@ -1,0 +1,74 @@
+{{ 'mt-styles.css' | asset_url | stylesheet_tag }}
+<script src="{{ 'mt-scripts.js' | asset_url }}" defer></script>
+
+{% style %}
+  #shopify-section-{{ section.id }} {
+    padding-top: {{ section.settings.padding_top }}px;
+    padding-bottom: {{ section.settings.padding_bottom }}px;
+  }
+  #shopify-section-{{ section.id }} .mt-title { text-align: {{ section.settings.text_align }}; }
+{% endstyle %}
+
+<section class="mt-resenas mt-section">
+  <div class="mt-container">
+    {%- if section.settings.eyebrow != blank -%}
+      <p class="mt-eyebrow" style="text-align:{{ section.settings.text_align }};">{{ section.settings.eyebrow }}</p>
+    {%- endif -%}
+    <h2 class="mt-title mt-reveal mt-reveal-1">{{ section.settings.headline }}</h2>
+
+    <div class="mt-carrusel-wrap" data-mt-carrusel>
+      <div class="mt-carrusel">
+        {%- for block in section.blocks -%}
+          <div class="mt-resena mt-reveal mt-reveal-{{ forloop.index | at_most: 4 }}" {{ block.shopify_attributes }}>
+            <div class="mt-resena__estrellas">{% for i in (1..5) %}{% if i <= block.settings.estrellas %}★{% else %}☆{% endif %}{% endfor %}</div>
+            <p class="mt-resena__texto">"{{ block.settings.texto }}"</p>
+            <p class="mt-resena__autor">{{ block.settings.autor }}</p>
+          </div>
+        {%- endfor -%}
+      </div>
+      <div class="mt-carrusel__nav">
+        <button type="button" class="mt-carrusel__btn" data-mt-prev aria-label="Anterior">←</button>
+        <button type="button" class="mt-carrusel__btn" data-mt-next aria-label="Siguiente">→</button>
+      </div>
+    </div>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "MT – Reseñas",
+  "tag": "section",
+  "settings": [
+    { "type": "text", "id": "eyebrow", "label": "Texto pequeño de apertura", "default": "Lo que dicen" },
+    { "type": "text", "id": "headline", "label": "Título", "default": "Clientes que ya le tienen cariño a su araña" },
+    { "type": "select", "id": "text_align", "label": "Alineación del título", "options": [
+        {"value": "left", "label": "Izquierda"},
+        {"value": "center", "label": "Centro"}
+      ], "default": "center" },
+    { "type": "header", "content": "Espaciado" },
+    { "type": "range", "id": "padding_top", "label": "Espacio superior (px)", "min": 0, "max": 160, "step": 8, "unit": "px", "default": 80 },
+    { "type": "range", "id": "padding_bottom", "label": "Espacio inferior (px)", "min": 0, "max": 160, "step": 8, "unit": "px", "default": 80 }
+  ],
+  "blocks": [
+    {
+      "type": "resena",
+      "name": "Reseña",
+      "settings": [
+        { "type": "range", "id": "estrellas", "label": "Estrellas", "min": 1, "max": 5, "step": 1, "default": 5 },
+        { "type": "textarea", "id": "texto", "label": "Texto de la reseña", "default": "Mucho mejor de lo que esperaba, la luz queda genial de noche." },
+        { "type": "text", "id": "autor", "label": "Nombre", "default": "Cliente verificado" }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "MT – Reseñas",
+      "blocks": [
+        { "type": "resena", "settings": { "texto": "Mucho mejor de lo que esperaba, la luz queda genial de noche y las patitas son súper monas.", "autor": "Marta G." } },
+        { "type": "resena", "settings": { "texto": "Las compré para decorar la mesa de la cena de Halloween y fueron lo que más se comentó.", "autor": "Diego R." } },
+        { "type": "resena", "settings": { "texto": "Llegó rápido y funciona a la primera. Le he comprado las tres variantes.", "autor": "Laura P." } }
+      ]
+    }
+  ]
+}
+{% endschema %}

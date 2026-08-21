@@ -1,0 +1,247 @@
+{{ 'mt-styles.css' | asset_url | stylesheet_tag }}
+<script src="{{ 'mt-scripts.js' | asset_url }}" defer></script>
+
+{% style %}
+  #shopify-section-{{ section.id }} {
+    padding-top: {{ section.settings.padding_top }}px;
+    padding-bottom: {{ section.settings.padding_bottom }}px;
+    background: var(--mt-color-fondo);
+  }
+{% endstyle %}
+
+{% assign current_variant = product.selected_or_first_available_variant %}
+
+<section class="mt-producto mt-section">
+  <div class="mt-container mt-producto__wrap">
+
+    <div class="mt-producto__galeria mt-reveal mt-reveal-1">
+      {%- if product.media.size > 0 -%}
+        <div class="mt-galeria__principal">
+          {%- for media in product.media limit: 1 -%}
+            <img id="mt-galeria-principal-img" src="{{ media | image_url: width: 1000 }}" alt="{{ media.alt | escape }}" loading="eager" fetchpriority="high">
+          {%- endfor -%}
+        </div>
+        {%- if product.media.size > 1 -%}
+          <div class="mt-galeria__miniaturas">
+            {%- for media in product.media -%}
+              <button type="button" class="mt-galeria__mini {% if forloop.first %}mt-galeria__mini--activa{% endif %}" data-mt-thumb data-full="{{ media | image_url: width: 1000 }}">
+                <img src="{{ media | image_url: width: 200 }}" alt="{{ media.alt | escape }}" loading="lazy">
+              </button>
+            {%- endfor -%}
+          </div>
+        {%- endif -%}
+      {%- else -%}
+        <div class="mt-galeria__principal">
+          <img src="{{ 'mt-producto-vela.jpg' | asset_url }}" alt="{{ product.title | escape }}" loading="eager">
+        </div>
+      {%- endif -%}
+    </div>
+
+    <div class="mt-producto__compra mt-reveal mt-reveal-2">
+      {%- if section.settings.eyebrow != blank -%}<p class="mt-eyebrow">{{ section.settings.eyebrow }}</p>{%- endif -%}
+      <h1 class="mt-title mt-producto__titulo">{{ product.title }}</h1>
+
+      <div class="mt-producto__precio">
+        <span class="mt-producto__precio-actual">{{ current_variant.price | money }}</span>
+        {%- if current_variant.compare_at_price > current_variant.price -%}
+          <span class="mt-producto__precio-antes">{{ current_variant.compare_at_price | money }}</span>
+        {%- endif -%}
+      </div>
+
+      {%- if section.settings.intro != blank -%}<p class="mt-body-text">{{ section.settings.intro }}</p>{%- endif -%}
+
+      {% form 'product', product, id: 'mt-product-form' %}
+        <input type="hidden" name="id" id="mt-variant-id" value="{{ current_variant.id }}">
+
+        {%- unless product.has_only_default_variant -%}
+          <div class="mt-producto__opciones">
+            {%- for option in product.options_with_values -%}
+              <div class="mt-opcion">
+                <label class="mt-opcion__label">{{ option.name }}</label>
+                <div class="mt-opcion__valores" data-mt-option-index="{{ forloop.index0 }}">
+                  {%- for value in option.values -%}
+                    <button type="button" class="mt-opcion__valor {% if value == option.selected_value %}mt-opcion__valor--activo{% endif %}" data-mt-value="{{ value | escape }}">{{ value }}</button>
+                  {%- endfor -%}
+                </div>
+              </div>
+            {%- endfor -%}
+          </div>
+        {%- endunless -%}
+
+        <button type="submit" name="add" class="mt-btn mt-btn-primary mt-producto__comprar" {% if current_variant.available == false %}disabled{% endif %}>
+          <span data-mt-btn-text>
+            {%- if current_variant.available == false -%}{{ section.settings.texto_agotado }}{%- else -%}{{ section.settings.boton_texto }}{%- endif -%}
+          </span>
+        </button>
+      {% endform %}
+
+      {%- if product.variants.size > 1 -%}
+        <script type="application/json" id="mt-variantes-json">{{ product.variants | json }}</script>
+      {%- endif -%}
+
+      <div class="mt-producto__confianza">
+        {%- for block in section.blocks -%}
+          {%- if block.type == 'confianza' -%}
+            <div class="mt-confianza__item" {{ block.shopify_attributes }}>
+              <span class="mt-confianza__icon">{{ block.settings.icono }}</span>
+              <span>{{ block.settings.texto }}</span>
+            </div>
+          {%- endif -%}
+        {%- endfor -%}
+      </div>
+    </div>
+  </div>
+
+  <div class="mt-container mt-producto__descripcion mt-reveal mt-reveal-3">
+    {%- if section.settings.descripcion_titulo != blank -%}<h2 class="mt-title" style="font-size:32px;">{{ section.settings.descripcion_titulo }}</h2>{%- endif -%}
+    <div class="mt-body-text mt-producto__descripcion-rica">{{ product.description }}</div>
+
+    {%- assign caracteristicas = section.blocks | where: "type", "caracteristica" -%}
+    {%- if caracteristicas.size > 0 -%}
+      <div class="mt-beneficios__grid mt-producto__caracteristicas">
+        {%- for block in caracteristicas -%}
+          <div class="mt-beneficio" {{ block.shopify_attributes }}>
+            <span class="mt-beneficio__icon">{{ block.settings.icono }}</span>
+            <p class="mt-beneficio__title">{{ block.settings.titulo }}</p>
+            <p class="mt-beneficio__body">{{ block.settings.texto }}</p>
+          </div>
+        {%- endfor -%}
+      </div>
+    {%- endif -%}
+
+    {%- if section.settings.incluye != blank -%}
+      <div class="mt-producto__incluye">
+        <p class="mt-producto__incluye-titulo">{{ section.settings.incluye_titulo }}</p>
+        <ul class="mt-producto__incluye-lista">
+          {%- assign items = section.settings.incluye | newline_to_br | split: '<br />' -%}
+          {%- for item in items -%}
+            {%- if item != blank -%}<li>{{ item }}</li>{%- endif -%}
+          {%- endfor -%}
+        </ul>
+      </div>
+    {%- endif -%}
+  </div>
+</section>
+
+<script>
+  (function () {
+    var seccion = document.currentScript.closest('.mt-producto');
+    if (!seccion) return;
+    var thumbs = seccion.querySelectorAll('[data-mt-thumb]');
+    var principal = seccion.querySelector('#mt-galeria-principal-img');
+    thumbs.forEach(function (btn) {
+      btn.addEventListener('click', function () {
+        thumbs.forEach(function (b) { b.classList.remove('mt-galeria__mini--activa'); });
+        btn.classList.add('mt-galeria__mini--activa');
+        if (principal) principal.src = btn.getAttribute('data-full');
+      });
+    });
+
+    var variantesEl = seccion.querySelector('#mt-variantes-json');
+    var variantes = variantesEl ? JSON.parse(variantesEl.textContent) : null;
+    var grupos = seccion.querySelectorAll('[data-mt-option-index]');
+    var idInput = seccion.querySelector('#mt-variant-id');
+    var btn = seccion.querySelector('.mt-producto__comprar');
+    var btnText = seccion.querySelector('[data-mt-btn-text]');
+    var precioActual = seccion.querySelector('.mt-producto__precio-actual');
+    var precioAntes = seccion.querySelector('.mt-producto__precio-antes');
+
+    function seleccionActual() {
+      var sel = [];
+      grupos.forEach(function (g) {
+        var activo = g.querySelector('.mt-opcion__valor--activo');
+        sel.push(activo ? activo.getAttribute('data-mt-value') : null);
+      });
+      return sel;
+    }
+
+    function formatoDinero(centavos) {
+      return (centavos / 100).toLocaleString(document.documentElement.lang || 'es', { style: 'currency', currency: {{ cart.currency.iso_code | json }} });
+    }
+
+    function actualizar() {
+      if (!variantes) return;
+      var sel = seleccionActual();
+      var variante = variantes.find(function (v) {
+        return v.options.every(function (opt, i) { return sel[i] === null || opt === sel[i]; });
+      });
+      if (!variante) return;
+      idInput.value = variante.id;
+      if (precioActual) precioActual.textContent = formatoDinero(variante.price);
+      if (precioAntes) {
+        if (variante.compare_at_price && variante.compare_at_price > variante.price) {
+          precioAntes.style.display = '';
+          precioAntes.textContent = formatoDinero(variante.compare_at_price);
+        } else {
+          precioAntes.style.display = 'none';
+        }
+      }
+      if (variante.available) {
+        btn.removeAttribute('disabled');
+        if (btnText) btnText.textContent = {{ section.settings.boton_texto | json }};
+      } else {
+        btn.setAttribute('disabled', 'disabled');
+        if (btnText) btnText.textContent = {{ section.settings.texto_agotado | json }};
+      }
+    }
+
+    grupos.forEach(function (grupo) {
+      grupo.querySelectorAll('[data-mt-value]').forEach(function (valorBtn) {
+        valorBtn.addEventListener('click', function () {
+          grupo.querySelectorAll('[data-mt-value]').forEach(function (b) { b.classList.remove('mt-opcion__valor--activo'); });
+          valorBtn.classList.add('mt-opcion__valor--activo');
+          actualizar();
+        });
+      });
+    });
+  })();
+</script>
+
+{% schema %}
+{
+  "name": "MT – Página de producto",
+  "tag": "section",
+  "settings": [
+    { "type": "text", "id": "eyebrow", "label": "Texto pequeño", "default": "Edición Halloween" },
+    { "type": "textarea", "id": "intro", "label": "Frase introductoria" },
+    { "type": "text", "id": "boton_texto", "label": "Texto del botón de compra", "default": "Añadir al carrito" },
+    { "type": "text", "id": "texto_agotado", "label": "Texto si está agotado", "default": "Agotado" },
+    { "type": "header", "content": "Descripción" },
+    { "type": "text", "id": "descripcion_titulo", "label": "Título de la descripción", "default": "Todo lo que trae" },
+    { "type": "text", "id": "incluye_titulo", "label": "Título del listado \"qué incluye\"", "default": "Qué incluye" },
+    { "type": "textarea", "id": "incluye", "label": "Qué incluye (un elemento por línea)", "default": "1 araña decorativa LED\n3 pilas de botón (ya colocadas)\nInstrucciones rápidas" },
+    { "type": "header", "content": "Espaciado" },
+    { "type": "range", "id": "padding_top", "label": "Espacio superior (px)", "min": 0, "max": 160, "step": 8, "unit": "px", "default": 48 },
+    { "type": "range", "id": "padding_bottom", "label": "Espacio inferior (px)", "min": 0, "max": 160, "step": 8, "unit": "px", "default": 48 }
+  ],
+  "blocks": [
+    {
+      "type": "confianza",
+      "name": "Garantía",
+      "settings": [
+        { "type": "text", "id": "icono", "label": "Icono (emoji)", "default": "🚚" },
+        { "type": "text", "id": "texto", "label": "Texto", "default": "Envío rápido" }
+      ]
+    },
+    {
+      "type": "caracteristica",
+      "name": "Característica",
+      "settings": [
+        { "type": "text", "id": "icono", "label": "Icono (emoji)", "default": "💡" },
+        { "type": "text", "id": "titulo", "label": "Título", "default": "Luz LED realista" },
+        { "type": "textarea", "id": "texto", "label": "Texto" }
+      ]
+    }
+  ],
+  "default": {
+    "blocks": [
+      { "type": "confianza", "settings": { "icono": "🚚", "texto": "Envío en 3-7 días" } },
+      { "type": "confianza", "settings": { "icono": "🔄", "texto": "Devolución fácil 14 días" } },
+      { "type": "confianza", "settings": { "icono": "🔒", "texto": "Pago 100% seguro" } },
+      { "type": "caracteristica", "settings": { "icono": "🕯️", "titulo": "Llama LED parpadeante", "texto": "Efecto de vela real, sin fuego ni humo." } },
+      { "type": "caracteristica", "settings": { "icono": "🔋", "titulo": "Pilas incluidas", "texto": "Lista para usar nada más abrir la caja." } },
+      { "type": "caracteristica", "settings": { "icono": "🎃", "titulo": "3 diseños a elegir", "texto": "Ojo, calavera o vela — elige el que más te guste." } }
+    ]
+  }
+}
+{% endschema %}

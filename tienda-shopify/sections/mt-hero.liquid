@@ -1,0 +1,63 @@
+{{ 'mt-styles.css' | asset_url | stylesheet_tag }}
+<script src="{{ 'mt-scripts.js' | asset_url }}" defer></script>
+
+{% style %}
+  #shopify-section-{{ section.id }} {
+    padding-top: {{ section.settings.padding_top }}px;
+    padding-bottom: {{ section.settings.padding_bottom }}px;
+  }
+  #shopify-section-{{ section.id }} .mt-hero__title { text-align: {{ section.settings.text_align }}; }
+  #shopify-section-{{ section.id }} .mt-hero__body { text-align: {{ section.settings.text_align }}; }
+  #shopify-section-{{ section.id }} .mt-hero__ctas { justify-content: {% if section.settings.text_align == 'center' %}center{% else %}flex-start{% endif %}; }
+  #shopify-section-{{ section.id }} .mt-hero__content { margin-{% if section.settings.text_align == 'center' %}left: auto; margin-right: auto{% else %}right: auto{% endif %}; }
+{% endstyle %}
+
+<section class="mt-hero mt-section">
+  {%- if section.settings.imagen_fondo != blank -%}
+    <img class="mt-hero__bg" src="{{ section.settings.imagen_fondo | image_url: width: 2400 }}" alt="" loading="eager" fetchpriority="high">
+  {%- else -%}
+    <img class="mt-hero__bg" src="{{ 'mt-hero-fondo.jpg' | asset_url }}" alt="" loading="eager" fetchpriority="high">
+  {%- endif -%}
+  <div class="mt-hero__scrim"></div>
+
+  <div class="mt-hero__content mt-reveal mt-reveal-1">
+    {%- if section.settings.eyebrow != blank -%}<p class="mt-eyebrow">{{ section.settings.eyebrow }}</p>{%- endif -%}
+    <h1 class="mt-title mt-hero__title" style="font-size:{{ section.settings.heading_size }}px;">{{ section.settings.headline }}</h1>
+    <p class="mt-body-text mt-hero__body" style="font-size:{{ section.settings.body_size }}px;">{{ section.settings.body | newline_to_br }}</p>
+    <div class="mt-hero__ctas">
+      <a href="{{ section.settings.boton_link | default: '#' }}" class="mt-btn mt-btn-primary">{{ section.settings.boton_texto }}</a>
+      {%- if section.settings.boton2_texto != blank -%}
+        <a href="{{ section.settings.boton2_link | default: '#' }}" class="mt-btn mt-btn-outline">{{ section.settings.boton2_texto }}</a>
+      {%- endif -%}
+    </div>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "MT – Portada (hero)",
+  "tag": "section",
+  "settings": [
+    { "type": "text", "id": "eyebrow", "label": "Texto pequeño de apertura", "default": "Edición Halloween" },
+    { "type": "text", "id": "headline", "label": "Título", "default": "Ilumina tu Halloween con algo que da un poco de miedo" },
+    { "type": "textarea", "id": "body", "label": "Texto", "default": "Arañas decorativas con luz LED realista. El detalle perfecto para tu mesa, tu estantería o tu fiesta." },
+    { "type": "image_picker", "id": "imagen_fondo", "label": "Imagen de fondo" },
+    { "type": "header", "content": "Botones" },
+    { "type": "text", "id": "boton_texto", "label": "Texto del botón principal", "default": "Comprar ahora" },
+    { "type": "url", "id": "boton_link", "label": "Enlace del botón principal" },
+    { "type": "text", "id": "boton2_texto", "label": "Texto del botón secundario (opcional)" },
+    { "type": "url", "id": "boton2_link", "label": "Enlace del botón secundario" },
+    { "type": "header", "content": "Tipografía" },
+    { "type": "select", "id": "text_align", "label": "Alineación", "options": [
+        {"value": "left", "label": "Izquierda"},
+        {"value": "center", "label": "Centro"}
+      ], "default": "left" },
+    { "type": "range", "id": "heading_size", "label": "Tamaño del título (px)", "min": 28, "max": 84, "step": 2, "unit": "px", "default": 58 },
+    { "type": "range", "id": "body_size", "label": "Tamaño del texto (px)", "min": 14, "max": 24, "step": 1, "unit": "px", "default": 18 },
+    { "type": "header", "content": "Espaciado" },
+    { "type": "range", "id": "padding_top", "label": "Espacio superior (px)", "min": 0, "max": 160, "step": 8, "unit": "px", "default": 0 },
+    { "type": "range", "id": "padding_bottom", "label": "Espacio inferior (px)", "min": 0, "max": 160, "step": 8, "unit": "px", "default": 0 }
+  ],
+  "presets": [ { "name": "MT – Portada (hero)" } ]
+}
+{% endschema %}

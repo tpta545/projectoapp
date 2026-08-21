@@ -4,20 +4,35 @@
   "sections": {
     "footer": {
       "type": "footer",
-      "blocks": {},
-      "block_order": [],
+      "blocks": {
+        "brand": {
+          "type": "brand_information",
+          "settings": { "show_social": true }
+        },
+        "sobre": {
+          "type": "text",
+          "settings": {
+            "heading": "Sobre nosotros",
+            "body": "<p>Decoración de Halloween con luz LED, pensada para dar ese toque justo de misterio a tu casa o tu fiesta.</p>"
+          }
+        },
+        "enlaces": {
+          "type": "link_list",
+          "settings": { "heading": "Enlaces", "menu": "footer" }
+        }
+      },
+      "block_order": ["brand", "sobre", "enlaces"],
       "settings": {
         "color_scheme": "scheme-1",
-        "newsletter_enable": true,
-        "newsletter_heading": "Subscribe to our emails",
-        "enable_follow_on_shop": true,
+        "newsletter_enable": false,
+        "enable_follow_on_shop": false,
         "show_social": true,
-        "enable_country_selector": true,
-        "enable_language_selector": true,
+        "enable_country_selector": false,
+        "enable_language_selector": false,
         "payment_enable": true,
         "show_policy": true,
         "margin_top": 0,
-        "padding_top": 36,
+        "padding_top": 56,
         "padding_bottom": 36
       }
     }

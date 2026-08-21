@@ -1,0 +1,68 @@
+{{ 'mt-styles.css' | asset_url | stylesheet_tag }}
+
+{% style %}
+  #shopify-section-{{ section.id }} {
+    padding-top: {{ section.settings.padding_top }}px;
+    padding-bottom: {{ section.settings.padding_bottom }}px;
+  }
+  #shopify-section-{{ section.id }} .mt-title { text-align: {{ section.settings.text_align }}; font-size: {{ section.settings.heading_size }}px; }
+{% endstyle %}
+
+<section class="mt-beneficios mt-section">
+  <div class="mt-container">
+    {%- if section.settings.eyebrow != blank -%}
+      <p class="mt-eyebrow" style="text-align:{{ section.settings.text_align }};">{{ section.settings.eyebrow }}</p>
+    {%- endif -%}
+    <h2 class="mt-title mt-reveal mt-reveal-1">{{ section.settings.headline }}</h2>
+
+    <div class="mt-beneficios__grid">
+      {%- for block in section.blocks -%}
+        <div class="mt-beneficio mt-reveal mt-reveal-{{ forloop.index | at_most: 4 }}" {{ block.shopify_attributes }}>
+          <span class="mt-beneficio__icon">{{ block.settings.icono }}</span>
+          <p class="mt-beneficio__title">{{ block.settings.titulo }}</p>
+          <p class="mt-beneficio__body">{{ block.settings.texto }}</p>
+        </div>
+      {%- endfor -%}
+    </div>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "MT – Beneficios",
+  "tag": "section",
+  "settings": [
+    { "type": "text", "id": "eyebrow", "label": "Texto pequeño de apertura", "default": "Por qué te va a encantar" },
+    { "type": "text", "id": "headline", "label": "Título", "default": "Tres motivos para tenerla en tu mesa" },
+    { "type": "select", "id": "text_align", "label": "Alineación del título", "options": [
+        {"value": "left", "label": "Izquierda"},
+        {"value": "center", "label": "Centro"}
+      ], "default": "center" },
+    { "type": "range", "id": "heading_size", "label": "Tamaño del título (px)", "min": 22, "max": 56, "step": 2, "unit": "px", "default": 38 },
+    { "type": "header", "content": "Espaciado" },
+    { "type": "range", "id": "padding_top", "label": "Espacio superior (px)", "min": 0, "max": 160, "step": 8, "unit": "px", "default": 80 },
+    { "type": "range", "id": "padding_bottom", "label": "Espacio inferior (px)", "min": 0, "max": 160, "step": 8, "unit": "px", "default": 80 }
+  ],
+  "blocks": [
+    {
+      "type": "beneficio",
+      "name": "Beneficio",
+      "settings": [
+        { "type": "text", "id": "icono", "label": "Icono (emoji)", "default": "💡" },
+        { "type": "text", "id": "titulo", "label": "Título", "default": "Luz LED realista" },
+        { "type": "textarea", "id": "texto", "label": "Texto", "default": "Llama parpadeante que imita el movimiento de una vela de verdad." }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "MT – Beneficios",
+      "blocks": [
+        { "type": "beneficio", "settings": { "icono": "🕯️", "titulo": "Luz LED realista", "texto": "Llama parpadeante que imita el movimiento de una vela de verdad." } },
+        { "type": "beneficio", "settings": { "icono": "🔋", "titulo": "Pilas incluidas", "texto": "Lista para encender nada más sacarla de la caja, sin cables." } },
+        { "type": "beneficio", "settings": { "icono": "🕸️", "titulo": "Tamaño perfecto", "texto": "Ideal para mesa, estantería o entrada — decora sin ocupar espacio." } }
+      ]
+    }
+  ]
+}
+{% endschema %}

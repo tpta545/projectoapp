@@ -1,0 +1,70 @@
+{{ 'mt-styles.css' | asset_url | stylesheet_tag }}
+
+{% style %}
+  #shopify-section-{{ section.id }} {
+    padding-top: {{ section.settings.padding_top }}px;
+    padding-bottom: {{ section.settings.padding_bottom }}px;
+  }
+{% endstyle %}
+
+<section class="mt-ambiente mt-section">
+  <div class="mt-container">
+    {%- for block in section.blocks -%}
+      <div class="mt-ambiente__fila {% if block.settings.invertir %}mt-ambiente__fila--inv{% endif %}" {{ block.shopify_attributes }}>
+        <div class="mt-ambiente__media mt-reveal mt-reveal-1">
+          {%- if block.settings.imagen != blank -%}
+            <img src="{{ block.settings.imagen | image_url: width: 1200 }}" alt="{{ block.settings.titulo | escape }}" loading="lazy">
+          {%- else -%}
+            <img src="{{ block.settings.imagen_defecto | asset_url }}" alt="{{ block.settings.titulo | escape }}" loading="lazy">
+          {%- endif -%}
+        </div>
+        <div class="mt-ambiente__texto mt-reveal mt-reveal-2">
+          {%- if block.settings.eyebrow != blank -%}<p class="mt-eyebrow">{{ block.settings.eyebrow }}</p>{%- endif -%}
+          <h3 class="mt-ambiente__titulo">{{ block.settings.titulo }}</h3>
+          <p class="mt-body-text">{{ block.settings.texto | newline_to_br }}</p>
+        </div>
+      </div>
+    {%- endfor -%}
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "MT – Ambiente (bandas)",
+  "tag": "section",
+  "settings": [
+    { "type": "header", "content": "Espaciado" },
+    { "type": "range", "id": "padding_top", "label": "Espacio superior (px)", "min": 0, "max": 160, "step": 8, "unit": "px", "default": 40 },
+    { "type": "range", "id": "padding_bottom", "label": "Espacio inferior (px)", "min": 0, "max": 160, "step": 8, "unit": "px", "default": 40 }
+  ],
+  "blocks": [
+    {
+      "type": "fila",
+      "name": "Banda",
+      "settings": [
+        { "type": "image_picker", "id": "imagen", "label": "Foto" },
+        { "type": "select", "id": "imagen_defecto", "label": "Foto de respaldo (si no eliges una foto arriba)",
+          "options": [
+            {"value": "mt-ambiente-mesa.jpg", "label": "Mesa de Halloween"},
+            {"value": "mt-ambiente-estanteria.jpg", "label": "Estantería"},
+            {"value": "mt-ambiente-fiesta.jpg", "label": "Fiesta"}
+          ], "default": "mt-ambiente-mesa.jpg" },
+        { "type": "text", "id": "eyebrow", "label": "Texto pequeño" },
+        { "type": "text", "id": "titulo", "label": "Título", "default": "En tu mesa de Halloween" },
+        { "type": "textarea", "id": "texto", "label": "Texto" },
+        { "type": "checkbox", "id": "invertir", "label": "Foto a la derecha", "default": false }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "MT – Ambiente (bandas)",
+      "blocks": [
+        { "type": "fila", "settings": { "titulo": "En tu mesa de Halloween", "texto": "El centro de mesa perfecto para una cena que da un poco de miedo (y mucho estilo).", "imagen_defecto": "mt-ambiente-mesa.jpg" } },
+        { "type": "fila", "settings": { "titulo": "También en tu estantería", "texto": "Entre libros y calabazas, la luz cálida de la vela LED crea el ambiente sin necesidad de fuego de verdad.", "imagen_defecto": "mt-ambiente-estanteria.jpg", "invertir": true } },
+        { "type": "fila", "settings": { "titulo": "La estrella de tu fiesta", "texto": "Reparte varias por la sala — cada una da para hablar.", "imagen_defecto": "mt-ambiente-fiesta.jpg" } }
+      ]
+    }
+  ]
+}
+{% endschema %}

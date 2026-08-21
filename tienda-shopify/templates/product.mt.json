@@ -1,0 +1,27 @@
+{
+  "sections": {
+    "principal": {
+      "type": "mt-producto",
+      "settings": {
+        "eyebrow": "Edición Halloween",
+        "intro": "Decoración de Halloween con luz LED realista. Elige entre ojo, calavera o vela.",
+        "boton_texto": "Añadir al carrito",
+        "texto_agotado": "Agotado"
+      }
+    },
+    "resenas": {
+      "type": "mt-resenas",
+      "settings": {
+        "eyebrow": "Lo que dicen",
+        "headline": "Clientes que ya le tienen cariño a su araña"
+      },
+      "blocks": {
+        "r1": { "type": "resena", "settings": { "texto": "Mucho mejor de lo que esperaba, la luz queda genial de noche y las patitas son súper monas.", "autor": "Marta G." } },
+        "r2": { "type": "resena", "settings": { "texto": "Las compré para decorar la mesa de la cena de Halloween y fueron lo que más se comentó.", "autor": "Diego R." } },
+        "r3": { "type": "resena", "settings": { "texto": "Llegó rápido y funciona a la primera. Le he comprado las tres variantes.", "autor": "Laura P." } }
+      },
+      "block_order": ["r1", "r2", "r3"]
+    }
+  },
+  "order": ["principal", "resenas"]
+}

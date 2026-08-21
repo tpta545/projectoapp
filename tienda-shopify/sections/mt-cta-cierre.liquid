@@ -1,0 +1,54 @@
+{{ 'mt-styles.css' | asset_url | stylesheet_tag }}
+
+{% style %}
+  #shopify-section-{{ section.id }} {
+    padding-top: {{ section.settings.padding_top }}px;
+    padding-bottom: {{ section.settings.padding_bottom }}px;
+  }
+{% endstyle %}
+
+<section class="mt-cta mt-section">
+  {%- if section.settings.imagen_fondo != blank -%}
+    <img class="mt-cta__bg" src="{{ section.settings.imagen_fondo | image_url: width: 2400 }}" alt="" loading="lazy">
+  {%- else -%}
+    <img class="mt-cta__bg" src="{{ 'mt-cta-cierre.jpg' | asset_url }}" alt="" loading="lazy">
+  {%- endif -%}
+  <div class="mt-cta__scrim"></div>
+
+  <div class="mt-cta__content mt-reveal mt-reveal-1">
+    <h2 class="mt-title mt-cta__title">{{ section.settings.headline }}</h2>
+    {%- if section.settings.mostrar_precio and section.settings.precio != blank -%}
+      <div class="mt-cta__precio">
+        <span class="mt-cta__precio-actual">{{ section.settings.precio }}</span>
+        {%- if section.settings.precio_antes != blank -%}
+          <span class="mt-cta__precio-antes">{{ section.settings.precio_antes }}</span>
+        {%- endif -%}
+      </div>
+    {%- endif -%}
+    <p class="mt-body-text" style="text-align:center;">{{ section.settings.body }}</p>
+    <a href="{{ section.settings.boton_link | default: '#' }}" class="mt-btn mt-btn-primary">{{ section.settings.boton_texto }}</a>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "MT – Cierre (CTA)",
+  "tag": "section",
+  "settings": [
+    { "type": "text", "id": "headline", "label": "Título", "default": "Tu Halloween se merece un poco de luz tenebrosa" },
+    { "type": "textarea", "id": "body", "label": "Texto", "default": "Elige tu variante favorita y que llegue antes de la fiesta." },
+    { "type": "image_picker", "id": "imagen_fondo", "label": "Imagen de fondo" },
+    { "type": "header", "content": "Precio (opcional)" },
+    { "type": "checkbox", "id": "mostrar_precio", "label": "Mostrar precio", "default": true },
+    { "type": "text", "id": "precio", "label": "Precio actual", "default": "14,99 €" },
+    { "type": "text", "id": "precio_antes", "label": "Precio antes (tachado, opcional)" },
+    { "type": "header", "content": "Botón" },
+    { "type": "text", "id": "boton_texto", "label": "Texto del botón", "default": "Comprar ahora" },
+    { "type": "url", "id": "boton_link", "label": "Enlace del botón" },
+    { "type": "header", "content": "Espaciado" },
+    { "type": "range", "id": "padding_top", "label": "Espacio superior (px)", "min": 0, "max": 160, "step": 8, "unit": "px", "default": 0 },
+    { "type": "range", "id": "padding_bottom", "label": "Espacio inferior (px)", "min": 0, "max": 160, "step": 8, "unit": "px", "default": 0 }
+  ],
+  "presets": [ { "name": "MT – Cierre (CTA)" } ]
+}
+{% endschema %}
